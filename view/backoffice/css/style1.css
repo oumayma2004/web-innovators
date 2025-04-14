@@ -1,0 +1,392 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;500;600;700&display=swap');
+
+:root {
+   --main-color: #8e44ad;
+   --red: #e74c3c;
+   --orange: #f39c12;
+   --light-color: #888;
+   --light-bg: #eee;
+   --black: #2c3e50;
+   --white: #fff;
+   --border: .1rem solid rgba(0, 0, 0, .2);
+}
+
+* {
+   font-family: 'Nunito', sans-serif;
+   margin: 0;
+   padding: 0;
+   box-sizing: border-box;
+   outline: none;
+   border: none;
+   text-decoration: none;
+}
+
+*::selection {
+   background-color: var(--main-color);
+   color: #fff;
+}
+
+html {
+   font-size: 62.5%;
+   overflow-x: hidden;
+}
+
+html::-webkit-scrollbar {
+   width: 1rem;
+   height: .5rem;
+}
+
+html::-webkit-scrollbar-track {
+   background-color: transparent;
+}
+
+html::-webkit-scrollbar-thumb {
+   background-color: var(--main-color);
+}
+
+body {
+   background-color: var(--light-bg);
+   padding-left: 30rem;
+}
+
+body.dark {
+   --light-color: #aaa;
+   --light-bg: #333;
+   --black: #fff;
+   --white: #222;
+   --border: .1rem solid rgba(255, 255, 255, .2);
+}
+
+body.active {
+   padding-left: 0;
+}
+
+section {
+   padding: 2rem;
+   margin: 0 auto;
+   max-width: 1200px;
+}
+
+.heading {
+   font-size: 2.5rem;
+   color: var(--black);
+   margin-bottom: 2.5rem;
+   border-bottom: var(--border);
+   padding-bottom: 1.5rem;
+   text-transform: capitalize;
+}
+
+.inline-btn,
+.inline-option-btn,
+.inline-delete-btn,
+.btn,
+.delete-btn,
+.option-btn {
+   border-radius: 25px;
+   color: #fff;
+   background-color: #0E2044;
+   font-size: 1.8rem;
+   cursor: pointer;
+   text-transform: capitalize;
+   padding: 1rem 3rem;
+   text-align: center;
+   margin-top: 1rem;
+}
+
+.btn,
+.delete-btn,
+.option-btn {
+   display: block;
+   width: 100%;
+}
+
+.inline-btn,
+.inline-option-btn,
+.inline-delete-btn {
+   display: inline-block;
+}
+
+.btn,
+.inline-btn {
+   background-color: #0E2044;
+   max-width: 200px;
+   /* Set the maximum width for the buttons */
+   width: 100%;
+   /* Ensure it adapts within the container */
+   margin: 10px auto;
+   /* Center the buttons */
+   text-align: center;
+   /* Align the text inside the buttons */
+
+}
+
+.option-btn,
+.inline-option-btn {
+   background-color: #0E2044
+}
+
+.delete-btn,
+.inline-delete-btn {
+   background-color: #0E2044;
+}
+
+.inline-btn:hover,
+.inline-option-btn:hover,
+.inline-delete-btn:hover,
+.btn:hover,
+.delete-btn:hover,
+.option-btn:hover {
+   background-color: #224486;
+   color: var(--white);
+}
+
+.flex-btn {
+   display: flex;
+   gap: 1rem;
+}
+
+.header {
+   position: sticky;
+   margin-left: 90px;
+   top: 0;
+   left: 0;
+   right: 0;
+
+}
+
+.header .flex {
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   position: relative;
+
+   padding: 1.5rem 2rem;
+}
+
+.header .flex .logo {
+   font-size: 2.5rem;
+   color: var(--black);
+
+}
+
+.header .flex .search-form {
+   width: 50rem;
+   border-radius: .5rem;
+   background-color: var(--light-bg);
+   padding: 1.5rem 2rem;
+   display: flex;
+   gap: 2rem;
+
+}
+
+.header .flex .icons div {
+   font-size: 22px;
+   color: #0E2044;
+   background-color: var(--light-bg);
+   border: 1.8px solid #0E2044;
+   border-radius: 50%;
+   box-shadow: 0 0 0 10px var(--light-bg);
+   height: 4.9rem;
+   width: 4.9rem;
+   line-height: 4.5rem;
+   cursor: pointer;
+   text-align: center;
+   margin-left: .7rem;
+}
+
+.header .flex .icons div:hover {
+   background-color: #0E2044;
+   color: var(--white);
+}
+
+.header .flex .profile {
+   position: absolute;
+   top: 120%;
+   right: 2rem;
+   background-color: var(--white);
+   border-radius: .5rem;
+   padding: 1.5rem;
+
+   text-align: center;
+   overflow: visible;
+   transform-origin: top right;
+   transform: scale(0);
+   transition: .2s linear;
+   width: 30rem;
+
+   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.header .flex .profile.active {
+   transform: scale(1);
+}
+
+.header .flex .profile .image {
+   height: 10rem;
+   width: 10rem;
+   border-radius: 50%;
+   object-fit: contain;
+   margin-bottom: 1rem;
+}
+
+.header .flex .profile .name {
+   font-size: 2rem;
+   color: #0E2044;
+   overflow: hidden;
+   text-overflow: ellipsis;
+   white-space: nowrap;
+}
+
+.header .flex .profile .role {
+   font-size: 1.8rem;
+   color: #0E2044;
+}
+
+#search-btn {
+   display: none;
+}
+
+.user-profile .info {
+   background-color: var(--white);
+   border-radius: .5rem;
+   margin-top: 20px;
+   padding: 2rem;
+   position: relative;
+   left: -320px;
+}
+
+.user-profile .info .user {
+   text-align: center;
+   margin-bottom: 2rem;
+   padding: 1rem;
+}
+
+.user-profile .info .user img {
+   height: 10rem;
+   width: 10rem;
+   border-radius: 50%;
+   object-fit: cover;
+   margin-bottom: 1rem;
+}
+
+.user-profile h1 {
+   font-size: 3.5rem;
+   color: var(--black);
+   margin-top: 100px;
+   position: relative;
+   left: -320px;
+}
+
+.user-profile .info .user h3 {
+   font-size: 2rem;
+   color: var(--black);
+
+}
+
+.user-profile .info .user p {
+   font-size: 1.7rem;
+   color: var(--light-color);
+   padding: .3rem 0;
+}
+
+.user-profile .info .box-container {
+   display: flex;
+   flex-wrap: wrap;
+   gap: 1.5rem;
+}
+
+.user-profile .info .box-container .box {
+   background-color: var(--light-bg);
+   border-radius: .5rem;
+   padding: 2rem;
+   flex: 1 1 25rem;
+}
+
+.user-profile .info .box-container .box .flex {
+   display: flex;
+   align-items: center;
+   gap: 2rem;
+   margin-bottom: 1rem;
+}
+
+.user-profile .info .box-container .box .flex i {
+   font-size: 2rem;
+   color: var(--white);
+   background-color: var(--black);
+   text-align: center;
+   border-radius: .5rem;
+   height: 5rem;
+   width: 5rem;
+   line-height: 4.9rem;
+}
+
+.user-profile .info .box-container .box .flex span {
+   font-size: 2.5rem;
+   color: var(--main-color);
+}
+
+.user-profile .info .box-container .box .flex p {
+   color: var(--light-color);
+   font-size: 1.7rem;
+}
+
+
+
+.form-container {
+   min-height: calc(100vh - 20rem);
+   display: flex;
+   align-items: center;
+   justify-content: center;
+
+}
+
+.form-container form {
+   background-color: var(--white);
+   border-radius: .5rem;
+   padding: 2rem;
+   width: 55rem;
+   position: relative;
+   left: -180px;
+   margin-top: 60px;
+}
+
+.form-container form h3 {
+   font-size: 2.5rem;
+   text-transform: capitalize;
+   color: var(--black);
+   text-align: center;
+}
+
+.form-container form p {
+   font-size: 1.9rem;
+   color: #0E2044;
+   padding-top: 1rem;
+}
+
+.form-container form textarea {
+   background-color: #eae8e8;
+   width: 100%;
+   height: 70px;
+   padding: 15px;
+   outline: none;
+   resize: none;
+   margin-top: 20px;
+   border-radius: 5px;
+   font-size: 1.9rem;
+   color: #0E2044;
+   padding-top: 1rem;
+}
+
+.form-container form p span {
+   color: var(--red);
+}
+
+.form-container form .box {
+   font-size: 1.8rem;
+   color: var(--black);
+   border-radius: .5rem;
+   padding: 1.4rem;
+   background-color: var(--light-bg);
+   width: 100%;
+   margin: 1rem 0;
+}
