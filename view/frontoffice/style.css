@@ -1,0 +1,192 @@
+/* Corps de la page */
+body {
+  font-family: Arial, sans-serif;
+  background: url("assets/background.jpg") no-repeat center center fixed; /* Image en arrière-plan */
+  background-size: cover; 
+  margin: 0;
+  padding: 40px 0;
+  color: #333;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  flex-direction: column;
+  padding-top: 20px; 
+}
+
+nav img{
+  width: 150px;
+  display: block;  
+  margin-left: 0;
+}
+
+/* Header */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ffc0cb; 
+  padding: 15px 30px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  color: white;
+}
+
+/* Téléphone et liens */
+header .tel,
+header .links {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+header .links {
+  margin-left: auto; 
+}
+
+header img {
+  width: 15px;
+}
+
+header a {
+  text-decoration: none;
+  color: white; 
+  font-size: 14px;
+  font-weight: bold; 
+}
+
+/* Contenu principal des packs */
+h1 {
+  text-align: center; 
+  margin-top: 100px; 
+  color: white; 
+  font-size: 4em; 
+  font-family: "Great Vibes", cursive; 
+  font-weight: bold; 
+  letter-spacing: 2px; 
+  text-transform: uppercase; 
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); 
+}
+
+/* Container des packs */
+.packs-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  justify-content: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
+  width: 100%;
+}
+
+/* Style des cartes de packs */
+.pack-card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.pack-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+.pack-title {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin: 15px 0;
+  color: #2c3e50;
+}
+
+.pack-description {
+  font-size: 1em;
+  color: #555;
+  margin-bottom: 15px;
+  line-height: 1.4;
+}
+
+.pack-price {
+  font-size: 1.3em;
+  font-weight: bold;
+  color: #ffc0cb; 
+  margin-bottom: 15px;
+}
+
+.pack-places {
+  font-size: 0.9em;
+  color: #888;
+  margin-bottom: 20px;
+}
+
+.btn {
+  display: inline-block;
+  margin-top: 15px;
+  padding: 12px 20px;
+  background-color: pink; 
+  color: white;
+  text-decoration: none;
+  border-radius: 10px;
+  font-weight: bold;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.btn:hover {
+  background-color: #ff1493; 
+  transform: scale(1.05);
+}
+
+/* Style du formulaire de réservation */
+.reservation-form {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  width: 300px;
+}
+
+.reservation-form h2 {
+  text-align: center;
+  font-size: 1.5em;
+  margin-bottom: 20px;
+}
+
+.reservation-form label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.reservation-form input, .reservation-form textarea {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.reservation-form button {
+  width: 100%;
+  padding: 10px;
+  background-color: #ffc0cb;
+  border: none;
+  color: white;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.reservation-form button.close {
+  background-color: #ff1493;
+  margin-top: 10px;
+}

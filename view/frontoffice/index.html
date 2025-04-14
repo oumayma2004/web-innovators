@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tfarhida - Accueil</title>
+  <link rel="stylesheet" href="styleu.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- Barre supérieure -->
+  <div class="top-bar">
+    <div class="phones">
+      <img src="assets/tel1.png" class="icon-phone" alt="Téléphone" />
+      <span>+216 50 548 028</span>
+      <img src="assets/tel1.png" class="icon-phone" alt="Téléphone" />
+      <span>+216 99 727 727</span>
+    </div>
+    <div class="user-links">
+      <a href="#" onclick="showLogin()">🔒 Log in</a>
+      <a href="#" onclick="showSignup()">👤 Sign up</a>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="logo">
+      <img src="assets/logosite1.png">
+    </div>
+  </nav>
+
+  <!-- Formulaire Login -->
+  <div class="form-popup" id="login">
+    <form id="loginForm">
+        <h3>Connexion</h3>
+        <input type="email"  placeholder="Email" id="loginEmail" required>
+        <input type="password"  placeholder="Mot de passe"  id="loginPassword" required>
+        <button type="submit" >Se connecter</button>
+        <button class="close-btn" onclick="closeForms()">Fermer</button>
+      </form>
+  </div>
+
+  <!-- Formulaire Signup -->
+  <div class="form-popup"  id="signup">
+    <form  id="signupForm" action="signup.php" method="POST">
+      <h3>Inscription</h3>
+      <input type="text" name="prenom" placeholder="Prénom" required />
+      <input type="text" name="nom" placeholder="Nom" required />
+      <input type="email" name="email" placeholder="Email" required />
+      <input type="tel" name="phone" placeholder="Numéro de téléphone" required />
+      <input type="text" name="adresse" placeholder="Adresse" required />
+      <input type="date" name="date_c" placeholder="Date de naissance" required />
+      <input type="password" id="signupPassword" name="password" placeholder="Mot de passe" required />
+      <input type="password" id="signupPasswordConfirm" name="passwordConfirm" placeholder="Confirmer le mot de passe" required />
+      <button type="submit">S'inscrire</button>
+      <button type="button" class="close-btn" onclick="closeForms()">Fermer</button>
+    </form>
+  </div>
+
+  <!-- Script pour gérer les formulaires -->
+  <script>
+    function showLogin() {
+      document.getElementById('login').style.display = 'block';
+      document.getElementById('signup').style.display = 'none';
+    }
+
+    function showSignup() {
+      document.getElementById('signup').style.display = 'block';
+      document.getElementById('login').style.display = 'none';
+    }
+
+    function closeForms() {
+      document.getElementById('login').style.display = 'none';
+      document.getElementById('signup').style.display = 'none';
+    }
+  </script>
+  <script>
+    document.getElementById("signupForm").addEventListener("submit", function (event) {
+        event.preventDefault();
+        const password = document.getElementById("signupPassword").value;
+        const passwordConfirm = document.getElementById("signupPasswordConfirm").value;
+
+        if (password !== passwordConfirm) {
+            alert("incorrect password ");
+            return;
+        }
+        this.submit();
+    });
+</script>
+<script>
+  document.getElementById("loginForm").addEventListener("submit", function (event) {
+      event.preventDefault();
+      var email = document.getElementById("loginEmail").value;
+      var password = document.getElementById("loginPassword").value;
+      var formData = new FormData();
+      formData.append("email", email);
+      formData.append("password", password);
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", "login.php", true);
+      xhr.onreadystatechange = function () {
+          if (xhr.readyState === 4 && xhr.status === 200) {
+              var response = xhr.responseText;
+              if (response === "success") {
+                  window.location.href = "pack.php";
+              } else {
+                  alert("Email ou mot de passe incorrect.");
+              }
+          }
+      };
+      xhr.send(formData);
+  });
+</script>
+
+</body>
+</html>
