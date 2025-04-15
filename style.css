@@ -1,0 +1,148 @@
+body{
+  margin-left: 40px;
+  margin-right: 40px;
+  font-family: "Montserrat", Arial, sans-serif;
+  background-color: rgb(243, 245, 247);
+  background: url(assets/background.jpg);
+  background-repeat: no-repeat;
+  background-size:  2000px 700px;
+  background-attachment: fixed;
+
+}
+
+nav{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 45px;
+}
+nav a{
+  text-decoration: none;
+  color: #ffc0cb;
+  font-size: 18px;
+  margin-right: 8px;  
+}
+nav img{
+  width: 150px;
+  display: block;  
+  margin-left: 0;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ffc0cb; 
+  padding: 15px 30px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  color: white;
+
+}
+
+header .tel,
+header .links {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+header .links {
+  margin-left: auto; /* This pushes it to the right */
+}
+
+header img {
+  width: 15px;
+}
+
+header a {
+  text-decoration: none;
+  color: rgb(255, 255, 255);
+  font-size: 14px;
+}
+
+.row1 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
+}
+.row1 img{
+  width: 400px;
+  
+}
+.event1,.event2,.event3{
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+}
+h2{
+  text-align: center;
+  color: rgb(216, 47, 47);
+  font-family: "Montserrat", Arial, sans-serif;
+}
+
+.social{
+  width: 40px;
+}
+
+.footer{
+  width: 100%;
+}
+footer{
+  background-color: white;
+  padding: 20px;
+  height: 135px;
+  margin-top: 12px;
+}
+.FO{
+width: 10%;
+text-align: center;
+font-family: "Montserrat", Arial, sans-serif;
+}
+footer h6{
+  text-align: center;
+}
+footer{
+display: flex;
+justify-content: space-between;
+}
+
+.slideshow-container {
+  position: relative;
+  width: 100%; /* Full width */
+  max-width: 750px; /* Max width of the slideshow */
+  height: 400px; /* Set height for the slideshow */
+  margin: auto;
+  overflow: hidden;
+}
+
+.mySlides {
+  display: none;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mySlides img {
+  width: 100%;
+  height: auto;
+}
+
+.dot {
+  height: 10px;
+  width: 10px;
+  margin: 0 1px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+  transition: background-color 0.6s ease;
+}
+
+.active {
+  background-color: #717171;
+}
+
