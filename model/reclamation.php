@@ -19,7 +19,7 @@ class Reclamation
         $type_reclamation,
         $evenement_concerne,
         $description,
-        $etat = 'pending',
+        $etat = 'en attente',
         $date_creation = null
     ) {
         $this->id_reclamation = $id_reclamation;
@@ -92,7 +92,7 @@ class Reclamation
     }
 
     public function setEtat($etat) {
-        if (in_array($etat, ['pending', 'repondu'])) {
+        if (in_array($etat, ['en attente', 'repondu'])) {
             $this->etat = $etat;
         }
     }
