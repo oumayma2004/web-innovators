@@ -1,8 +1,10 @@
 <?php
-require '../../controller/reclamationC.php'; // Chemin selon ton projet
-
+include_once '../../controller/reclamationC.php'; // Chemin selon ton projet
+include_once '../../controller/ReponseC.php';
+$reponseC = new ReponseC();
+$reponses = $reponseC->afficherReponses();
 $reclamationC = new ReclamationC();
-$list = $reclamationC->listReclamations(); // Récupération des réclamations
+$list = $reclamationC->afficherReclamations(); // Récupération des réclamations
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -11,7 +13,7 @@ $list = $reclamationC->listReclamations(); // Récupération des réclamations
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="apple-touch-icon" sizes="76x76" href="assets/img/apple-icon.png">
-  <link rel="icon" type="image/png" href="assets/img/favicon.png">
+  <link rel="icon" type="image/png" href="assets/img/tfarhida.png">
   <title>
     Material Dashboard 3 by Creative Tim
   </title>
@@ -33,8 +35,8 @@ $list = $reclamationC->listReclamations(); // Récupération des réclamations
     <div class="sidenav-header">
       <i class="fas fa-times p-3 cursor-pointer text-dark opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
       <a class="navbar-brand px-4 py-3 m-0" href=" https://demos.creative-tim.com/material-dashboard/pages/dashboard " target="_blank">
-        <img src="assets/img/logo-ct-dark.png" class="navbar-brand-img" width="26" height="26" alt="main_logo">
-        <span class="ms-1 text-sm text-dark">Creative Tim</span>
+        <img src="assets/img/tfarhida.png" class="navbar-brand-img" width="150" height="150" alt="main_logo">
+        <span class="ms-1 text-sm text-dark"></span>
       </a>
     </div>
     <hr class="horizontal dark mt-0 mb-2">
@@ -51,62 +53,49 @@ $list = $reclamationC->listReclamations(); // Récupération des réclamations
     <i class="material-symbols-rounded opacity-5">report_problem</i>
     <span class="nav-link-text ms-1">Réclamations</span>
   </a>
-  <div class="collapse" id="reclamationMenu">
-    <ul class="nav flex-column ms-3">
-      <li class="nav-item">
-        <a class="nav-link text-blue" href="listreclamation.php">
-          <span class="nav-link-text ms-1">Liste des Réclamations</span>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link text-blue" href="ajouterReclamation.php">
-          <span class="nav-link-text ms-1">Ajouter une Réclamation</span>
-        </a>
-      </li>
-    </ul>
-  </div>
+
 </li>
         <li class="nav-item">
-          <a class="nav-link text-dark" href="../pages/billing.html">
+          <a class="nav-link text-dark" href="">
             <i class="material-symbols-rounded opacity-5">receipt_long</i>
-            <span class="nav-link-text ms-1">Billing</span>
+            <span class="nav-link-text ms-1">sponsor</span>
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-dark" href="../pages/virtual-reality.html">
+          <a class="nav-link text-dark" href="">
             <i class="material-symbols-rounded opacity-5">view_in_ar</i>
-            <span class="nav-link-text ms-1">Virtual Reality</span>
+            <span class="nav-link-text ms-1">evenement</span>
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-dark" href="../pages/rtl.html">
+          <a class="nav-link text-dark" href="">
             <i class="material-symbols-rounded opacity-5">format_textdirection_r_to_l</i>
-            <span class="nav-link-text ms-1">RTL</span>
+            <span class="nav-link-text ms-1">user</span>
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-dark" href="../pages/notifications.html">
+          <a class="nav-link text-dark" href="">
             <i class="material-symbols-rounded opacity-5">notifications</i>
-            <span class="nav-link-text ms-1">Notifications</span>
+            <span class="nav-link-text ms-1">pack</span>
           </a>
         </li>
         <li class="nav-item mt-3">
           <h6 class="ps-4 ms-2 text-uppercase text-xs text-dark font-weight-bolder opacity-5">Account pages</h6>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-dark" href="../pages/profile.html">
+          <a class="nav-link text-dark" href="">
             <i class="material-symbols-rounded opacity-5">person</i>
             <span class="nav-link-text ms-1">Profile</span>
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-dark" href="../pages/sign-in.html">
+          <a class="nav-link text-dark" href="">
             <i class="material-symbols-rounded opacity-5">login</i>
             <span class="nav-link-text ms-1">Sign In</span>
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-dark" href="../pages/sign-up.html">
+          <a class="nav-link text-dark" href="">
             <i class="material-symbols-rounded opacity-5">assignment</i>
             <span class="nav-link-text ms-1">Sign Up</span>
           </a>
@@ -138,12 +127,7 @@ $list = $reclamationC->listReclamations(); // Récupération des réclamations
             </div>
           </div>
           <ul class="navbar-nav d-flex align-items-center  justify-content-end">
-            <li class="nav-item d-flex align-items-center">
-              <a class="btn btn-outline-primary btn-sm mb-0 me-3" target="_blank" href="https://www.creative-tim.com/builder?ref=navbar-material-dashboard">Online Builder</a>
-            </li>
-            <li class="mt-1">
-              <a class="github-button" href="https://github.com/creativetimofficial/material-dashboard" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star creativetimofficial/material-dashboard on GitHub">Star</a>
-            </li>
+
             <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
               <a href="javascript:;" class="nav-link text-body p-0" id="iconNavbarSidenav">
                 <div class="sidenav-toggler-inner">
@@ -252,45 +236,92 @@ $list = $reclamationC->listReclamations(); // Récupération des réclamations
               </div>
             </div>
             <div class="table-responsive p-0">
-  <table class="table align-items-center justify-content-center mb-0">
+            <table class="table align-items-center justify-content-center mb-0">
+  <thead>
+    <tr>
+      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ID</th>
+      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Nom</th>
+      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Email</th>
+      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Téléphone</th>
+      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Date</th>
+      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">État</th>
+      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Type</th>
+      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Événement</th>
+      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Description</th>
+      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2 text-center">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <?php foreach($list as $rec): ?>
+      <tr>
+        <td><p class="text-sm mb-0">RC-<?= htmlspecialchars($rec['id_reclamation']) ?></p></td>
+        <td><p class="text-sm mb-0"><?= htmlspecialchars($rec['nom']) ?></p></td>
+        <td><p class="text-sm mb-0"><?= htmlspecialchars($rec['email']) ?></p></td>
+        <td><p class="text-sm mb-0"><?= htmlspecialchars($rec['tel']) ?></p></td>
+        <td><p class="text-sm mb-0"><?= htmlspecialchars($rec['date_creation']) ?></p></td>
+        <td>
+          <span class="badge bg-gradient-<?= $rec['etat'] === 'repondu' ? 'success' : 'primary' ?>">
+            <?= htmlspecialchars($rec['etat']) ?>
+          </span>
+        </td>
+        <td><p class="text-sm mb-0"><?= htmlspecialchars($rec['type_reclamation']) ?></p></td>
+        <td><p class="text-sm mb-0"><?= htmlspecialchars($rec['evenement_concerne']) ?></p></td>
+        <td><p class="text-sm mb-0"><?= nl2br(htmlspecialchars($rec['description'])) ?></p></td>
+        <td class="text-center">
+          <a href="repondrerec.php?id=<?= $rec['id_reclamation'] ?>" class="btn btn-primary">repondre </a>
+          <a href="supprimerReclamation.php?id=<?= $rec['id_reclamation'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('Supprimer cette réclamation ?');">Supprimer</a>
+        </td>
+      </tr>
+    <?php endforeach; ?>
+  </tbody>
+</table>
+
+</div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    <!--        ///////////////////////////      table reponse         /////////////////////// -->
+      <div class="container-fluid py-2">
+      
+      <div class="row">
+        <div class="col-12">
+          <div class="card my-4">
+            <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+              <div class="bg-gradient-dark shadow-dark border-radius-lg pt-4 pb-3">
+                <h6 class="text-white text-capitalize ps-3">Table Reclamation</h6>
+              </div>
+            </div>
+            <div class="table-responsive p-0">
+            <table class="table align-items-center mb-0">
     <thead>
       <tr>
-        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ID</th>
-        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Nom</th>
-        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Email</th>
-        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Téléphone</th>
+        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ID Réponse</th>
+        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">ID Réclamation</th>
+        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Contenu</th>
         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Date</th>
-        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">État</th>
-        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Type</th>
-        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Événement</th>
-        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Description</th>
         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2 text-center">Actions</th>
       </tr>
     </thead>
     <tbody>
-      <?php
-        
-
-        foreach($list as $rec){
-      ?>
-      <tr>
-        <td><p class="text-sm mb-0"><?php echo $rec['id_reclamation']; ?></p></td>
-        <td><p class="text-sm mb-0"><?php echo $rec['nom']; ?></p></td>
-        <td><p class="text-sm mb-0"><?php echo $rec['email']; ?></p></td>
-        <td><p class="text-sm mb-0"><?php echo $rec['tel']; ?></p></td>
-        <td><p class="text-sm mb-0"><?php echo $rec['date_creation']; ?></p></td>
-        <td><span class="badge bg-gradient-secondary"><?php echo $rec['etat']; ?></span></td>
-        <td><p class="text-sm mb-0"><?php echo $rec['type_reclamation']; ?></p></td>
-        <td><p class="text-sm mb-0"><?php echo $rec['evenement_concerne']; ?></p></td>
-        <td><p class="text-sm mb-0"><?php echo $rec['description']; ?></p></td>
-        <td class="text-center">
-          <a href="modifierReclamation.php?id=<?php echo $rec['id_reclamation']; ?>" class="btn btn-sm btn-warning">Modifier</a>
-          <a href="supprimerReclamation.php?id=<?php echo $rec['id_reclamation']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Supprimer cette réclamation ?');">Supprimer</a>
-        </td>
-      </tr>
-      <?php } ?>
+      <?php foreach($reponses as $rep): ?>
+        <tr>
+          <td><p class="text-sm mb-0">RP-<?= htmlspecialchars($rep['id_reponse']) ?></p></td>
+          <td><p class="text-sm mb-0">RC-<?= htmlspecialchars($rep['id_reclamation']) ?></p></td>
+          <td><p class="text-sm mb-0"><?= nl2br(htmlspecialchars($rep['contenu'])) ?></p></td>
+          <td><p class="text-sm mb-0"><?= htmlspecialchars($rep['date_reponse']) ?></p></td>
+          <td class="text-center">
+            <a href="modreponse.php?id=<?= $rep['id_reponse'] ?>" class="btn btn-primary">Modifier</a>
+            <a href="supprimerReponse.php?id=<?= $rep['id_reponse'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('Supprimer cette réponse ?');">Supprimer</a>
+          </td>
+        </tr>
+      <?php endforeach; ?>
     </tbody>
   </table>
+
 </div>
 
             </div>

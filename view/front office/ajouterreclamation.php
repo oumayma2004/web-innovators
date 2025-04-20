@@ -1,6 +1,5 @@
 <?php
-require '../../controller/reclamationC.php'; // Chemin selon ton projet
-require '../../model/Reclamation.php';
+include_once '../../controller/reclamationC.php'; // Chemin selon ton projet
 
 $reclamationC = new ReclamationC();
 
@@ -10,18 +9,19 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $_POST['nom'],
         $_POST['email'],
         $_POST['tel'],
-        $_POST['date_creation'],
-        $_POST['etat'],
+        // On ne récupère plus date_creation ni etat
+        // Valeurs par défaut définies dans la base de données
         $_POST['type_reclamation'],
         $_POST['evenement_concerne'],
         $_POST['description']
     );
 
     $reclamationC->ajouterReclamation($reclamation);
-    header('Location: listreclamation.php'); // rediriger vers la liste
+    header('Location: ajouterreclamation.php?success=true'); // Ajout du paramètre success
     exit();
 }
-?>
+?>  
+<!DOCTYPE html>
 
 <html lang="fr">
 <head>
@@ -39,10 +39,110 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <div id="RECLAMER"><a href="index.html"><label>Home</label></a></div>
         </div>
     </header>
+<style>
+
+.success-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #4CAF50;
+    color: white;
+    border-radius: 8px;
+    padding: 15px 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 1000;
+    animation: slideIn 0.5s ease-out;
+    max-width: 400px;
+}
+
+.success-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+}
+
+.success-notification svg {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.success-notification h3 {
+    margin: 0 0 5px 0;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.success-notification p {
+    margin: 0;
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+.close-btn {
+    margin-left: 15px;
+    cursor: pointer;
+    font-size: 18px;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+
+.close-btn:hover {
+    opacity: 1;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+
+</style>
+<script>
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Fermer la notification de succès
+    const closeBtn = document.querySelector('.close-btn');
+    if (closeBtn) {
+        closeBtn.addEventListener('click', function() {
+            this.closest('.success-notification').style.display = 'none';
+        });
+        
+        // Fermer automatiquement après 10 secondes
+        setTimeout(() => {
+            document.querySelector('.success-notification')?.remove();
+        }, 10000);
+    }
+});
+</script>
 
     <main class="container">
         <h1>Envoyer une Réclamation</h1>
-
+        <?php
+// Afficher le message de succès si le paramètre 'success' est présent dans l'URL
+if (isset($_GET['success']) && $_GET['success'] === 'true') {
+    echo '
+    <div class="success-notification">
+        <div class="success-content">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+            </svg>
+            <div>
+                <h3>Réclamation envoyée avec succès</h3>
+                <p>Nous avons bien reçu votre réclamation et la traiterons dans les plus brefs délais.</p>
+            </div>
+            <span class="close-btn">&times;</span>
+        </div>
+    </div>';
+}
+?>
         <form action="ajouterreclamation.php" method="POST" class="reclamation-form" onsubmit="return validateForm(event)">
             <label for="nom">Nom :</label>
             <input type="text" id="nom" name="nom"  />
@@ -53,15 +153,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <label for="tel">Téléphone :</label>
             <input type="text" id="tel" name="tel"  />
 
-            <label for="date_creation">Date :</label>
-            <input type="date" id="date_creation" name="date_creation"  />
-
-            <label for="etat">État de la réclamation :</label>
-            <select id="etat" name="etat" >
-                <option value="en attente">En attente</option>
-                <option value="traitée">Traitée</option>
-                <option value="rejetée">Rejetée</option>
-            </select>
 
             <label for="type_reclamation">Type de réclamation :</label>
             <select id="type_reclamation" name="type_reclamation" >

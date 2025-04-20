@@ -1,28 +1,37 @@
 <?php
-require '../../config.php';
+include_once __DIR__.'/../config.php';
+require_once __DIR__.'/../model/Reclamation.php';
+
 class ReclamationC
 {
-    public function listReclamations()
-    {
-        $sql = "SELECT * FROM reclamtion";
-        $db = config::getConnexion();
-        try {
-            $list = $db->query($sql);
-            return $list;
-        } catch (Exception $e) {
-            die('Erreur : ' . $e->getMessage());
-        }
-    }
 
-    public function ajouterReclamation($reclamation)
-    {
-        $sql = 'INSERT INTO reclamtion (id_reclamation, nom, email, tel, date_creation, etat, type_reclamation, evenement_concerne, description) 
-                VALUES (:id, :nom, :email, :tel, :date_creation, :etat, :type_reclamation, :evenement_concerne, :description)';
+    
+    // Dans ReclamationC.php
+    public function updateReclamationStatus($id_reclamation, $newStatus) {
+        $sql = "UPDATE reclamation SET etat = :etat WHERE id_reclamation = :id";
+        
         $db = config::getConnexion();
         try {
             $query = $db->prepare($sql);
             $query->execute([
-                'id' => $reclamation->getId(),
+                'id' => $id_reclamation,
+                'etat' => $newStatus
+            ]);
+            return true;
+        } catch (Exception $e) {
+            echo 'Erreur: ' . $e->getMessage();
+            return false;
+        }
+    }
+    // Ajouter une réclamation
+    public function ajouterReclamation($reclamation)
+    {
+        $sql = "INSERT INTO reclamtion (nom, email, tel, date_creation, etat, type_reclamation, evenement_concerne, description) 
+                VALUES (:nom, :email, :tel, :date_creation, :etat, :type_reclamation, :evenement_concerne, :description)";
+        $db = config::getConnexion();
+        try {
+            $query = $db->prepare($sql);
+            $query->execute([
                 'nom' => $reclamation->getNom(),
                 'email' => $reclamation->getEmail(),
                 'tel' => $reclamation->getTel(),
@@ -33,22 +42,51 @@ class ReclamationC
                 'description' => $reclamation->getDescription()
             ]);
         } catch (Exception $e) {
+            echo 'Erreur : ' . $e->getMessage();
+        }
+    }
+
+    // Afficher toutes les réclamations
+    public function afficherReclamations()
+    {
+        $sql = "SELECT * FROM reclamtion ORDER BY date_creation DESC";
+        $db = config::getConnexion();
+        try {
+            return $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
             die('Erreur : ' . $e->getMessage());
         }
     }
 
-    public function deleteReclamation($id)
+    // Supprimer une réclamation
+    public function supprimerReclamation($id)
     {
         $sql = "DELETE FROM reclamtion WHERE id_reclamation = :id";
         $db = config::getConnexion();
-        $req = $db->prepare($sql);
-        $req->bindValue(':id', $id);
         try {
+            $req = $db->prepare($sql);
+            $req->bindValue(':id', $id);
             $req->execute();
         } catch (Exception $e) {
             die('Erreur : ' . $e->getMessage());
         }
     }
+
+    // Récupérer une réclamation spécifique
+    public function recupererReclamation($id)
+    {
+        $sql = "SELECT * FROM reclamtion WHERE id_reclamation = :id";
+        $db = config::getConnexion();
+        try {
+            $query = $db->prepare($sql);
+            $query->execute(['id' => $id]);
+            return $query->fetch(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            echo 'Erreur : ' . $e->getMessage();
+        }
+    }
+
+    // Modifier une réclamation
     public function modifierReclamation($reclamation, $id)
     {
         $sql = "UPDATE reclamtion SET 
@@ -61,7 +99,6 @@ class ReclamationC
                     evenement_concerne = :evenement_concerne,
                     description = :description
                 WHERE id_reclamation = :id";
-
         $db = config::getConnexion();
         try {
             $query = $db->prepare($sql);
@@ -77,43 +114,64 @@ class ReclamationC
                 'id' => $id
             ]);
         } catch (Exception $e) {
+            echo 'Erreur : ' . $e->getMessage();
+        }
+    }
+
+    // Afficher avec éventuelles réponses (si tu ajoutes la table "reponse")
+    public function afficherReclamationsAvecReponses()
+    {
+        $sql = "SELECT r.*, rep.contenu AS reponse 
+                FROM reclamtion r 
+                LEFT JOIN reponse rep ON r.id_reclamation = rep.id_reclamation 
+                ORDER BY r.date_creation DESC";
+        
+        $db = config::getConnexion();
+        try {
+            $query = $db->query($sql);
+            return $query->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
             die('Erreur : ' . $e->getMessage());
         }
     }
 
-    public function getReclamationById($id)
-{
-    $sql = "SELECT * FROM reclamtion WHERE id_reclamation = :id";
-    $db = config::getConnexion();
-    $req = $db->prepare($sql);
-    $req->bindValue(':id', $id);
+    public function getReclamationById($id) {
+        $sql = "SELECT * FROM reclamtion WHERE id_reclamation = :id";
+        $db = config::getConnexion();
     
-    try {
-        $req->execute();
-        $result = $req->fetch(); // Récupère une seule ligne
-        
-        // Vérifier si la réclamation existe
-        if ($result) {
-            // Créer un objet réclamation avec les résultats de la base de données
-            $reclamation = new Reclamation(
-                $result['id_reclamation'],
-                $result['nom'],
-                $result['email'],
-                $result['tel'],
-                $result['date_creation'],
-                $result['etat'],
-                $result['type_reclamation'],
-                $result['evenement_concerne'],
-                $result['description']
-            );
-            return $reclamation;
-        } else {
-            return null; // Si aucune réclamation n'a été trouvée
+        try {
+            $query = $db->prepare($sql);
+            $query->bindParam(':id', $id);
+            $query->execute();
+            $row = $query->fetch();
+    
+            if ($row) {
+                $reclamation = new Reclamation(
+                    $row['id_reclamation'],
+                    $row['nom'],
+                    $row['email'],
+                    $row['tel'],
+                    $row['date_creation'],
+                    $row['etat'],
+                    $row['type_reclamation'],
+                    $row['evenement_concerne'],
+                    $row['description']
+                );
+                return $reclamation;
+            }
+    
+            return null;
+        } catch (PDOException $e) {
+            echo 'Erreur : ' . $e->getMessage();
+            return null;
         }
-    } catch (Exception $e) {
-        die('Erreur : ' . $e->getMessage());
     }
+
+   
 }
-}
+
+    
+
+
 
 ?>

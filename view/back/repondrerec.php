@@ -1,28 +1,67 @@
-<?php
-require '../../controller/reclamationC.php'; // Chemin selon ton projet
-require '../../model/Reclamation.php';
+<?php 
+include_once '../../controller/reponseC.php'; 
+include_once '../../model/reponse.php'; 
+include_once '../../controller/reclamationC.php';
+include_once '../../model/reclamation.php';
 
-$reclamationC = new ReclamationC();
+$id_reclamation = 0; 
+$contenu = ''; 
+$reclamation = null; 
 
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $reclamation = new Reclamation(
-        null, // ID = auto-incrémenté
-        $_POST['nom'],
-        $_POST['email'],
-        $_POST['tel'],
-        $_POST['date_creation'],
-        $_POST['etat'],
-        $_POST['type_reclamation'],
-        $_POST['evenement_concerne'],
-        $_POST['description']
-    );
-
-    $reclamationC->ajouterReclamation($reclamation);
-    header('Location: listreclamation.php'); // rediriger vers la liste
-    exit();
+// Récupérer l'ID de la réclamation depuis l'URL
+if (isset($_GET['id'])) { 
+  $id = $_GET['id']; 
+  $reclamationC = new ReclamationC(); 
+  $reclamation = $reclamationC->getReclamationById($id);
+  
+  // Vérifier si la réclamation existe
+  if (!$reclamation) {
+      header("Location: listreclamation.php?error=Réclamation non trouvée");
+      exit();
+  }
+} else {
+  header("Location: listreclamation.php?error=ID de réclamation manquant");
 }
-?>
+// Traitement du formulaire
+// Traitement du formulaire
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+  // Debug
+  error_log("POST data received: " . print_r($_POST, true));
+  
+  if (isset($_POST['id_reclamation']) && isset($_POST['contenu'])) {
+      $form_id_reclamation = $_POST['id_reclamation'];
+      $form_contenu = $_POST['contenu'];
+      
+      // Debug
+      error_log("ID Reclamation: " . $form_id_reclamation);
+      error_log("Contenu: " . $form_contenu);
+      
+      if (!empty($form_contenu)) {
+          try {
+              $reponse = new Reponse(null, $form_id_reclamation, $form_contenu, null);
+              $reponseC = new ReponseC();
+              
+              if ($reponseC->ajouterReponse($reponse)) {
+                  $success_message = "Réponse envoyée avec succès.";
+                  // Redirect after short delay
+                  header("Refresh: 2; URL=listreclamation.php?success=1");
+              } else {
+                  $error_message = "Erreur lors de l'envoi de la réponse.";
+              }
+          } catch (Exception $e) {
+              error_log("Exception: " . $e->getMessage());
+              $error_message = "Erreur: " . $e->getMessage();
+          }
+      } else {
+          $error_message = "Le contenu de la réponse ne peut pas être vide.";
+      }
+  } else {
+      $error_message = "Données de formulaire incomplètes.";
+  }
+}
 
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -30,7 +69,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="apple-touch-icon" sizes="76x76" href="assets/img/apple-icon.png">
-  <link rel="icon" type="image/png" href="assets/img/favicon.png">
+  <link rel="icon" type="image/png" href="assets/img/tfarhida.png">
   <title>
     Material Dashboard 3 by Creative Tim
   </title>
@@ -46,6 +85,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   <!-- CSS Files -->
   <link id="pagestyle" href="assets/css/material-dashboard.css?v=3.2.0" rel="stylesheet" />
   <script src="assets/js/validforme.js" ></script> <!-- Inclure le fichier JS ici -->
+
 </head>
 
 <body class="g-sidenav-show  bg-gray-100">
@@ -53,14 +93,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <div class="sidenav-header">
       <i class="fas fa-times p-3 cursor-pointer text-dark opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
       <a class="navbar-brand px-4 py-3 m-0" href=" https://demos.creative-tim.com/material-dashboard/pages/dashboard " target="_blank">
-        <img src="assets/img/logo-ct-dark.png" class="navbar-brand-img" width="26" height="26" alt="main_logo">
-        <span class="ms-1 text-sm text-dark">Creative Tim</span>
+      <img src="assets/img/tfarhida.png" class="navbar-brand-img" width="150" height="150" alt="main_logo">
       </a>
     </div>
     <hr class="horizontal dark mt-0 mb-2">
     <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
       <ul class="navbar-nav">
-        <li class="nav-item">
+      <li class="nav-item">
           <a class="nav-link text-dark" href="../pages/dashboard.html">
             <i class="material-symbols-rounded opacity-5">dashboard</i>
             <span class="nav-link-text ms-1">Dashboard</span>
@@ -263,82 +302,170 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <!-- End Navbar -->
     <div class="container-fluid py-4">
   <div class="row justify-content-center">
-    <div class="col-md-8">
-      <!-- Titre -->
+    <div class="col-md-10 col-lg-8">
+      <!-- Carte principale -->
       <div class="card shadow-lg border-0">
-        <div class="card-header bg-gradient-dark text-white text-center py-3 rounded-top">
-        <h5 class="mb-0 text-white">Ajouter une Réclamation</h5>
+        <!-- En-tête -->
+
+        
+        <!-- Messages d'alerte -->
+        <?php if (!empty($error_message)): ?>
+        <div class="alert alert-dark alert-dismissible fade show m-4" role="alert">
+          <i class="fas fa-exclamation-circle mr-2"></i><?php echo htmlspecialchars($error_message); ?>
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
+        <?php endif; ?>
 
-        <!-- Formulaire -->
-        <div class="card-body bg-light p-4 rounded-bottom">
-        <form method="POST" action="" onsubmit="return validform(event)">
+        <?php if (!empty($success_message)): ?>
+        <div class="alert alert-success alert-dismissible fade show m-4" role="alert">
+          <i class="fas fa-check-circle mr-2"></i><?php echo htmlspecialchars($success_message); ?>
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <?php endif; ?>
 
-<!-- Nom -->
-<div class="input-group input-group-outline mb-3">
-    <label class="form-label">Nom</label>
-    <input type="text" name="nom" id="nom" class="form-control"   >
+        <!-- Contenu -->
+        <div class="card-body bg-gray-100 p-0">
+          <div class="p-4">
+            <h4 class="h4 text-dark mb-4"><i class="fas fa-reply mr-2"></i>Répondre à la réclamation</h4>
+            
+            <!-- Carte interne -->
+            <div class="card border-0 shadow-sm">
+              <div class="card-header bg-gray-800 text-white">
+                <i class="fas fa-tag mr-2"></i>Réclamation #<?= htmlspecialchars($reclamation->getId()) ?>
+              </div>
+              
+              <div class="card-body bg-white p-4">
+                <form action="repondrerec.php?id=<?= htmlspecialchars($reclamation->getId()) ?>" method="POST" onsubmit="return validateReponse();">
+                  <input type="hidden" name="id_reclamation" value="<?= htmlspecialchars($reclamation->getId()) ?>">
+                  
+                  <div class="form-group mb-4">
+                    <label for="contenu" class="font-weight-bold text-dark">Contenu de la réponse</label>
+                    <textarea name="contenu" id="contenu" rows="6" class="form-control border-gray-300" 
+                              placeholder="Saisissez votre réponse détaillée ici..."></textarea>
+                    <div class="invalid-feedback d-block animate-fade" id="contenuError">
+                      <i class="fas fa-exclamation-circle mr-1"></i> Le contenu doit contenir au moins 5 caractères.
+                    </div>
+                  </div>
+                  
+                  <div class="form-group mt-5 text-right">
+                    <a href="listreclamation.php" class="btn btn-outline-dark btn-lg px-4 mr-2">
+                      <i class="fas fa-arrow-left mr-2"></i> Retour
+                    </a>
+                    <button type="submit" class="btn btn-dark-gradient btn-lg px-5">
+                      <i class="fas fa-paper-plane mr-2"></i> Envoyer
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
-<!-- Email -->
-<div class="input-group input-group-outline mb-3">
-    <label class="form-label">E-mail</label>
-    <input type="email" name="email" id="email" class="form-control"   >
-</div>
+<style>
+  .bg-dark-gradient {
+    background: linear-gradient(135deg, #2c3e50 0%, #1a1a1a 100%) !important;
+  }
+  
+  .bg-gray-100 {
+    background-color: #f8f9fa;
+  }
+  
+  .bg-gray-800 {
+    background-color: #343a40;
+  }
+  
+  .border-gray-300 {
+    border: 1px solid #dee2e6;
+    border-radius: 0.375rem;
+  }
+  
+  .btn-dark-gradient {
+    background: linear-gradient(to right, #434343, #000000);
+    border: none;
+    color: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+  }
+  
+  .btn-dark-gradient:hover {
+    background: linear-gradient(to right, #383838, #000000);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  }
+  
+  .btn-outline-dark {
+    transition: all 0.3s ease;
+  }
+  
+  .btn-outline-dark:hover {
+    transform: translateY(-1px);
+  }
+  
+  .animate-fade {
+    animation: fadeIn 0.3s ease-in-out;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  textarea:focus {
+    border-color: #555 !important;
+    box-shadow: 0 0 0 0.2rem rgba(85, 85, 85, 0.25);
+  }
+  
+  .card {
+    border-radius: 0.5rem;
+    overflow: hidden;
+  }
+  
+  .card-header {
+    border-bottom: none;
+    font-weight: 500;
+  }
+</style>
 
-<!-- Téléphone -->
-<div class="input-group input-group-outline mb-3">
-    <label class="form-label">Téléphone</label>
-    <input type="text" name="tel" id="tel" class="form-control"   >
-</div>
-
-<!-- Date -->
-<div class="input-group input-group-outline mb-3">
-    <label class="form-label">Date</label>
-    <input type="date" name="date_creation" id="date_creation" class="form-control"   >
-</div>
-
-<!-- État -->
-<div class="input-group input-group-outline mb-3">
-    <label class="form-label">État</label>
-    <select name="etat" id="etat" class="form-control"   >
-        <option value="en attente">En attente</option>
-        <option value="traitée">Traitée</option>
-        <option value="rejetée">Rejetée</option>
-    </select>
-</div>
-
-<!-- Type de réclamation -->
-<div class="input-group input-group-outline mb-3">
-    <label class="form-label">Type de réclamation</label>
-    <input type="text" name="type_reclamation" id="type_reclamation" class="form-control"   >
-</div>
-
-<!-- Événement concerné -->
-<div class="input-group input-group-outline mb-3">
-    <label class="form-label">Événement concerné</label>
-    <input type="text" name="evenement_concerne" id="evenement_concerne" class="form-control"   >
-</div>
-
-<!-- Description -->
-<div class="input-group input-group-outline mb-3">
-    <label class="form-label">Description</label>
-    <textarea name="description" id="description" rows="4" class="form-control"   ></textarea>
-</div>
-
-<!-- Button -->
-<div class="text-center">
-    <button type="submit" class="btn btn-lg bg-gradient-dark btn-lg w-100 mt-4 mb-0">Ajouter</button>
-</div>
-
-</form>
-
-        </div> <!-- fin card-body -->
-      </div> <!-- fin card -->
-    </div> <!-- fin col -->
-  </div> <!-- fin row -->
-</div> <!-- fin container -->
-
+<script>
+  function validateReponse() {
+    const contenu = document.getElementById('contenu').value.trim();
+    const errorElement = document.getElementById('contenuError');
+    
+    // Reset state
+    errorElement.style.display = 'none';
+    document.getElementById('contenu').classList.remove('is-invalid');
+    
+    if (contenu.length < 5) {
+      errorElement.style.display = 'block';
+      document.getElementById('contenu').classList.add('is-invalid');
+      return false;
+    }
+    
+    return true;
+  }
+  
+  // Dynamic validation on input
+  document.getElementById('contenu').addEventListener('input', function() {
+    const contenu = this.value.trim();
+    const errorElement = document.getElementById('contenuError');
+    
+    if (contenu.length > 0 && contenu.length < 5) {
+      errorElement.style.display = 'block';
+      this.classList.add('is-invalid');
+    } else {
+      errorElement.style.display = 'none';
+      this.classList.remove('is-invalid');
+    }
+  });
+</script>
       <footer class="footer py-4  ">
         <div class="container-fluid">
           <div class="row align-items-center justify-content-lg-between">
