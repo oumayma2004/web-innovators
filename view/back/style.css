@@ -1,0 +1,179 @@
+header{
+    font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    
+    height: 179px;
+    width: 1500PX;
+   
+   
+  
+   
+}
+#RECLAMER{
+	float: right;
+	width: 100px;
+	height: 50px;
+	text-align: center;
+    color: black;
+	font-family: calibri;
+	font-size: 18pt;
+	margin-top: 5%;
+	margin-right: 5%;
+    border: none;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+ 
+#RETOUR{
+	float: right;
+	width: 150px;
+	height: 50px;
+	text-align: center;	
+    color: black;
+	font-family: calibri;
+	font-size: 18pt;
+	margin-top: 5%;
+	margin-right: 4%;
+    border: none;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+#RECLAMER:hover, #RETOUR:hover {
+    color:pink; /* change au survol */
+  }
+  #RECLAMER a, #RETOUR a {
+    color: inherit; /* hériter de la couleur du parent */
+  }
+
+body{
+    background-image: url(assets/background.jpg);
+    background-repeat: no-repeat;
+    background-size:  2000px 700px;
+    background-attachment: fixed;
+    
+}
+  
+  .container {
+    max-width: 600px;
+    background: rgba(255, 192, 203, 0.2); /* rose clair transparent */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    margin: 50px auto;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 182, 193, 0.3); /* bord rose pâle */
+  }
+  h1 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .reclamation-form label {
+    display: block;
+    margin-top: 15px;
+    font-weight: bold;
+  }
+  
+  .reclamation-form input,
+  .reclamation-form select,
+  .reclamation-form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 4px;
+    border: 1px solid pink;
+  }
+  
+  .reclamation-form button {
+    margin-top: 20px;
+    padding: 12px;
+    width: 100%;
+    background-color: red;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .reclamation-form button:hover {
+    background-color: black;
+  }
+  h2 {
+    text-align: center;
+    color: #333;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  }
+  
+  th, td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: left;
+  }
+  
+  th {
+    background-color: #e9e9e9;
+  }
+  
+  .btn {
+    padding: 6px 12px;
+    margin: 2px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.3s ease;
+  }
+  
+  .btn-edit {
+    background-color: rgb(240, 67, 125);
+    color: white;
+  }
+  
+  .btn-edit:hover {
+    background-color: pink;
+  }
+  
+  .btn-delete {
+    background-color: #e74c3c;
+    color: white;
+  }
+  
+  .btn-delete:hover {
+    background-color: #c0392b;
+  }
+  
+  .btn-review {
+    background-color: #2ecc71;
+    color: white;
+  }
+  
+  .btn-review:hover {
+    background-color: #27ae60;
+  }
+  .social{
+    width: 40px;
+}
+
+  .footer{
+    width: 100%;
+}
+footer{
+    background-color: white;
+    padding: 20px;
+    height: 115px;
+}
+.FO{
+  width: 10%;
+  text-align: center;
+}
+footer{
+  display: flex;
+  justify-content: space-between;
+}
