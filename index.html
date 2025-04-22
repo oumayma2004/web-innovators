@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>tfarhida</title>
+  <link rel="icon" href="assets/logo-removebg-preview.png" style="border-radius: 50%;" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Basic styling for the dynamic events */
+    .row1 {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      margin: 20px 0;
+    }
+    .event1, .event2, .event3 {
+      width: 30%;
+      border: 1px solid #ccc;
+      padding: 10px;
+      box-sizing: border-box;
+      text-align: center;
+    }
+    .event1 img, .event2 img, .event3 img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+    }
+
+    /* Footer Styling */
+footer {
+  background-color: black;
+  color: #fff;
+  padding: 30px 20px;
+  text-align: center;
+  font-size: 14px;
+  position: relative;
+  bottom: 0;
+  width: 100%;
+}
+
+footer .FO {
+  display: inline-block;
+  margin: 15px 20px;
+}
+
+footer .FO p {
+  margin: 5px 0;
+}
+
+footer .social {
+  width: 30px;
+  height: 30px;
+  margin: 5px;
+  transition: transform 0.3s ease;
+}
+
+footer .social:hover {
+  transform: scale(1.2);
+}
+
+footer .FO a {
+  color: #fff;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+footer .FO a:hover {
+  color: #f39c12;
+}
+
+footer h6 {
+  font-size: 12px;
+  margin-top: 20px;
+  color: #ddd;
+}
+
+footer .FO .social-icons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+}
+
+footer .FO .social-icons img {
+  transition: transform 0.3s ease;
+}
+
+footer .FO .social-icons img:hover {
+  transform: scale(1.1);
+}
+
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="tel">
+      <img src="assets/tel.png" alt="tel" />
+      <a href="tel:+21692000500"> +216 92 000 500 </a>
+      <img src="assets/tel.png" alt="tel" />
+      <a href="tel:+21692500200"> +216 92 500 200</a>
+    </div>
+    <div class="links">
+      <img src="assets/lock.png" />
+      <a href="">Log in </a>
+      <img src="assets/user.png" />
+      <a href="">Sign up</a>
+      <a href="view/panier.php"><img src="assets/sac-de-courses.png" alt="panier" width="25px"></a>
+    </div>
+  </header>
+
+  <hr />
+
+  <!-- Navbar -->
+  <nav>
+    <a href="index.html"><img src="assets/logo-removebg-preview.png" alt="logo" /></a>
+    <div class="link">
+      <a href="index.html">Home </a>
+      <a href="">Packs </a>
+      <a href="">Sponsors </a>
+      <a href="">Reclamation</a>
+    </div>
+  </nav>
+
+  <!-- Slideshow -->
+  <div class="slideshow-container">
+    <div class="mySlides fade">
+      <img src="assets/kawther" />
+    </div>
+
+    <div class="mySlides fade">
+      <img src="assets/t8ani" />
+    </div>
+
+    <div class="mySlides fade">
+      <img src="assets/timo" />
+    </div>
+  </div>
+
+  <div style="text-align:center">
+    <span class="dot"></span>
+    <span class="dot"></span>
+    <span class="dot"></span>
+  </div>
+
+  <!-- Slideshow Script -->
+  <script>
+    let slideIndex = 0;
+    showSlides();
+    function showSlides() {
+      let i;
+      let slides = document.getElementsByClassName("mySlides");
+      let dots = document.getElementsByClassName("dot");
+      for (i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none";
+      }
+      slideIndex++;
+      if (slideIndex > slides.length) {
+        slideIndex = 1;
+      }
+      for (i = 0; i < dots.length; i++) {
+        dots[i].className = dots[i].className.replace(" active", "");
+      }
+      slides[slideIndex - 1].style.display = "block";
+      dots[slideIndex - 1].className += " active";
+      setTimeout(showSlides, 2000);
+    }
+  </script>
+
+  <!-- Events Section -->
+  <br>
+  <h2>OUR EVENTS</h2><br />
+  <!-- Add this container where events should be shown -->
+  <div id="dynamic-events"></div>
+
+  <!-- Insert the script before closing body tag -->
+  <script>
+    async function fetchEvents() {
+      try {
+        // Fetch events data from the server
+        const response = await fetch('get_events.php');
+        const events = await response.json();  // Parse the JSON response
+
+        const container = document.getElementById('dynamic-events');
+        container.innerHTML = ''; // Clear the container before adding new data
+
+        let rowDiv;
+
+        events.forEach((event, index) => {
+          // Create a new row every 3 events
+          if (index % 3 === 0) {
+            rowDiv = document.createElement('div');
+            rowDiv.classList.add('row1');
+            container.appendChild(rowDiv);
+          }
+
+          const eventDiv = document.createElement('div');
+          eventDiv.classList.add(`event${(index % 3) + 1}`);  // Adds class event1, event2, or event3
+
+          // Format the date in French
+          const date = new Date(event.date_de_e);  // Assuming the date in the backend is 'date_de_e'
+          const options = { day: '2-digit', month: 'long', year: 'numeric' };
+          const formattedDate = date.toLocaleDateString('fr-FR', options);
+
+          eventDiv.innerHTML = `
+            <div class="image-overlay">
+              <div class="price-tag">${event.prix_e ? event.prix_e + ' TND' : 'Gratuit'}</div>
+            </div>
+            <a href="view/event_details.php?id=${event.id_event}">
+              <img src="uploads/${event.image}" alt="${event.nom_e} - ${event.etat_e} - ${event.category_e}" />
+            </a>
+            <div class="event-text">
+              <h6>${event.nom_e}</h6>
+              <p><strong>Date:</strong> ${formattedDate} </p>
+              <p><strong>État:</strong> ${event.etat_e}</p>
+              <p><strong>Catégorie:</strong> ${event.category_e}</p>
+              <p><strong>Lieu:</strong> ${event.lieu_e || 'Non spécifié'}</p>
+              <p><strong>Description:</strong> ${event.description_e || 'Aucune description'}</p>
+            </div>
+          `;
+
+          rowDiv.appendChild(eventDiv);
+        });
+
+      } catch (err) {
+        console.error('Erreur lors du chargement des événements:', err);
+      }
+    }
+
+    function renderStars(rating) {
+      let stars = '';
+      for (let i = 1; i <= 5; i++) {
+        if (i <= rating) {
+          stars += '<span class="star filled">&#9733;</span>';  // Filled star
+        } else {
+          stars += '<span class="star empty">&#9734;</span>';  // Empty star
+        }
+      }
+      return stars;
+    }
+
+    // Fetch events initially and every 5 seconds after that
+    fetchEvents();
+    setInterval(fetchEvents, 5000);
+  </script>
+
+  <!-- Footer -->
+  <footer>
+    <div class="FO">
+      <p class="p">Meilleur prix GARANTI</p>
+    </div>
+    <div class="FO">
+      <p class="p">Paiement 100% sécurisé</p>
+    </div>
+    <div class="FO">
+      <p class="p">+200000 clients satisfaits</p>
+    </div>
+    <div class="FO">
+      <p class="p">Suivez-nous :</p>
+      <div class="social-icons">
+        <a href="http://www.facebook.com"><img class="social" src="assets/fb.png" alt="Facebook"></a>
+        <a href="http://www.instagram.com"><img class="social" src="assets/instagram.png" alt="Instagram"></a>
+        <a href="http://www.twitter.com"><img class="social" src="assets/twitter.png" alt="Twitter"></a>
+        <a href="http://www.youtube.com"><img class="social" src="assets/youtube.png" alt="YouTube"></a>
+      </div>
+    </div>
+    <h6>@Copyright 2025 All Rights Reserved</h6>
+  </footer>
+  
+</body>
+</html>

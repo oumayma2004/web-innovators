@@ -1,0 +1,17 @@
+{
+    "name": "creativetimofficial/material-dashboard",
+    "description": "Material Dashboard - Free Bootstrap Material Design Admin",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Creative Tim",
+            "email": "hello@creative-tim.com"
+        }
+    ],
+    "require": {
+        "endroid/qr-code": "^6.0",
+        "phpmailer/phpmailer": "^6.9",
+        "sendinblue/api-v3-sdk": "^8.4"
+    }
+}
