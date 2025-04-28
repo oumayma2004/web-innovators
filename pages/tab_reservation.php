@@ -39,6 +39,7 @@ $reservations = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
+  <link rel="icon" width="200px" type="image/png" href="../assets/logo-removebg-preview.png">
   <!--     Fonts and icons     -->
   <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700,900" />
   <!-- Nucleo Icons -->
@@ -54,7 +55,7 @@ $reservations = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <div class="sidenav-header">
       <i class="fas fa-times p-3 cursor-pointer text-dark opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
       <a class="navbar-brand px-4 py-3 m-0" href=" https://demos.creative-tim.com/material-dashboard/pages/dashboard " target="_blank">
-        <img src="../assets/logo.jpg" class="navbar-brand-img" width="95px" alt="main_logo">
+        <img src="../assets/logo-removebg-preview.png" class="navbar-brand-img" width="95px" alt="main_logo">
         
       </a>
     </div>
@@ -68,33 +69,34 @@ $reservations = $stmt->fetchAll(PDO::FETCH_ASSOC);
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active bg-gradient-dark text-white" href="../pages/tables.php">
-            <i class="material-symbols-rounded opacity-5">table_view</i>
-            <span class="nav-link-text ms-1">Tables</span>
-          </a>
-        </li>
+  <a class="nav-link text-dark" href="../pages/tables.php">
+    <i class="material-symbols-rounded opacity-5">table_view</i>
+    <span class="nav-link-text ms-1">Tab_event</span>
+  </a>
+</li>
+
         <li class="nav-item">
-          <a class="nav-link text-dark" href="../pages/tab_reservation.php">
+          <a class="nav-link active text-white" href="../pages/tab_reservation.php"style="background-color: #f06292;">
             <i class="material-symbols-rounded opacity-5">receipt_long</i>
-            <span class="nav-link-text ms-1">reservation</span>
+            <span class="nav-link-text ms-1">Reservation</span>
           </a>
         </li>
         <li class="nav-item">
           <a class="nav-link text-dark" href="">
             <i class="material-symbols-rounded opacity-5">view_in_ar</i>
-            <span class="nav-link-text ms-1">Virtual Reality</span>
+            <span class="nav-link-text ms-1">Reclamation</span>
           </a>
         </li>
         <li class="nav-item">
           <a class="nav-link text-dark" href="">
             <i class="material-symbols-rounded opacity-5">format_textdirection_r_to_l</i>
-            <span class="nav-link-text ms-1">RTL</span>
+            <span class="nav-link-text ms-1">Sponsors</span>
           </a>
         </li>
         <li class="nav-item">
           <a class="nav-link text-dark" href="">
             <i class="material-symbols-rounded opacity-5">notifications</i>
-            <span class="nav-link-text ms-1">Notifications</span>
+            <span class="nav-link-text ms-1">Packs</span>
           </a>
         </li>
         <li class="nav-item mt-3">
@@ -120,13 +122,59 @@ $reservations = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </li>
       </ul>
     </div>
-    <div class="sidenav-footer position-absolute w-100 bottom-0 ">
-      <div class="mx-3">
-        <a class="btn btn-outline-dark mt-4 w-100" href="https://www.creative-tim.com/learning-lab/bootstrap/overview/material-dashboard?ref=sidebarfree" type="button">Documentation</a>
-        <a class="btn bg-gradient-dark w-100" href="https://www.creative-tim.com/product/material-dashboard-pro?ref=sidebarfree" type="button">Upgrade to pro</a>
-      </div>
-    </div>
   </aside>
+  <nav class="navbar navbar-main navbar-expand-lg px-0 mx-3 shadow-none border-radius-xl" id="navbarBlur" data-scroll="true">
+      <div class="container-fluid py-1 px-3">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
+            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Pages</a></li>
+            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Tables</li>
+          </ol>
+        </nav>
+        <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
+          <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+
+          </div>
+          <ul class="navbar-nav d-flex align-items-center  justify-content-end"> 
+            <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
+              <a href="javascript:;" class="nav-link text-body p-0" id="iconNavbarSidenav">
+                <div class="sidenav-toggler-inner">
+                  <i class="sidenav-toggler-line"></i>
+                  <i class="sidenav-toggler-line"></i>
+                  <i class="sidenav-toggler-line"></i>
+                </div>
+              </a>
+            </li>
+            <li class="nav-item px-3 d-flex align-items-center">
+              <a href="javascript:;" class="nav-link text-body p-0">
+                <i class="material-symbols-rounded fixed-plugin-button-nav">settings</i>
+              </a>
+            </li>
+            <li class="nav-item dropdown pe-3 d-flex align-items-center">
+              <a href="javascript:;" class="nav-link text-body p-0" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="material-symbols-rounded">notifications</i>
+              </a>
+              <ul class="dropdown-menu  dropdown-menu-end  px-2 py-3 me-sm-n4" aria-labelledby="dropdownMenuButton">
+                <li class="mb-2">
+                  <a class="dropdown-item border-radius-md" href="javascript:;">
+                    <div class="d-flex py-1">
+                      <div class="my-auto">
+                        <img src="../assets/img/team-2.jpg" class="avatar avatar-sm  me-3 ">
+                      </div>
+                    </div>
+                  </a>
+                </li>
+              </ul>
+            </li>
+            <li class="nav-item d-flex align-items-center">
+              <a href="" class="nav-link text-body font-weight-bold px-0">
+                <i class="material-symbols-rounded">account_circle</i>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
   <title>Panier - Mes Réservations</title>
   <style>
         * {
@@ -139,7 +187,7 @@ $reservations = $stmt->fetchAll(PDO::FETCH_ASSOC);
             font-family: 'Segoe UI', sans-serif;
             background: #f4f4f4;
             position: relative;
-            margin-left: 140px;
+            margin-left: 18%;
         }
 
         h2 {
@@ -147,35 +195,50 @@ $reservations = $stmt->fetchAll(PDO::FETCH_ASSOC);
             text-align: center;
             padding-top: 30px;
         }
+        .head_table {
+    background: linear-gradient(60deg, #ffc0cb);
+    border-radius: 12px;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
 
-        table {
-            width: 80%;
-            margin: 20px auto;
-            border-collapse: collapse;
-            background-color: rgba(255, 255, 255, 0.95);
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.2);
-        }
+  .authors-table {
+    width: 100%;
+    background-color: #fff0f5;
+    border: 1px solid #f8bbd0;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 20px;
+  }
 
-        th, td {
-            padding: 15px;
-            text-align: center;
-            border: 1px solid #ccc;
-        }
+  .authors-table th, .authors-table td {
+    padding: 6px;
+    font-size: 13px;
+    vertical-align: middle;
+    white-space: nowrap; /* Empêche le retour à la ligne */
+    text-align:center;
+  }
 
-        th {
-            background-color: #f06292;
-            color: white;
-        }
+  .authors-table img {
+    max-width: 60px;
+    height: 50px;
+    border-radius: 5px;
+    object-fit: cover;
+  }
+  .authors-table th {
+    background-color: #f06292;
+    color:white;
+    text-align:center;
+  }
 
-        tr:nth-child(even) {
-            background-color:rgb(230, 202, 202);
-        }
-
-        tr:hover {
-            background-color:rgb(252, 214, 228);
-            cursor: pointer;
-        }
+  .authors-table tr:nth-child(even) td {
+    background-color: #ffe6f0;
+  }
+  .bg-custom-pink {
+  background-color: #f06292;
+}
 
         .event-image {
             width: 80px;
@@ -237,16 +300,44 @@ $reservations = $stmt->fetchAll(PDO::FETCH_ASSOC);
             justify-content: center;
             gap: 10px;
         }
+        .btn-light.btn-sm {
+    background-color: white;
+            color: #f06292;
+            border: 1px solid #f06292;
+  }
+
+  .btn-light.btn-sm:hover {
+    background-color: white;
+            color: #f06292;
+            border: 1px solid #f06292;
+            display: inline-block;
+            text-align: center;
+            text-decoration: none;
+            background-color: #f06292;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+  }
   </style>
 </head>
 <body>
 
-<h2>Mes Réservations</h2>
+<div class="bg-custom-pink shadow-dark border-radius-lg pt-4 pb-3 d-flex justify-content-between align-items-center px-3">
+  <h6 class="text-white text-capitalize m-0">Reservation Tables</h6>
+  <div>
+    <button onclick="sortByDate()" class="btn btn-light btn-sm">Trier par Date</button>
+    <button onclick="sortByAlphabet()" class="btn btn-light btn-sm">Trier par Nom de l'Événement</button>
+</div>
+</div>
+
+
 
 <?php if (empty($reservations)): ?>
     <p style="text-align: center; font-size: 18px;">Aucune réservation trouvée.</p>
 <?php else: ?>
-    <table>
+    <table class="authors-table table table-bordered">
         <thead>
             <tr>
                 <th>Image de l'Événement</th>
@@ -316,7 +407,29 @@ $reservations = $stmt->fetchAll(PDO::FETCH_ASSOC);
             document.getElementById("editTotalPrice").value = this.value * (total_price / nbr);
         });
     }
+    
+    function sortByDate() {
+        let rows = Array.from(document.querySelectorAll("table tbody tr"));
+        rows.sort((rowA, rowB) => {
+            let dateA = new Date(rowA.cells[5].textContent); // Date is in the 6th column
+            let dateB = new Date(rowB.cells[5].textContent);
+            return dateA - dateB;
+        });
+        rows.forEach(row => document.querySelector("table tbody").appendChild(row)); // Reorder rows
+    }
+
+    function sortByAlphabet() {
+        let rows = Array.from(document.querySelectorAll("table tbody tr"));
+        rows.sort((rowA, rowB) => {
+            let nameA = rowA.cells[1].textContent.toLowerCase(); // Event Name is in the 2nd column
+            let nameB = rowB.cells[1].textContent.toLowerCase();
+            return nameA.localeCompare(nameB);
+        });
+        rows.forEach(row => document.querySelector("table tbody").appendChild(row)); // Reorder rows
+    }
 </script>
+
+
 
 </body>
 </html>

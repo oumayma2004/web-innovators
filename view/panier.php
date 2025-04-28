@@ -40,6 +40,7 @@ $reservations = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
   <meta charset="UTF-8">
   <title>Panier - Mes Réservations</title>
+  <link rel="icon" href="assets/logo-removebg-preview.png" style="border-radius: 50%;" />
   <style>
         * {
             margin: 0;
@@ -169,6 +170,7 @@ $reservations = $stmt->fetchAll(PDO::FETCH_ASSOC);
   </style>
 </head>
 <body>
+<a href="../index.html"><img src="../assets/logo-removebg-preview.png" alt="logo" width="90px" style="margin-left: 80%;" /></a>
 <div class="back-button-container">
     <a href="../index.html" class="back-button">← Retour</a>
 </div>

@@ -10,9 +10,22 @@ $stmt = $db->prepare("SELECT * FROM gestion_event WHERE id_event = ?");
 $stmt->execute([$id_event]);
 $event = $stmt->fetch(PDO::FETCH_ASSOC);
 if (!$event) die("Événement non trouvé.");
+$available_tickets = $event['nbr_e']; // Available tickets for the event
 
 if (!isset($_GET['nbr']) || !is_numeric($_GET['nbr']) || $_GET['nbr'] <= 0) die("Billets invalides.");
 $nbr = (int) $_GET['nbr'];
+
+// Check if requested tickets exceed available tickets
+if ($nbr > $available_tickets) {
+    // Update event status to "sold out"
+    $stmt = $db->prepare("UPDATE gestion_event SET etat_e = 'Sold Out' WHERE id_event = ?");
+    $stmt->execute([$id_event]);
+
+    // Disable the reservation button
+    $sold_out = true;
+} else {
+    $sold_out = false;
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $card_number = $_POST['card_number'];
@@ -53,6 +66,7 @@ $reservation_success = isset($_GET['success']) && $_GET['success'] == 1 && isset
 <head>
   <meta charset="UTF-8">
   <title>Réservation - <?= htmlspecialchars($event['nom_e']) ?></title>
+  <link rel="icon" href="../assets/logo-removebg-preview.png" style="border-radius: 50%;" />
   <style>
         body {
             font-family: 'Segoe UI', sans-serif;
@@ -179,7 +193,6 @@ unset($_SESSION['reservation_success']);
     <button id="download-pdf" class="reserve-btn">Télécharger le PDF</button>
     <a href="../index.html" class="reserve-btn">Retour à l'accueil</a>
 </div>
-
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
@@ -203,6 +216,7 @@ unset($_SESSION['reservation_success']);
         doc.text(`Événement : ${nom_event}`, 20, 40);
         doc.text(`Date : ${date}`, 20, 50);
         doc.text(`Total : ${total}`, 20, 60);
+        doc.text(`Email : ${email}`, 20, 70);
         doc.text("Merci pour votre réservation.", 20, 80);
 
         const qrImage = new Image();
