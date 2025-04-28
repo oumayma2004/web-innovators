@@ -166,6 +166,73 @@ class ReclamationC
             return null;
         }
     }
+    public function countReclamationsWithSearch($search)
+    {
+        $sql = "SELECT COUNT(*) AS total FROM reclamtion
+                WHERE 
+                nom LIKE :search OR 
+                email LIKE :search OR 
+                tel LIKE :search OR 
+                date_creation LIKE :search OR 
+                etat LIKE :search OR 
+                type_reclamation LIKE :search OR 
+                evenement_concerne LIKE :search OR 
+                description LIKE :search";
+        $db = config::getConnexion();
+        try {
+            $query = $db->prepare($sql);
+            $query->execute([':search' => '%' . $search . '%']);
+            return $query->fetch(PDO::FETCH_ASSOC)['total'];
+        } catch (Exception $e) {
+            die('Error: ' . $e->getMessage());
+        }
+    }
+    
+
+// Récupérer une liste de réclamations avec recherche, tri et pagination
+public function fetchFilteredSortedReclamations($search, $sort, $limit, $offset, $etatFilter = '')
+{
+    $db = config::getConnexion();
+    
+    // Construction dynamique de la requête
+    $sql = "SELECT * FROM reclamtion WHERE (
+                nom LIKE :search OR 
+                email LIKE :search OR 
+                tel LIKE :search OR 
+                date_creation LIKE :search OR 
+                etat LIKE :search OR 
+                type_reclamation LIKE :search OR 
+                evenement_concerne LIKE :search OR 
+                description LIKE :search
+            )";
+    
+    if (!empty($etatFilter)) {
+        $sql .= " AND etat = :etatFilter";
+    }
+
+    // Sécurité tri
+    $allowedSortValues = ['ASC', 'DESC'];
+    $sort = in_array(strtoupper($sort), $allowedSortValues) ? strtoupper($sort) : 'ASC';
+
+    $sql .= " ORDER BY date_creation $sort LIMIT :limit OFFSET :offset";
+
+    try {
+        $query = $db->prepare($sql);
+        $query->bindValue(':search', '%' . $search . '%', PDO::PARAM_STR);
+
+        if (!empty($etatFilter)) {
+            $query->bindValue(':etatFilter', $etatFilter, PDO::PARAM_STR);
+        }
+
+        $query->bindValue(':limit', (int)$limit, PDO::PARAM_INT);
+        $query->bindValue(':offset', (int)$offset, PDO::PARAM_INT);
+
+        $query->execute();
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    } catch (Exception $e) {
+        die('Error: ' . $e->getMessage());
+    }
+}
 
    
 }

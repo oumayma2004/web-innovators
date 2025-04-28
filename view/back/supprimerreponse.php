@@ -1,15 +1,14 @@
 <?php
-// Inclure la classe ReclamationC
-require '../../controller/reponseC.php'; // Chemin selon ton projet
 
-// Vérifier si l'ID est passé dans l'URL
+require '../../controller/reponseC.php'; 
+=
 if (isset($_GET['id']) && !empty($_GET['id'])) {
-    $id = $_GET['id']; // Récupérer l'ID depuis l'URL
+    $id = $_GET['id']; 
 
-    // Créer une instance de la classe ReclamationC
+    
     $reponseC = new ReponseC();
 
-    // Appeler la méthode pour supprimer la réclamation
+    
     $reponseC->supprimerReponse($id);
 
     // Rediriger vers la page d'affichage des réclamations après suppression

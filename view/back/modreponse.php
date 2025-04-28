@@ -85,67 +85,54 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['contenu'])) {
             <span class="nav-link-text ms-1">Dashboard</span>
           </a>
         </li>
+                <li class="nav-item">
+          <a class="nav-link active bg-gradient-dark text-white" href="#reclamationMenu" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="reclamationMenu">
+            <i class="material-symbols-rounded opacity-5">report_problem</i>
+            <span class="nav-link-text ms-1">Réclamations</span>
+          </a>
+
+        </li>
         <li class="nav-item">
-  <a class="nav-link active bg-gradient-dark text-white" href="#reclamationMenu" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="reclamationMenu">
-    <i class="material-symbols-rounded opacity-5">report_problem</i>
-    <span class="nav-link-text ms-1">Réclamations</span>
-  </a>
-  <div class="collapse" id="reclamationMenu">
-    <ul class="nav flex-column ms-3">
-      <li class="nav-item">
-        <a class="nav-link text-blue" href="listreclamation.php">
-          <span class="nav-link-text ms-1">Liste des Réclamations</span>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link text-blue" href="ajouterReclamation.php">
-          <span class="nav-link-text ms-1">Ajouter une Réclamation</span>
-        </a>
-      </li>
-    </ul>
-  </div>
-</li>
-        <li class="nav-item">
-          <a class="nav-link text-dark" href="../pages/billing.html">
+          <a class="nav-link text-dark" href="">
             <i class="material-symbols-rounded opacity-5">receipt_long</i>
-            <span class="nav-link-text ms-1">Billing</span>
+            <span class="nav-link-text ms-1">sponsor</span>
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-dark" href="../pages/virtual-reality.html">
+          <a class="nav-link text-dark" href="">
             <i class="material-symbols-rounded opacity-5">view_in_ar</i>
-            <span class="nav-link-text ms-1">Virtual Reality</span>
+            <span class="nav-link-text ms-1">evenement</span>
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-dark" href="../pages/rtl.html">
+          <a class="nav-link text-dark" href="">
             <i class="material-symbols-rounded opacity-5">format_textdirection_r_to_l</i>
-            <span class="nav-link-text ms-1">RTL</span>
+            <span class="nav-link-text ms-1">user</span>
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-dark" href="../pages/notifications.html">
+          <a class="nav-link text-dark" href="">
             <i class="material-symbols-rounded opacity-5">notifications</i>
-            <span class="nav-link-text ms-1">Notifications</span>
+            <span class="nav-link-text ms-1">pack</span>
           </a>
         </li>
         <li class="nav-item mt-3">
           <h6 class="ps-4 ms-2 text-uppercase text-xs text-dark font-weight-bolder opacity-5">Account pages</h6>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-dark" href="../pages/profile.html">
+          <a class="nav-link text-dark" href="">
             <i class="material-symbols-rounded opacity-5">person</i>
             <span class="nav-link-text ms-1">Profile</span>
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-dark" href="../pages/sign-in.html">
+          <a class="nav-link text-dark" href="">
             <i class="material-symbols-rounded opacity-5">login</i>
             <span class="nav-link-text ms-1">Sign In</span>
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-dark" href="../pages/sign-up.html">
+          <a class="nav-link text-dark" href="">
             <i class="material-symbols-rounded opacity-5">assignment</i>
             <span class="nav-link-text ms-1">Sign Up</span>
           </a>
@@ -285,10 +272,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['contenu'])) {
     <div class="col-md-8">
       <!-- Titre -->
      <div class="card shadow-lg border-0">
-     <div class="card-header bg-dark-gradient text-white text-center py-4 rounded-top">
-    <h4 class="mb-0 font-weight-bold text-white"><i class="fas fa-edit mr-2"></i>Modifier la Réponse</h4>
-    <p class="mb-0 opacity-8">Mise à jour de la réponse à la réclamation</p>
+     <div class="card-header text-white text-center py-4 rounded-top" style="background-color: #FF009A;">
+  <h4 class="mb-0 font-weight-bold text-white"><i class="fas fa-edit mr-2"></i>Modifier la Réponse</h4>
+  <p class="mb-0 opacity-8">Mise à jour de la réponse à la réclamation</p>
 </div>
+
 
     <div class="card-body p-5 rounded-bottom" style="background-color: #f1f1f1;">
         <form action="modreponse.php?id=<?= htmlspecialchars($id_reponse) ?>" method="POST" onsubmit="return validateUpdateReponse();">
@@ -328,15 +316,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['contenu'])) {
                 <a href="reclamations.php" class="btn btn-outline-dark btn-lg px-4 mr-2">
                     <i class="fas fa-arrow-left mr-2"></i> Retour
                 </a>
-                <button type="submit" class="btn btn-dark-gradient btn-lg px-5">
-                    <i class="fas fa-save mr-2"></i> Enregistrer
-                </button>
+                <button type="submit" class="btn btn-rose-gradient btn-lg px-5">
+  <i class="fas fa-save mr-2"></i> Enregistrer
+</button>
+
             </div>
         </form>
     </div>
 </div>
 
 <style>
+.btn-rose-gradient {
+  background: linear-gradient(45deg, #FF009A, #ff66c4);
+  border: none;
+  color: white;
+}
+.btn-rose-gradient:hover {
+  opacity: 0.9;
+}
+
+
     .bg-dark-gradient {
         background: linear-gradient(135deg, #2c3e50 0%, #1a1a1a 100%) !important;
     }

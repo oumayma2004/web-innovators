@@ -10,13 +10,12 @@ class ReponseC
         $db = config::getConnexion();
         
         try {
-            // Debug information
+          
             error_log("ajouterReponse called with ID: " . $reponse->getIdReclamation() . ", content: " . $reponse->getContenu());
             
             // Commencer une transaction
             $db->beginTransaction();
     
-            // 1. Ajouter la réponse
             $sqlInsert = "INSERT INTO reponse (id_reclamation, contenu) 
                          VALUES (:id_reclamation, :contenu)";
             $queryInsert = $db->prepare($sqlInsert);
@@ -134,6 +133,75 @@ class ReponseC
             echo 'Erreur : ' . $e->getMessage();
         }
     }
+    public function countReponsesWithSearch($search)
+    {
+        $db = config::getConnexion();
+        
+        $sql = "SELECT COUNT(*) AS total FROM reponse WHERE 1=1"; // Toujours 1=1 pour construire dynamiquement
+    
+        if (!empty($search)) {
+            $sql .= " AND (
+                id_reponse LIKE :search OR
+                id_reclamation LIKE :search OR
+                contenu LIKE :search OR
+                date_reponse LIKE :search
+            )";
+        }
+    
+        try {
+            $query = $db->prepare($sql);
+    
+            if (!empty($search)) {
+                $query->bindValue(':search', '%' . $search . '%', PDO::PARAM_STR);
+            }
+    
+            $query->execute();
+            return $query->fetch(PDO::FETCH_ASSOC)['total'];
+        } catch (Exception $e) {
+            die('Error: ' . $e->getMessage());
+        }
+    }
+    
+    
+
+// Récupérer une liste de réponses avec recherche, tri et pagination
+public function fetchFilteredSortedReponses($search, $sort, $limit, $offset)
+{
+    $db = config::getConnexion();
+    
+    $sql = "SELECT * FROM reponse WHERE 1=1";
+
+    if (!empty($search)) {
+        $sql .= " AND (
+            id_reponse LIKE :search OR
+            id_reclamation LIKE :search OR
+            contenu LIKE :search OR
+            date_reponse LIKE :search
+        )";
+    }
+
+    // Sécurité ASC/DESC
+    $allowedSortValues = ['ASC', 'DESC'];
+    $sort = in_array(strtoupper($sort), $allowedSortValues) ? strtoupper($sort) : 'ASC';
+
+    $sql .= " ORDER BY date_reponse $sort LIMIT :limit OFFSET :offset";
+
+    try {
+        $query = $db->prepare($sql);
+
+        if (!empty($search)) {
+            $query->bindValue(':search', '%' . $search . '%', PDO::PARAM_STR);
+        }
+
+        $query->bindValue(':limit', (int)$limit, PDO::PARAM_INT);
+        $query->bindValue(':offset', (int)$offset, PDO::PARAM_INT);
+
+        $query->execute();
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    } catch (Exception $e) {
+        die('Error: ' . $e->getMessage());
+    }
+}
     
 }
 ?>

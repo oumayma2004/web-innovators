@@ -1,11 +1,38 @@
 <?php
-include_once '../../controller/reclamationC.php'; // Chemin selon ton projet
-include_once '../../controller/ReponseC.php';
-$reponseC = new ReponseC();
-$reponses = $reponseC->afficherReponses();
+include_once "../../config.php";
+include_once "../../controller/reclamationC.php";
+include_once "../../controller/ReponseC.php";
+
+// Création des contrôleurs
 $reclamationC = new ReclamationC();
-$list = $reclamationC->afficherReclamations(); // Récupération des réclamations
+$reponseC = new ReponseC();
+
+// Paramètres pour Réclamations
+$searchReclamation = isset($_GET['searchReclamation']) ? $_GET['searchReclamation'] : '';
+$etatFilter = isset($_GET['etat']) ? $_GET['etat'] : '';
+$sortReclamation = isset($_GET['sortReclamation']) ? $_GET['sortReclamation'] : 'ASC';
+$pageReclamation = isset($_GET['pageReclamation']) ? (int)$_GET['pageReclamation'] : 1;
+$limit = 3;
+$offsetReclamation = ($pageReclamation - 1) * $limit;
+
+// Paramètres pour Réponses
+$searchReponse = isset($_GET['searchReponse']) ? $_GET['searchReponse'] : '';
+$sortReponse = isset($_GET['sortReponse']) ? $_GET['sortReponse'] : 'ASC';
+$pageReponse = isset($_GET['pageReponse']) ? (int)$_GET['pageReponse'] : 1;
+$offsetReponse = ($pageReponse - 1) * $limit;
+
+// Récupération des réclamations
+$totalReclamations = $reclamationC->countReclamationsWithSearch($searchReclamation, $etatFilter);
+$totalPagesReclamations = ceil($totalReclamations / $limit);
+$listReclamations = $reclamationC->fetchFilteredSortedReclamations($searchReclamation, $sortReclamation, $limit, $offsetReclamation, $etatFilter);
+
+// Récupération des réponses
+$totalReponses = $reponseC->countReponsesWithSearch($searchReponse);
+$totalPagesReponses = ceil($totalReponses / $limit);
+$listReponses = $reponseC->fetchFilteredSortedReponses($searchReponse, $sortReponse, $limit, $offsetReponse);
 ?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -48,13 +75,13 @@ $list = $reclamationC->afficherReclamations(); // Récupération des réclamatio
             <span class="nav-link-text ms-1">Dashboard</span>
           </a>
         </li>
-        <li class="nav-item">
-  <a class="nav-link active bg-gradient-dark text-white" href="#reclamationMenu" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="reclamationMenu">
-    <i class="material-symbols-rounded opacity-5">report_problem</i>
-    <span class="nav-link-text ms-1">Réclamations</span>
-  </a>
+                <li class="nav-item">
+          <a class="nav-link active bg-gradient-dark text-white" href="#reclamationMenu" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="reclamationMenu">
+            <i class="material-symbols-rounded opacity-5">report_problem</i>
+            <span class="nav-link-text ms-1">Réclamations</span>
+          </a>
 
-</li>
+        </li>
         <li class="nav-item">
           <a class="nav-link text-dark" href="">
             <i class="material-symbols-rounded opacity-5">receipt_long</i>
@@ -120,101 +147,103 @@ $list = $reclamationC->afficherReclamations(); // Récupération des réclamatio
           </ol>
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
-          <div class="ms-md-auto pe-md-3 d-flex align-items-center">
-            <div class="input-group input-group-outline">
-              <label class="form-label">Type here...</label>
-              <input type="text" class="form-control">
+        <div class="input-group input-group-outline">
+        <form method="GET" class="d-flex justify-content-center align-items-center my-5 gap-3">
+  <!-- Champ de recherche -->
+  <div class="input-group input-group-outline me-2" style="max-width: 300px;">
+    <label class="form-label" style="transform: translateY(-24px) scale(0.8); color: #6c757d; transition: all 0.2s;">Rechercher</label>
+    <input type="text" 
+           class="form-control" 
+           name="searchReclamation" 
+           value="<?php echo isset($_GET['searchReclamation']) ? htmlspecialchars($_GET['searchReclamation']) : ''; ?>"
+           style="padding: 12px 16px; border-radius: 8px; border: 1px solid #e0e0e0; background-color: #f8f9fa;">
+    <span class="position-absolute" style="left: 12px; top: 50%; transform: translateY(-50%); color: #6c757d;">
+
+    </span>
+  </div>
+
+  <!-- Filtrage par état -->
+  <div class="input-group input-group-outline me-2" style="max-width: 250px;">
+    <label class="form-label" style="transform: translateY(-24px) scale(0.8); color: #6c757d; transition: all 0.2s;">Filtrer par État</label>
+    <select name="etat" class="form-control" style="
+        padding: 12px 16px;
+        border-radius: 8px;
+        border: 1px solid #e0e0e0;
+        background-color: #f8f9fa;
+        color: #495057;
+        font-size: 14px;
+        transition: all 0.3s;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        appearance: none;
+        background-image: url('data:image/svg+xml;utf8,<svg fill=\"%236c757d\" height=\"24\" viewBox=\"0 0 24 24\" width=\"24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M7 10l5 5 5-5z\"/></svg>');
+        background-repeat: no-repeat;
+        background-position: right 8px center;
+    ">
+        <option value=""></option>
+        <option value="pending" <?php if (isset($_GET['etat']) && $_GET['etat'] == 'pending') echo 'selected'; ?>>En attente</option>
+        <option value="repondu" <?php if (isset($_GET['etat']) && $_GET['etat'] == 'repondu') echo 'selected'; ?>>Répondu</option>
+    </select>
+  </div>
+
+  <!-- Boutons -->
+  <div class="d-flex gap-2">
+    <button type="submit" class="btn btn-primary px-4" style="height: 44px; border-radius: 8px;">
+      <i class="fas fa-search me-2"></i>Filtrer
+    </button>
+    <a href="?page=1" class="btn btn-outline-secondary px-4" style="height: 44px; border-radius: 8px;">
+      <i class="fas fa-undo me-2"></i>Réinitialiser
+    </a>
+  </div>
+</form>
+
+<style>
+  .form-control, .form-select {
+    border: 1px solid #e0e0e0;
+    transition: all 0.3s;
+  }
+  
+  .form-control:focus, select:focus {
+    outline: none;
+    border-color: #d63384;
+    box-shadow: 0 0 0 2px rgba(74, 139, 252, 0.2);
+    background-color: white;
+  }
+  
+  .input-group:focus-within label {
+    color: #d63384 !important;
+  }
+  
+  .form-control:hover, select:hover {
+    border-color: #adb5bd;
+  }
+  
+  option {
+    padding: 8px 12px;
+  }
+  
+  option:hover {
+    background-color: #e9ecef !important;
+  }
+  
+  @media (max-width: 768px) {
+    form {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 1rem !important;
+    }
+    
+    .input-group {
+      max-width: 100% !important;
+      width: 100%;
+    }
+  }
+</style>
+
             </div>
-          </div>
           <ul class="navbar-nav d-flex align-items-center  justify-content-end">
 
-            <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
-              <a href="javascript:;" class="nav-link text-body p-0" id="iconNavbarSidenav">
-                <div class="sidenav-toggler-inner">
-                  <i class="sidenav-toggler-line"></i>
-                  <i class="sidenav-toggler-line"></i>
-                  <i class="sidenav-toggler-line"></i>
-                </div>
-              </a>
-            </li>
-            <li class="nav-item px-3 d-flex align-items-center">
-              <a href="javascript:;" class="nav-link text-body p-0">
-                <i class="material-symbols-rounded fixed-plugin-button-nav">settings</i>
-              </a>
-            </li>
-            <li class="nav-item dropdown pe-3 d-flex align-items-center">
-              <a href="javascript:;" class="nav-link text-body p-0" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="material-symbols-rounded">notifications</i>
-              </a>
-              <ul class="dropdown-menu  dropdown-menu-end  px-2 py-3 me-sm-n4" aria-labelledby="dropdownMenuButton">
-                <li class="mb-2">
-                  <a class="dropdown-item border-radius-md" href="javascript:;">
-                    <div class="d-flex py-1">
-                      <div class="my-auto">
-                        <img src="assets/img/team-2.jpg" class="avatar avatar-sm  me-3 ">
-                      </div>
-                      <div class="d-flex flex-column justify-content-center">
-                        <h6 class="text-sm font-weight-normal mb-1">
-                          <span class="font-weight-bold">New message</span> from Laur
-                        </h6>
-                        <p class="text-xs text-secondary mb-0">
-                          <i class="fa fa-clock me-1"></i>
-                          13 minutes ago
-                        </p>
-                      </div>
-                    </div>
-                  </a>
-                </li>
-                <li class="mb-2">
-                  <a class="dropdown-item border-radius-md" href="javascript:;">
-                    <div class="d-flex py-1">
-                      <div class="my-auto">
-                        <img src="assets/img/small-logos/logo-spotify.svg" class="avatar avatar-sm bg-gradient-dark  me-3 ">
-                      </div>
-                      <div class="d-flex flex-column justify-content-center">
-                        <h6 class="text-sm font-weight-normal mb-1">
-                          <span class="font-weight-bold">New album</span> by Travis Scott
-                        </h6>
-                        <p class="text-xs text-secondary mb-0">
-                          <i class="fa fa-clock me-1"></i>
-                          1 day
-                        </p>
-                      </div>
-                    </div>
-                  </a>
-                </li>
-                <li>
-                  <a class="dropdown-item border-radius-md" href="javascript:;">
-                    <div class="d-flex py-1">
-                      <div class="avatar avatar-sm bg-gradient-secondary  me-3  my-auto">
-                        <svg width="12px" height="12px" viewBox="0 0 43 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                          <title>credit-card</title>
-                          <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                            <g transform="translate(-2169.000000, -745.000000)" fill="#FFFFFF" fill-rule="nonzero">
-                              <g transform="translate(1716.000000, 291.000000)">
-                                <g transform="translate(453.000000, 454.000000)">
-                                  <path class="color-background" d="M43,10.7482083 L43,3.58333333 C43,1.60354167 41.3964583,0 39.4166667,0 L3.58333333,0 C1.60354167,0 0,1.60354167 0,3.58333333 L0,10.7482083 L43,10.7482083 Z" opacity="0.593633743"></path>
-                                  <path class="color-background" d="M0,16.125 L0,32.25 C0,34.2297917 1.60354167,35.8333333 3.58333333,35.8333333 L39.4166667,35.8333333 C41.3964583,35.8333333 43,34.2297917 43,32.25 L43,16.125 L0,16.125 Z M19.7083333,26.875 L7.16666667,26.875 L7.16666667,23.2916667 L19.7083333,23.2916667 L19.7083333,26.875 Z M35.8333333,26.875 L28.6666667,26.875 L28.6666667,23.2916667 L35.8333333,23.2916667 L35.8333333,26.875 Z"></path>
-                                </g>
-                              </g>
-                            </g>
-                          </g>
-                        </svg>
-                      </div>
-                      <div class="d-flex flex-column justify-content-center">
-                        <h6 class="text-sm font-weight-normal mb-1">
-                          Payment successfully completed
-                        </h6>
-                        <p class="text-xs text-secondary mb-0">
-                          <i class="fa fa-clock me-1"></i>
-                          2 days
-                        </p>
-                      </div>
-                    </div>
-                  </a>
-                </li>
-              </ul>
-            </li>
+            
+
             <li class="nav-item d-flex align-items-center">
               <a href="../pages/sign-in.html" class="nav-link text-body font-weight-bold px-0">
                 <i class="material-symbols-rounded">account_circle</i>
@@ -252,7 +281,7 @@ $list = $reclamationC->afficherReclamations(); // Récupération des réclamatio
     </tr>
   </thead>
   <tbody>
-    <?php foreach($list as $rec): ?>
+    <?php foreach($listReclamations as $rec): ?>
       <tr>
         <td><p class="text-sm mb-0">RC-<?= htmlspecialchars($rec['id_reclamation']) ?></p></td>
         <td><p class="text-sm mb-0"><?= htmlspecialchars($rec['nom']) ?></p></td>
@@ -275,7 +304,49 @@ $list = $reclamationC->afficherReclamations(); // Récupération des réclamatio
     <?php endforeach; ?>
   </tbody>
 </table>
+<style>
+.pagination {
+    margin: 20px 0;
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+}
 
+.pagination a {
+    color: #d63384; /* Rose foncé */
+    background-color: #fff;
+    border: 1px solid #d63384;
+    padding: 8px 12px;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.pagination a:hover {
+    background-color: #d63384;
+    color: white;
+}
+
+/* Style pour la page active (vous devrez ajouter une classe 'active' au lien de la page courante) */
+.pagination a.active {
+    background-color: #d63384;
+    color: white;
+    font-weight: bold;
+}
+</style>
+</div>
+</div>
+<?php
+$totalPagesReclamations = ceil($totalReclamations / $limit);
+$currentPageReclamation = isset($_GET['pageReclamation']) ? (int)$_GET['pageReclamation'] : 1;
+
+echo '<div class="pagination">';
+for ($i = 1; $i <= $totalPagesReclamations; $i++) {
+    $activeClass = ($i == $currentPageReclamation) ? 'active' : '';
+    echo "<a class='$activeClass' href='?pageReclamation=$i&searchReclamation=" . urlencode($searchReclamation) . "&etat=" . urlencode($etatFilter) . "&sortReclamation=" . urlencode($sortReclamation) . "'>$i</a> ";
+}
+echo '</div>';
+?>
 </div>
 
             </div>
@@ -288,6 +359,76 @@ $list = $reclamationC->afficherReclamations(); // Récupération des réclamatio
       <div class="container-fluid py-2">
       
       <div class="row">
+
+      <div class="input-group input-group-outline">
+      <form method="GET" class="d-flex justify-content-center align-items-center my-5" style="max-width: 600px; margin: 0 auto;">
+    <div class="d-flex align-items-center gap-3 w-100">
+        <!-- Champ de recherche pour Réponses -->
+        <div class="input-group input-group-outline me-2 flex-grow-1">
+            <label class="form-label" style="transform: translateY(-24px) scale(0.8); color: #6c757d; transition: all 0.2s;">Rechercher</label>
+            <input type="text" 
+                   class="form-control" 
+                   name="searchReponse" 
+                   value="<?php echo isset($_GET['searchReponse']) ? htmlspecialchars($_GET['searchReponse']) : ''; ?>"
+                   style="padding: 12px 16px; border-radius: 8px; border: 1px solid #e0e0e0; background-color: #f8f9fa;">
+            <span class="position-absolute" style="left: 12px; top: 50%; transform: translateY(-50%); color: #6c757d;">
+
+            </span>
+        </div>
+
+        <!-- Boutons -->
+        <div class="d-flex align-items-center gap-2">
+            <button type="submit" class="btn btn-primary px-4" style="height: 44px; border-radius: 8px;">
+                <i class="fas fa-search me-2"></i>Rechercher
+            </button>
+            <a href="?pageReponse=1" class="btn btn-outline-secondary px-4" style="height: 44px; border-radius: 8px;">
+                <i class="fas fa-undo me-2"></i>Réinitialiser
+            </a>
+        </div>
+    </div>
+</form>
+
+<style>
+    .form-control {
+        border: 1px solid #e0e0e0;
+        transition: all 0.3s;
+        padding-left: 40px !important;
+    }
+    
+    .form-control:focus {
+        outline: none;
+        border-color: #d63384;
+        box-shadow: 0 0 0 2px rgba(74, 139, 252, 0.2);
+        background-color: white;
+    }
+    
+    .input-group:focus-within label {
+        color: #d63384 !important;
+    }
+    
+    .form-control:hover {
+        border-color: #adb5bd;
+    }
+    
+    @media (max-width: 768px) {
+        form {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 1rem !important;
+        }
+        
+        .input-group {
+            width: 100% !important;
+        }
+        
+        .d-flex.align-items-center.gap-2 {
+            width: 100%;
+            justify-content: space-between;
+        }
+    }
+</style>
+</div>
+
         <div class="col-12">
           <div class="card my-4">
             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
@@ -307,7 +448,7 @@ $list = $reclamationC->afficherReclamations(); // Récupération des réclamatio
       </tr>
     </thead>
     <tbody>
-      <?php foreach($reponses as $rep): ?>
+      <?php foreach($listReponses as $rep): ?>
         <tr>
           <td><p class="text-sm mb-0">RP-<?= htmlspecialchars($rep['id_reponse']) ?></p></td>
           <td><p class="text-sm mb-0">RC-<?= htmlspecialchars($rep['id_reclamation']) ?></p></td>
@@ -325,6 +466,17 @@ $list = $reclamationC->afficherReclamations(); // Récupération des réclamatio
 </div>
 
             </div>
+                          <?php
+              $totalPagesReponses = ceil($totalReponses / $limit);
+              $currentPageReponse = isset($_GET['pageReponse']) ? (int)$_GET['pageReponse'] : 1;
+
+              echo '<div class="pagination">';
+              for ($i = 1; $i <= $totalPagesReponses; $i++) {
+                  $activeClass = ($i == $currentPageReponse) ? 'active' : '';
+                  echo "<a class='$activeClass' href='?pageReponse=$i&searchReponse=" . urlencode($searchReponse) . "&sortReponse=" . urlencode($sortReponse) . "'>$i</a> ";
+              }
+              echo '</div>';
+              ?>
           </div>
         </div>
       </div>
