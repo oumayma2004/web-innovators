@@ -58,8 +58,8 @@ if (isset($_GET['id'])) {
     <div class="sidenav-header">
       <i class="fas fa-times p-3 cursor-pointer text-dark opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
       <a class="navbar-brand px-4 py-3 m-0" href=" https://demos.creative-tim.com/material-dashboard/pages/dashboard " target="_blank">
-        <img src="assets/logosite1.png" class="navbar-brand-img" width="26" height="26" alt="main_logo">
-        <span class="ms-1 text-sm text-dark">Tfarhida</span>
+        <img src="assets/logosite1.png" class="navbar-brand-img" width="160" alt="main_logo">
+       
       </a>
     </div>
     <hr class="horizontal dark mt-0 mb-2">
@@ -92,7 +92,7 @@ if (isset($_GET['id'])) {
         <li class="nav-item">
           <a class="nav-link text-dark" href="../pages/rtl.html">
             <i class="material-symbols-rounded opacity-5">format_textdirection_r_to_l</i>
-            <span class="nav-link-text ms-1">RTL</span>
+            <span class="nav-link-text ms-1">Réclamation</span>
           </a>
         </li>
         <li class="nav-item">
@@ -109,7 +109,7 @@ if (isset($_GET['id'])) {
       </div>
     </div>
   </aside>
-  <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
+  <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg" style="background-image: url('img/back.jpeg'); background-size: cover; background-position: center;">
     <!-- Navbar -->
     <nav class="navbar navbar-main navbar-expand-lg px-0 mx-3 shadow-none border-radius-xl" id="navbarBlur" data-scroll="true">
       <div class="container-fluid py-1 px-3">
@@ -228,7 +228,7 @@ if (isset($_GET['id'])) {
       </div>
     </div>  
       <div class="row mb-4">
-        <div class="col-lg-8 col-md-6 mb-md-0 mb-4">
+        <div class="col-lg-8 col-md-6 mb-md-0 mb-4 w-100">
           <div class="card">
             <div class="card-header pb-0">
               <div class="row">

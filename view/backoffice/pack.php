@@ -36,8 +36,11 @@ $packsMoreThan30Count = count($packsMoreThan30);
   <!-- CSS Files -->
   <link id="pagestyle" href="assets/css/material-dashboard.css?v=3.2.0" rel="stylesheet" />
   <!-- Chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 
 <body class="g-sidenav-show  bg-gray-100">
@@ -54,8 +57,7 @@ $packsMoreThan30Count = count($packsMoreThan30);
     <div class="sidenav-header">
       <i class="fas fa-times p-3 cursor-pointer text-dark opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
       <a class="navbar-brand px-4 py-3 m-0" href=" https://demos.creative-tim.com/material-dashboard/pages/dashboard " target="_blank">
-        <img src="assets/logosite1.png" class="navbar-brand-img" width="26" height="26" alt="main_logo">
-        <span class="ms-1 text-sm text-dark">Tfarhida</span>
+        <img src="assets/logosite1.png" class="navbar-brand-img" width="160" alt="main_logo">
       </a>
     </div>
     <hr class="horizontal dark mt-0 mb-2">
@@ -88,7 +90,7 @@ $packsMoreThan30Count = count($packsMoreThan30);
         <li class="nav-item">
           <a class="nav-link text-dark" href="../pages/rtl.html">
             <i class="material-symbols-rounded opacity-5">format_textdirection_r_to_l</i>
-            <span class="nav-link-text ms-1">RTL</span>
+            <span class="nav-link-text ms-1">Réclamation</span>
           </a>
         </li>
         <li class="nav-item">
@@ -105,7 +107,7 @@ $packsMoreThan30Count = count($packsMoreThan30);
       </div>
     </div>
   </aside>
-  <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
+  <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg" style="background-image: url('img/back.jpeg'); background-size: cover; background-position: center;">
     <!-- Navbar -->
     <nav class="navbar navbar-main navbar-expand-lg px-0 mx-3 shadow-none border-radius-xl" id="navbarBlur" data-scroll="true">
       <div class="container-fluid py-1 px-3">
@@ -223,330 +225,379 @@ $packsMoreThan30Count = count($packsMoreThan30);
         </div>
       </div>
     </div>
-    <div class="search">
-                    <label>
-                        <input type="text" id="live_search12" placeholder="Search here">
-                        <ion-icon name="search-outline"></ion-icon>
-                    </label>
-                </div>
+    <div style="margin: 20px 0;">
+    <div style="display: flex; max-width: 400px; position: relative; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border-radius: 50px; overflow: hidden; transition: all 0.3s ease;">
+        <input type="text" id="live_search12" placeholder="Search here..." 
+               style="flex: 1; border: none; background-color: #f8f9fa; padding: 14px 20px; font-size: 16px; border-radius: 50px 0 0 50px; outline: none; transition: all 0.3s ease;">
+        <button type="button" 
+                style="background-color: pink; border: none; color: white; padding: 0 20px; cursor: pointer; border-radius: 0 50px 50px 0; transition: background-color 0.3s ease;">
+            <i class="fas fa-search" style="font-size: 18px;"></i>
+        </button>
+    </div>
+</div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-            <script type="text/javascript">
-                $(document).ready(function(){
-                    $("#live_search12").on('keyup change', function(){
-                        $('#recentOrders').html(''); 
-                        var input =$(this).val();
-                        console.log(input);
-                        $.ajax({
-                            type: 'GET',
-                            url:"recherchePack.php",
-                            data: 'input=' + encodeURIComponent(input),
-                            success: function(data){
-                                if(data!=""){
-                                    $('#recentOrders').append(data); 
-                                }else{
-                                    document.getElementById('recentOrders').innerHTML = "<div style='font-size:20px'>aucun offre</div>"
-                                }
-                            }
-                        });
-                    });
-                 });
-            </script>
-      <div class="row mb-4">
-        <div class="col-lg-8 col-md-6 mb-md-0 mb-4">
-          <div class="card">
-            <div class="card-header pb-0">
-            <a class="btn btn-outline-dark mt-3 w-10" href="ajoutpack.html" type="button">ajouter</a>  
-              <div class="row">
-                <div class="col-lg-6 col-7">
-                  <h6>Table Pack</h6>
+    <script type="text/javascript">
+      $(document).ready(function(){
+        $("#live_search12").on('keyup change', function(){
+          $('#recentOrders').html(''); 
+          var input =$(this).val();
+          console.log(input);
+          $.ajax({
+            type: 'GET',
+            url:"recherchePack.php",
+            data: 'input=' + encodeURIComponent(input),
+            success: function(data){
+              if(data!=""){
+                $('#recentOrders').append(data); 
+              }else{
+                document.getElementById('recentOrders').innerHTML = "<div style='font-size:20px'>aucun offre</div>"
+              }
+            }
+          });
+        });
+      });
+    </script>
+    <div class="row mb-4">
+      <div class="col-lg-8 col-md-6 mb-md-0 mb-4 w-100">
+        <div class="card">
+          <div class="card-header pb-0">
+            <button class="btn btn-outline-dark mt-3 w-10" data-bs-toggle="modal" data-bs-target="#addPackModal" type="button">
+              <i class="fas fa-plus me-1"></i> Add Pack
+            </button>  
+            <div class="row">
+              <div class="col-lg-6 col-7">
+                <h6>Table Pack</h6>
+              </div>
+              <div class="col-lg-6 col-5 my-auto text-end">
+                <div class="dropdown float-lg-end pe-4">
+                  <a class="cursor-pointer" id="dropdownTable" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fa fa-ellipsis-v text-secondary"></i>
+                  </a>
+                  <ul class="dropdown-menu px-2 py-3 ms-sm-n4 ms-n5" aria-labelledby="dropdownTable">
+                    <li><a class="dropdown-item border-radius-md" href="javascript:;">Action</a></li>
+                    <li><a class="dropdown-item border-radius-md" href="javascript:;">Another action</a></li>
+                    <li><a class="dropdown-item border-radius-md" href="javascript:;">Something else here</a></li>
+                  </ul>
                 </div>
-                <div class="col-lg-6 col-5 my-auto text-end">
-                  <div class="dropdown float-lg-end pe-4">
-                    <a class="cursor-pointer" id="dropdownTable" data-bs-toggle="dropdown" aria-expanded="false">
-                      <i class="fa fa-ellipsis-v text-secondary"></i>
-                    </a>
-                    <ul class="dropdown-menu px-2 py-3 ms-sm-n4 ms-n5" aria-labelledby="dropdownTable">
-                      <li><a class="dropdown-item border-radius-md" href="javascript:;">Action</a></li>
-                      <li><a class="dropdown-item border-radius-md" href="javascript:;">Another action</a></li>
-                      <li><a class="dropdown-item border-radius-md" href="javascript:;">Something else here</a></li>
-                    </ul>
+              </div>
+            </div>
+          </div>
+          <div class="card-body px-0 pb-2">
+            <div class="table-responsive">
+              <table class="table align-items-center mb-0">
+                <form method="POST" action="export_packs_pdf.php">
+                  <button type="submit" name="export_packs_pdf" class="btn btn-success">
+                    <i class="fas fa-file-pdf me-1"></i> Export Packs as PDF
+                  </button>
+                </form>
+
+                <thead>
+                  <tr>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ID</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Title</th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Description</th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Price</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Places</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Date</th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="recentOrders">
+                  <?php foreach ($list as $pack): ?>
+                  <tr>
+                    <td>
+                      <div class="d-flex px-2 py-1">
+                        <div><?= $pack['id']; ?></div>
+                      </div>
+                    </td>
+                    <td>
+                      <div class="avatar-group mt-2">
+                        <?= htmlspecialchars($pack['titre']); ?>
+                      </div>
+                    </td>
+                    <td class="align-middle text-center text-sm">
+                      <span class="text-xs font-weight-bold"><?= htmlspecialchars($pack['description']); ?></span>
+                    </td>
+                    <td class="align-middle text-center text-sm">
+                      <span class="text-xs font-weight-bold"><?= htmlspecialchars($pack['prix']); ?></span>
+                    </td>
+                    <td class="align-middle text-center text-sm">
+                      <span class="text-xs font-weight-bold"><?= htmlspecialchars($pack['nombre_places']); ?></span>
+                    </td>
+                    <td class="align-middle text-center text-sm">
+                      <span class="text-xs font-weight-bold"><?= htmlspecialchars($pack['date_d']); ?></span>
+                    </td>
+                    <td class="align-middle text-center">
+                      <button class="btn btn-sm btn-primary me-1" data-bs-toggle="modal" data-bs-target="#editPackModal" 
+                        onclick="setEditFormValues(
+                          '<?= $pack['id'] ?>',
+                          '<?= htmlspecialchars($pack['titre'], ENT_QUOTES) ?>',
+                          '<?= htmlspecialchars($pack['description'], ENT_QUOTES) ?>',
+                          '<?= htmlspecialchars($pack['prix']) ?>',
+                          '<?= htmlspecialchars($pack['nombre_places']) ?>',
+                          '<?= htmlspecialchars($pack['date_d']) ?>'
+                        )">
+                        <i class="fas fa-edit"></i> Edit
+                      </button>
+                      <a href="deletepack.php?id=<?= $pack['id'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this pack?');">
+                        <i class="fas fa-trash"></i> Delete
+                      </a>
+                    </td>
+                  </tr>
+                  <?php endforeach; ?>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add Pack Modal -->
+    <div class="modal fade" id="addPackModal" tabindex="-1" aria-labelledby="addPackModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header bg-gradient-dark">
+            <h5 class="modal-title text-white" id="addPackModalLabel">Add New Pack</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form id="addPackForm" action="addpack.php" method="POST">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="titre" class="form-label">Title</label>
+                    <input type="text" class="form-control" id="titre" name="titre" required>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="prix" class="form-label">Price</label>
+                    <input type="number" class="form-control" id="prix" name="prix" step="0.01" required>
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="card-body px-0 pb-2">
-              <div class="table-responsive">
-                <table class="table align-items-center mb-0">
-                <form method="POST" action="export_packs_pdf.php">
-    <button type="submit" name="export_packs_pdf" class="btn btn-success">
-        Exporter Packs en PDF
-    </button>
-</form>
-
-                  <thead>
-                    <tr>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ID</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">titre</th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">description</th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">prix</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">nombre_places</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Date</th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Delete</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">update</th>
-                    </tr>
-                  </thead>
-                  <tbody id="recentOrders">
-                  <?php
-                    foreach ($list as $pack) {
-                    ?>
-                    <tr>
-                      <td>
-                        <div class="d-flex px-2 py-1">
-                          <div>
-                              <?= $pack['id']; ?>
-                          </div>
-                        </div>
-                      </td>
-                      <td>
-                        <div class="avatar-group mt-2">
-                            <?= htmlspecialchars($pack['titre']); ?>
-                        </div>
-                      </td>
-                      <td class="align-middle text-center text-sm">
-                        <span class="text-xs font-weight-bold"> <?= htmlspecialchars($pack['description']); ?></span>
-                      </td>
-                      <td class="align-middle text-center text-sm">
-                        <span class="text-xs font-weight-bold"> <?= htmlspecialchars($pack['prix']); ?></span>
-                      </td>
-                      <td class="align-middle text-center text-sm">
-                        <span class="text-xs font-weight-bold"> <?= htmlspecialchars($pack['nombre_places']); ?></span>
-                      </td>
-                      <td class="align-middle text-center text-sm">
-                        <span class="text-xs font-weight-bold"> <?= htmlspecialchars($pack['date_d']); ?></span>
-                      </td>
-                      <td class="align-middle">
-                        <a href="deletepack.php?id_code=<?= htmlspecialchars($codePromo['id_code']); ?>" class="btn btn-primary">
-                          <i class="fa-solid fa-pen"></i> Delete
-                        </a>
-                      </td>
-                      <td class="align-middle">
-                          <a href="updatepack.php?id=<?= htmlspecialchars($pack['id']); ?>" class="btn btn-primary">
-                              <i class="fa-solid fa-pen"></i> Update
-                          </a>
-                      </td>
-                    </tr>
-                    <?php
-                      }
-                      ?>
-                  </tbody>
-                </table>
+              <div class="row mt-3">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="nombre_places" class="form-label">Number of Places</label>
+                    <input type="number" class="form-control" id="nombre_places" name="nombre_places" required>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="date_d" class="form-label">Date</label>
+                    <input type="date" class="form-control" id="date_d" name="date_d" required>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="container">
-    <h1>Statistiques des Packs par Nombre de Places</h1>
-    <div class="row">
-      <!-- Graphique Packs entre 5 et 10 places -->
-      <div class="col-md-4">
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title">Packs entre 5 et 10 places</h5>
-            <canvas id="packs5to10Chart"></canvas>
-          </div>
-        </div>
-      </div>
-
-      <!-- Graphique Packs entre 20 et 30 places -->
-      <div class="col-md-4">
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title">Packs entre 20 et 30 places</h5>
-            <canvas id="packs20to30Chart"></canvas>
-          </div>
-        </div>
-      </div>
-
-      <!-- Graphique Packs plus de 30 places -->
-      <div class="col-md-4">
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title">Packs plus de 30 places</h5>
-            <canvas id="packsMoreThan30Chart"></canvas>
+              <div class="form-group mt-3">
+                <label for="description" class="form-label">Description</label>
+                <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Save Pack</button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      // Graphique Packs entre 5 et 10 places
-      var ctx5to10 = document.getElementById('packs5to10Chart').getContext('2d');
-      new Chart(ctx5to10, {
-        type: 'bar',
-        data: {
-          labels: ['Packs entre 5 et 10 places'],
-          datasets: [{
-            label: 'Nombre de Packs',
-            data: [<?= $packs5To10Count ?>],
-            backgroundColor: '#36a2eb',
-            borderColor: '#36a2eb',
-            borderWidth: 1
-          }]
-        },
-        options: {
-          responsive: true,
-          scales: {
-            y: {
-              beginAtZero: true
-            }
-          }
-        }
-      });
-
-      // Graphique Packs entre 20 et 30 places
-      var ctx20to30 = document.getElementById('packs20to30Chart').getContext('2d');
-      new Chart(ctx20to30, {
-        type: 'bar',
-        data: {
-          labels: ['Packs entre 20 et 30 places'],
-          datasets: [{
-            label: 'Nombre de Packs',
-            data: [<?= $packs20To30Count ?>],
-            backgroundColor: '#ff6384',
-            borderColor: '#ff6384',
-            borderWidth: 1
-          }]
-        },
-        options: {
-          responsive: true,
-          scales: {
-            y: {
-              beginAtZero: true
-            }
-          }
-        }
-      });
-
-      // Graphique Packs plus de 30 places
-      var ctxMoreThan30 = document.getElementById('packsMoreThan30Chart').getContext('2d');
-      new Chart(ctxMoreThan30, {
-        type: 'bar',
-        data: {
-          labels: ['Packs plus de 30 places'],
-          datasets: [{
-            label: 'Nombre de Packs',
-            data: [<?= $packsMoreThan30Count ?>],
-            backgroundColor: '#ff9f40',
-            borderColor: '#ff9f40',
-            borderWidth: 1
-          }]
-        },
-        options: {
-          responsive: true,
-          scales: {
-            y: {
-              beginAtZero: true
-            }
-          }
-        }
-      });
-    });
-  </script>
-      <footer class="footer py-4  ">
-        <div class="container-fluid">
-          <div class="row align-items-center justify-content-lg-between">
-            <div class="col-lg-6 mb-lg-0 mb-4">
-              <div class="copyright text-center text-sm text-muted text-lg-start">
-                © <script>
-                  document.write(new Date().getFullYear())
-                </script>,
-                made with <i class="fa fa-heart"></i> by
-                <a href="https://www.creative-tim.com" class="font-weight-bold" target="_blank">Tfarhida</a>
-                for a better web.
+    <!-- Edit Pack Modal -->
+    <div class="modal fade" id="editPackModal" tabindex="-1" aria-labelledby="editPackModalLabel" aria-hidden="true" >
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="background-image: url('img/back.jpeg'); background-size: cover; background-position: center;">
+          <div class="modal-header bg-gradient-dark">
+            <h5 class="modal-title text-white" id="editPackModalLabel">Edit Pack</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form id="editPackForm" action="updatepack.php" method="POST">
+              <input type="hidden" id="edit_id" name="id">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="edit_titre" class="form-label">Title</label>
+                    <input type="text" class="form-control" id="edit_titre" name="titre" required>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="edit_prix" class="form-label">Price</label>
+                    <input type="number" class="form-control" id="edit_prix" name="prix" step="0.01" required>
+                  </div>
+                </div>
               </div>
+              <div class="row mt-3">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="edit_nombre_places" class="form-label">Number of Places</label>
+                    <input type="number" class="form-control" id="edit_nombre_places" name="nombre_places" required>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="edit_date_d" class="form-label">Date</label>
+                    <input type="date" class="form-control" id="edit_date_d" name="date_d" required>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group mt-3">
+                <label for="edit_description" class="form-label">Description</label>
+                <textarea class="form-control" id="edit_description" name="description" rows="3" required></textarea>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Update Pack</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <h1>Statistiques des Packs par Nombre de Places</h1>
+      <div class="row">
+        <!-- Graphique Packs entre 5 et 10 places -->
+        <div class="col-md-4">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Packs entre 5 et 10 places</h5>
+              <canvas id="packs5to10Chart"></canvas>
             </div>
           </div>
         </div>
-      </footer>
+
+        <!-- Graphique Packs entre 20 et 30 places -->
+        <div class="col-md-4">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Packs entre 20 et 30 places</h5>
+              <canvas id="packs20to30Chart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Graphique Packs plus de 30 places -->
+        <div class="col-md-4">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Packs plus de 30 places</h5>
+              <canvas id="packsMoreThan30Chart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+
+    <script>
+      // Function to set values in edit form
+      function setEditFormValues(id, titre, description, prix, nombre_places, date_d) {
+        document.getElementById('edit_id').value = id;
+        document.getElementById('edit_titre').value = titre;
+        document.getElementById('edit_description').value = description;
+        document.getElementById('edit_prix').value = prix;
+        document.getElementById('edit_nombre_places').value = nombre_places;
+        document.getElementById('edit_date_d').value = date_d;
+      }
+
+      // Initialize charts
+      document.addEventListener('DOMContentLoaded', function () {
+        // Graphique Packs entre 5 et 10 places
+        var ctx5to10 = document.getElementById('packs5to10Chart').getContext('2d');
+        new Chart(ctx5to10, {
+          type: 'bar',
+          data: {
+            labels: ['Packs entre 5 et 10 places'],
+            datasets: [{
+              label: 'Nombre de Packs',
+              data: [<?= $packs5To10Count ?>],
+              backgroundColor: '#36a2eb',
+              borderColor: '#36a2eb',
+              borderWidth: 1
+            }]
+          },
+          options: {
+            responsive: true,
+            scales: {
+              y: {
+                beginAtZero: true
+              }
+            }
+          }
+        });
+
+        // Graphique Packs entre 20 et 30 places
+        var ctx20to30 = document.getElementById('packs20to30Chart').getContext('2d');
+        new Chart(ctx20to30, {
+          type: 'bar',
+          data: {
+            labels: ['Packs entre 20 et 30 places'],
+            datasets: [{
+              label: 'Nombre de Packs',
+              data: [<?= $packs20To30Count ?>],
+              backgroundColor: '#ff6384',
+              borderColor: '#ff6384',
+              borderWidth: 1
+            }]
+          },
+          options: {
+            responsive: true,
+            scales: {
+              y: {
+                beginAtZero: true
+              }
+            }
+          }
+        });
+
+        // Graphique Packs plus de 30 places
+        var ctxMoreThan30 = document.getElementById('packsMoreThan30Chart').getContext('2d');
+        new Chart(ctxMoreThan30, {
+          type: 'bar',
+          data: {
+            labels: ['Packs plus de 30 places'],
+            datasets: [{
+              label: 'Nombre de Packs',
+              data: [<?= $packsMoreThan30Count ?>],
+              backgroundColor: '#ff9f40',
+              borderColor: '#ff9f40',
+              borderWidth: 1
+            }]
+          },
+          options: {
+            responsive: true,
+            scales: {
+              y: {
+                beginAtZero: true
+              }
+            }
+          }
+        });
+      });
+    </script>
+
+    <footer class="footer py-4">
+      <div class="container-fluid">
+        <div class="row align-items-center justify-content-lg-between">
+          <div class="col-lg-6 mb-lg-0 mb-4">
+            <div class="copyright text-center text-sm text-muted text-lg-start">
+              © <script>
+                document.write(new Date().getFullYear())
+              </script>,
+              made with <i class="fa fa-heart"></i> by
+              <a href="https://www.creative-tim.com" class="font-weight-bold" target="_blank">Tfarhida</a>
+              for a better web.
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
   </main>
-  <div class="fixed-plugin">
-    <a class="fixed-plugin-button text-dark position-fixed px-3 py-2">
-      <i class="material-symbols-rounded py-2">settings</i>
-    </a>
-    <div class="card shadow-lg">
-      <div class="card-header pb-0 pt-3">
-        <div class="float-start">
-          <h5 class="mt-3 mb-0">Material UI Configurator</h5>
-          <p>See our dashboard options.</p>
-        </div>
-        <div class="float-end mt-4">
-          <button class="btn btn-link text-dark p-0 fixed-plugin-close-button">
-            <i class="material-symbols-rounded">clear</i>
-          </button>
-        </div>
-        <!-- End Toggle Button -->
-      </div>
-      <hr class="horizontal dark my-1">
-      <div class="card-body pt-sm-3 pt-0">
-        <!-- Sidebar Backgrounds -->
-        <div>
-          <h6 class="mb-0">Sidebar Colors</h6>
-        </div>
-        <a href="javascript:void(0)" class="switch-trigger background-color">
-          <div class="badge-colors my-2 text-start">
-            <span class="badge filter bg-gradient-primary" data-color="primary" onclick="sidebarColor(this)"></span>
-            <span class="badge filter bg-gradient-dark active" data-color="dark" onclick="sidebarColor(this)"></span>
-            <span class="badge filter bg-gradient-info" data-color="info" onclick="sidebarColor(this)"></span>
-            <span class="badge filter bg-gradient-success" data-color="success" onclick="sidebarColor(this)"></span>
-            <span class="badge filter bg-gradient-warning" data-color="warning" onclick="sidebarColor(this)"></span>
-            <span class="badge filter bg-gradient-danger" data-color="danger" onclick="sidebarColor(this)"></span>
-          </div>
-        </a>
-        <!-- Sidenav Type -->
-        <div class="mt-3">
-          <h6 class="mb-0">Sidenav Type</h6>
-          <p class="text-sm">Choose between different sidenav types.</p>
-        </div>
-        <div class="d-flex">
-          <button class="btn bg-gradient-dark px-3 mb-2" data-class="bg-gradient-dark" onclick="sidebarType(this)">Dark</button>
-          <button class="btn bg-gradient-dark px-3 mb-2 ms-2" data-class="bg-transparent" onclick="sidebarType(this)">Transparent</button>
-          <button class="btn bg-gradient-dark px-3 mb-2  active ms-2" data-class="bg-white" onclick="sidebarType(this)">White</button>
-        </div>
-        <p class="text-sm d-xl-none d-block mt-2">You can change the sidenav type just on desktop view.</p>
-        <!-- Navbar Fixed -->
-        <div class="mt-3 d-flex">
-          <h6 class="mb-0">Navbar Fixed</h6>
-          <div class="form-check form-switch ps-0 ms-auto my-auto">
-            <input class="form-check-input mt-1 ms-auto" type="checkbox" id="navbarFixed" onclick="navbarFixed(this)">
-          </div>
-        </div>
-        <hr class="horizontal dark my-3">
-        <div class="mt-2 d-flex">
-          <h6 class="mb-0">Light / Dark</h6>
-          <div class="form-check form-switch ps-0 ms-auto my-auto">
-            <input class="form-check-input mt-1 ms-auto" type="checkbox" id="dark-version" onclick="darkMode(this)">
-          </div>
-        </div>
-        <hr class="horizontal dark my-sm-4">
-        <a class="btn bg-gradient-info w-100" href="https://www.creative-tim.com/product/material-dashboard-pro">Free Download</a>
-        <a class="btn btn-outline-dark w-100" href="https://www.creative-tim.com/learning-lab/bootstrap/overview/material-dashboard">View documentation</a>
-        <div class="w-100 text-center">
-          <a class="github-button" href="https://github.com/creativetimofficial/material-dashboard" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star creativetimofficial/material-dashboard on GitHub">Star</a>
-          <h6 class="mt-3">Thank you for sharing!</h6>
-          <a href="https://twitter.com/intent/tweet?text=Check%20Material%20UI%20Dashboard%20made%20by%20%40CreativeTim%20%23webdesign%20%23dashboard%20%23bootstrap5&amp;url=https%3A%2F%2Fwww.creative-tim.com%2Fproduct%2Fsoft-ui-dashboard" class="btn btn-dark mb-0 me-2" target="_blank">
-            <i class="fab fa-twitter me-1" aria-hidden="true"></i> Tweet
-          </a>
-          <a href="https://www.facebook.com/sharer/sharer.php?u=https://www.creative-tim.com/product/material-dashboard" class="btn btn-dark mb-0 me-2" target="_blank">
-            <i class="fab fa-facebook-square me-1" aria-hidden="true"></i> Share
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
+
   <!--   Core JS Files   -->
   <script src="assets/js/core/popper.min.js"></script>
   <script src="assets/js/core/bootstrap.min.js"></script>
@@ -627,7 +678,6 @@ $packsMoreThan30Count = count($packsMoreThan30);
       },
     });
 
-
     var ctx2 = document.getElementById("chart-line").getContext("2d");
 
     new Chart(ctx2, {
@@ -646,7 +696,6 @@ $packsMoreThan30Count = count($packsMoreThan30);
           fill: true,
           data: [120, 230, 130, 440, 250, 360, 270, 180, 90, 300, 310, 220],
           maxBarThickness: 6
-
         }],
       },
       options: {
@@ -729,7 +778,6 @@ $packsMoreThan30Count = count($packsMoreThan30);
           fill: true,
           data: [50, 40, 300, 220, 500, 250, 400, 230, 500],
           maxBarThickness: 6
-
         }],
       },
       options: {
@@ -770,7 +818,7 @@ $packsMoreThan30Count = count($packsMoreThan30);
               display: false,
               drawOnChartArea: false,
               drawTicks: false,
-              borderDash: [4, 4]
+              borderDash: [5, 5]
             },
             ticks: {
               display: true,

@@ -5,6 +5,9 @@ $list = $ReservationC->getAllReservations();
 $mostReservedPack = $ReservationC->getMostReservedPack();
 $reservationStats = $ReservationC->getReservationStats();
 
+// Get all users and packs for dropdowns
+$users = $ReservationC->getAllUsers();
+$packs = $ReservationC->getAllPacks();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -29,6 +32,10 @@ $reservationStats = $ReservationC->getReservationStats();
   <!-- CSS Files -->
   <link id="pagestyle" href="assets/css/material-dashboard.css?v=3.2.0" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 
 <body class="g-sidenav-show  bg-gray-100">
@@ -36,8 +43,8 @@ $reservationStats = $ReservationC->getReservationStats();
     <div class="sidenav-header">
       <i class="fas fa-times p-3 cursor-pointer text-dark opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
       <a class="navbar-brand px-4 py-3 m-0" href=" https://demos.creative-tim.com/material-dashboard/pages/dashboard " target="_blank">
-        <img src="assets/logosite1.png" class="navbar-brand-img" width="26" height="26" alt="main_logo">
-        <span class="ms-1 text-sm text-dark">Tfarhida</span>
+        <img src="assets/logosite1.png" class="navbar-brand-img" width="160" alt="main_logo">
+       
       </a>
     </div>
     <hr class="horizontal dark mt-0 mb-2">
@@ -56,13 +63,13 @@ $reservationStats = $ReservationC->getReservationStats();
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active bg-gradient-dark text-white" href="codepromo.php">
+          <a class="nav-link text-dark" href="codepromo.php">
             <i class="material-symbols-rounded opacity-5">receipt_long</i>
             <span class="nav-link-text ms-1">Code promo</span>
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-dark" href="reservation.php">
+          <a class="nav-link active bg-gradient-dark  text-white" href="reservation.php">
             <i class="material-symbols-rounded opacity-5">view_in_ar</i>
             <span class="nav-link-text ms-1">Reservation</span>
           </a>
@@ -70,7 +77,7 @@ $reservationStats = $ReservationC->getReservationStats();
         <li class="nav-item">
           <a class="nav-link text-dark" href="../pages/rtl.html">
             <i class="material-symbols-rounded opacity-5">format_textdirection_r_to_l</i>
-            <span class="nav-link-text ms-1">RTL</span>
+            <span class="nav-link-text ms-1">Réclamation</span>
           </a>
         </li>
         <li class="nav-item">
@@ -87,7 +94,7 @@ $reservationStats = $ReservationC->getReservationStats();
       </div>
     </div>
   </aside>
-  <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
+  <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg" style="background-image: url('img/back.jpeg'); background-size: cover; background-position: center;">
     <!-- Navbar -->
     <nav class="navbar navbar-main navbar-expand-lg px-0 mx-3 shadow-none border-radius-xl" id="navbarBlur" data-scroll="true">
       <div class="container-fluid py-1 px-3">
@@ -205,492 +212,313 @@ $reservationStats = $ReservationC->getReservationStats();
         </div>
       </div>
     </div>  
-    <div class="search">
-                    <label>
-                        <input type="text" id="live_search12" placeholder="Search here">
-                        <ion-icon name="search-outline"></ion-icon>
-                    </label>
-                </div>
+    <div style="margin: 20px 0;">
+    <div style="display: flex; max-width: 400px; position: relative; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border-radius: 50px; overflow: hidden; transition: all 0.3s ease;">
+        <input type="text" id="live_search12" placeholder="Search here..." 
+               style="flex: 1; border: none; background-color: #f8f9fa; padding: 14px 20px; font-size: 16px; border-radius: 50px 0 0 50px; outline: none; transition: all 0.3s ease;">
+        <button type="button" 
+                style="background-color: pink; border: none; color: white; padding: 0 20px; cursor: pointer; border-radius: 0 50px 50px 0; transition: background-color 0.3s ease;">
+            <i class="fas fa-search" style="font-size: 18px;"></i>
+        </button>
+    </div>
+</div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-            <script type="text/javascript">
-                $(document).ready(function(){
-                    $("#live_search12").on('keyup change', function(){
-                        $('#recentOrders').html(''); 
-                        var input =$(this).val();
-                        console.log(input);
-                        $.ajax({
-                            type: 'GET',
-                            url:"rechercheReservation.php",
-                            data: 'input=' + encodeURIComponent(input),
-                            success: function(data){
-                                if(data!=""){
-                                    $('#recentOrders').append(data); 
-                                }else{
-                                    document.getElementById('recentOrders').innerHTML = "<div style='font-size:20px'>aucun offre</div>"
-                                }
-                            }
-                        });
-                    });
-                 });
-            </script>
-      <div class="row mb-4">
-        <div class="col-lg-8 col-md-6 mb-md-0 mb-4">
-          <div class="card">
-            <div class="card-header pb-0">
-              <div class="row">
-                <div class="col-lg-6 col-7">
-                  <h6>Table Reservation</h6>
+    <script type="text/javascript">
+      $(document).ready(function(){
+        $("#live_search12").on('keyup change', function(){
+          $('#recentOrders').html(''); 
+          var input =$(this).val();
+          console.log(input);
+          $.ajax({
+            type: 'GET',
+            url:"rechercheReservation.php",
+            data: 'input=' + encodeURIComponent(input),
+            success: function(data){
+              if(data!=""){
+                $('#recentOrders').append(data); 
+              }else{
+                document.getElementById('recentOrders').innerHTML = "<div style='font-size:20px'>aucun offre</div>"
+              }
+            }
+          });
+        });
+      });
+    </script>
+    <div class="row mb-4">
+      <div class="col-lg-8 col-md-6 mb-md-0 mb-4 w-100">
+        <div class="card">
+          <div class="card-header pb-0">
+            <button class="btn btn-outline-dark mt-3 w-10" data-bs-toggle="modal" data-bs-target="#addReservationModal" type="button">
+              <i class="fas fa-plus me-1"></i> Add Reservation
+            </button>  
+            <div class="row">
+              <div class="col-lg-6 col-7">
+                <h6>Table Reservation</h6>
+              </div>
+              <div class="col-lg-6 col-5 my-auto text-end">
+                <div class="dropdown float-lg-end pe-4">
+                  <a class="cursor-pointer" id="dropdownTable" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fa fa-ellipsis-v text-secondary"></i>
+                  </a>
+                  <ul class="dropdown-menu px-2 py-3 ms-sm-n4 ms-n5" aria-labelledby="dropdownTable">
+                    <li><a class="dropdown-item border-radius-md" href="javascript:;">Action</a></li>
+                    <li><a class="dropdown-item border-radius-md" href="javascript:;">Another action</a></li>
+                    <li><a class="dropdown-item border-radius-md" href="javascript:;">Something else here</a></li>
+                  </ul>
                 </div>
-                <div class="col-lg-6 col-5 my-auto text-end">
-                  <div class="dropdown float-lg-end pe-4">
-                    <a class="cursor-pointer" id="dropdownTable" data-bs-toggle="dropdown" aria-expanded="false">
-                      <i class="fa fa-ellipsis-v text-secondary"></i>
-                    </a>
-                    <ul class="dropdown-menu px-2 py-3 ms-sm-n4 ms-n5" aria-labelledby="dropdownTable">
-                      <li><a class="dropdown-item border-radius-md" href="javascript:;">Action</a></li>
-                      <li><a class="dropdown-item border-radius-md" href="javascript:;">Another action</a></li>
-                      <li><a class="dropdown-item border-radius-md" href="javascript:;">Something else here</a></li>
-                    </ul>
+              </div>
+            </div>
+          </div>
+          <div class="card-body px-0 pb-2">
+            <div class="table-responsive">
+              <table class="table align-items-center mb-0">
+                <form method="POST" action="export_reservations_pdf.php">
+                  <button type="submit" name="export_reservations_pdf" class="btn btn-success">
+                    <i class="fas fa-file-pdf me-1"></i> Export Reservations as PDF
+                  </button>
+                </form>
+                <thead>
+                  <tr>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ID</th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Nom Utilisateur</th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Nom du Pack</th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Date de Réservation</th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="recentOrders">
+                  <?php foreach ($list as $Reservation) { 
+                    $user = $ReservationC->getUserById($Reservation['user_id']);
+                    $pack = $ReservationC->getPackById($Reservation['pack_id']);
+                  ?>
+                    <tr>
+                      <td>
+                        <div class="d-flex px-2 py-1">
+                          <?= htmlspecialchars($Reservation['id']); ?>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="d-flex align-items-center">
+                          <?= htmlspecialchars($user['nom']); ?>
+                        </div>
+                      </td>
+                      <td class="align-middle text-center">
+                        <span class="text-xs font-weight-bold">
+                          <?= htmlspecialchars($pack['titre']); ?>
+                        </span>
+                      </td>
+                      <td class="align-middle text-center">
+                        <span class="text-xs font-weight-bold">
+                          <?= htmlspecialchars($Reservation['date_reservation']); ?>
+                        </span>
+                      </td>
+                      <td class="align-middle text-center">
+                        <button class="btn btn-sm btn-primary me-1" data-bs-toggle="modal" data-bs-target="#editReservationModal" 
+                          onclick="setEditFormValues(
+                            '<?= $Reservation['id'] ?>',
+                            '<?= htmlspecialchars($Reservation['user_id'], ENT_QUOTES) ?>',
+                            '<?= htmlspecialchars($Reservation['pack_id'], ENT_QUOTES) ?>',
+                            '<?= htmlspecialchars($Reservation['date_reservation']) ?>'
+                          )">
+                          <i class="fas fa-edit"></i> Edit
+                        </button>
+                        <a href="deletereservation.php?id=<?= urlencode($Reservation['id']); ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this reservation?');">
+                          <i class="fas fa-trash"></i> Delete
+                        </a>
+                      </td>
+                    </tr>
+                  <?php } ?>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add Reservation Modal -->
+    <div class="modal fade" id="addReservationModal" tabindex="-1" aria-labelledby="addReservationModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header bg-gradient-dark">
+            <h5 class="modal-title text-white" id="addReservationModalLabel">Add New Reservation</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form id="addReservationForm" action="addreservation.php" method="POST">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="user_id" class="form-label">User</label>
+                    <select class="form-control" id="user_id" name="user_id" required>
+                      <option value="">Select User</option>
+                      <?php foreach ($users as $user): ?>
+                        <option value="<?= $user['id'] ?>"><?= htmlspecialchars($user['nom']) ?></option>
+                      <?php endforeach; ?>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="pack_id" class="form-label">Pack</label>
+                    <select class="form-control" id="pack_id" name="pack_id" required>
+                      <option value="">Select Pack</option>
+                      <?php foreach ($packs as $pack): ?>
+                        <option value="<?= $pack['id'] ?>"><?= htmlspecialchars($pack['titre']) ?></option>
+                      <?php endforeach; ?>
+                    </select>
                   </div>
                 </div>
               </div>
-            </div>
-            <div class="card-body px-0 pb-2">
-              <div class="table-responsive">
-              <table class="table align-items-center mb-0">
-              <form method="POST" action="export_reservations_pdf.php">
-    <button type="submit" name="export_reservations_pdf" class="btn btn-success">
-        Exporter Réservations en PDF
-    </button>
-</form>
-                    <thead>
-                        <tr>
-                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ID</th>
-                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Nom Utilisateur</th>
-                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Nom du Pack</th>
-                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Date de Réservation</th>
-                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Supprimer</th>
-                        </tr>
-                    </thead>
-                    <tbody id="recentOrders">
-                    <?php foreach ($list as $Reservation) { 
-        $user = $ReservationC->getUserById($Reservation['user_id']);
-        $pack = $ReservationC->getPackById($Reservation['pack_id']);
-    ?>
-                            <tr>
-                                <td>
-                                    <div class="d-flex px-2 py-1">
-                                        <?= htmlspecialchars($Reservation['id']); ?>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <?= htmlspecialchars($user['nom']); ?>
-                                    </div>
-                                </td>
-                                <td class="align-middle text-center">
-                                    <span class="text-xs font-weight-bold">
-                                        <?= htmlspecialchars($pack['titre']); ?>
-                                    </span>
-                                </td>
-                                <td class="align-middle text-center">
-                                    <span class="text-xs font-weight-bold">
-                                        <?= htmlspecialchars($Reservation['date_reservation']); ?>
-                                    </span>
-                                </td>
-                                <td class="align-middle text-center">
-                                    <a href="deletereservation.php?id=<?= urlencode($Reservation['id']); ?>" class="btn btn-danger btn-sm">
-                                        <i class="fa fa-trash"></i> Supprimer
-                                    </a>
-                                </td>
-                            </tr>
-                        <?php } ?>
-                    </tbody>
-                </table>
-
+              <div class="row mt-3">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="date_reservation" class="form-label">Reservation Date</label>
+                    <input type="date" class="form-control" id="date_reservation" name="date_reservation" required>
+                  </div>
+                </div>
               </div>
-            </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Save Reservation</button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
-      <h1>Statistiques des Packs Réservés (%)</h1>
+    </div>
 
-<canvas id="reservationChart" width="600" height="400"></canvas>
+    <!-- Edit Reservation Modal -->
+    <div class="modal fade" id="editReservationModal" tabindex="-1" aria-labelledby="editReservationModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="background-image: url('img/back.jpeg'); background-size: cover; background-position: center;">
+          <div class="modal-header bg-gradient-dark">
+            <h5 class="modal-title text-white" id="editReservationModalLabel">Edit Reservation</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form id="editReservationForm" action="updatereservation.php" method="POST">
+              <input type="hidden" id="edit_id" name="id">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="edit_user_id" class="form-label">User</label>
+                    <select class="form-control" id="edit_user_id" name="user_id" required>
+                      <option value="">Select User</option>
+                      <?php foreach ($users as $user): ?>
+                        <option value="<?= $user['id'] ?>"><?= htmlspecialchars($user['nom']) ?></option>
+                      <?php endforeach; ?>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="edit_pack_id" class="form-label">Pack</label>
+                    <select class="form-control" id="edit_pack_id" name="pack_id" required>
+                      <option value="">Select Pack</option>
+                      <?php foreach ($packs as $pack): ?>
+                        <option value="<?= $pack['id'] ?>"><?= htmlspecialchars($pack['titre']) ?></option>
+                      <?php endforeach; ?>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="row mt-3">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="edit_date_reservation" class="form-label">Reservation Date</label>
+                    <input type="date" class="form-control" id="edit_date_reservation" name="date_reservation" required>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Update Reservation</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
 
-<script>
-// Charger les données PHP vers JavaScript
-const packs = <?php echo json_encode(array_column($reservationStats, 'pack_name')); ?>;
-const reservations = <?php echo json_encode(array_column($reservationStats, 'total_reservations')); ?>;
+    <h1>Statistiques des Packs Réservés (%)</h1>
+    <canvas id="reservationChart" width="600" height="400"></canvas>
 
-// Calcul du total de réservations
-const totalReservations = reservations.reduce((acc, val) => acc + val, 0);
+    <script>
+      // Function to set values in edit form
+      function setEditFormValues(id, user_id, pack_id, date_reservation) {
+        document.getElementById('edit_id').value = id;
+        document.getElementById('edit_user_id').value = user_id;
+        document.getElementById('edit_pack_id').value = pack_id;
+        document.getElementById('edit_date_reservation').value = date_reservation;
+      }
 
-// Calculer les pourcentages
-const percentages = reservations.map(val => ((val / totalReservations) * 100).toFixed(2));
+      // Charger les données PHP vers JavaScript
+      const packs = <?php echo json_encode(array_column($reservationStats, 'pack_name')); ?>;
+      const reservations = <?php echo json_encode(array_column($reservationStats, 'total_reservations')); ?>;
 
-// Générer le chart
-const ctx = document.getElementById('reservationChart').getContext('2d');
-const reservationChart = new Chart(ctx, {
-    type: 'pie', // Tu peux changer en 'doughnut' si tu veux
-    data: {
-        labels: packs.map((pack, index) => `${pack} (${percentages[index]}%)`),
-        datasets: [{
+      // Calcul du total de réservations
+      const totalReservations = reservations.reduce((acc, val) => acc + val, 0);
+
+      // Calculer les pourcentages
+      const percentages = reservations.map(val => ((val / totalReservations) * 100).toFixed(2));
+
+      // Générer le chart
+      const ctx = document.getElementById('reservationChart').getContext('2d');
+      const reservationChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+          labels: packs.map((pack, index) => `${pack} (${percentages[index]}%)`),
+          datasets: [{
             label: 'Pourcentage de réservations',
             data: percentages,
             backgroundColor: [
-                'rgba(255, 99, 132, 0.7)',
-                'rgba(54, 162, 235, 0.7)',
-                'rgba(255, 206, 86, 0.7)',
-                'rgba(75, 192, 192, 0.7)',
-                'rgba(153, 102, 255, 0.7)',
-                'rgba(255, 159, 64, 0.7)'
+              'rgba(255, 99, 132, 0.7)',
+              'rgba(54, 162, 235, 0.7)',
+              'rgba(255, 206, 86, 0.7)',
+              'rgba(75, 192, 192, 0.7)',
+              'rgba(153, 102, 255, 0.7)',
+              'rgba(255, 159, 64, 0.7)'
             ],
             borderColor: 'rgba(255, 255, 255, 1)',
             borderWidth: 2
-        }]
-    },
-    options: {
-        responsive: true,
-        plugins: {
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
             legend: {
-                position: 'bottom'
+              position: 'bottom'
             }
+          }
         }
-    }
-});
-</script>
+      });
+    </script>
 
-      <footer class="footer py-4  ">
-        <div class="container-fluid">
-          <div class="row align-items-center justify-content-lg-between">
-            <div class="col-lg-6 mb-lg-0 mb-4">
-              <div class="copyright text-center text-sm text-muted text-lg-start">
-                © <script>
-                  document.write(new Date().getFullYear())
-                </script>,
-                made with <i class="fa fa-heart"></i> by
-                <a href="https://www.creative-tim.com" class="font-weight-bold" target="_blank">Tfarhida</a>
-                for a better web.
-              </div>
+    <footer class="footer py-4">
+      <div class="container-fluid">
+        <div class="row align-items-center justify-content-lg-between">
+          <div class="col-lg-6 mb-lg-0 mb-4">
+            <div class="copyright text-center text-sm text-muted text-lg-start">
+              © <script>
+                document.write(new Date().getFullYear())
+              </script>,
+              made with <i class="fa fa-heart"></i> by
+              <a href="https://www.creative-tim.com" class="font-weight-bold" target="_blank">Tfarhida</a>
+              for a better web.
             </div>
           </div>
         </div>
-      </footer>
-    </div>
+      </div>
+    </footer>
   </main>
-  <div class="fixed-plugin">
-    <a class="fixed-plugin-button text-dark position-fixed px-3 py-2">
-      <i class="material-symbols-rounded py-2">settings</i>
-    </a>
-    <div class="card shadow-lg">
-      <div class="card-header pb-0 pt-3">
-        <div class="float-start">
-          <h5 class="mt-3 mb-0">Material UI Configurator</h5>
-          <p>See our dashboard options.</p>
-        </div>
-        <div class="float-end mt-4">
-          <button class="btn btn-link text-dark p-0 fixed-plugin-close-button">
-            <i class="material-symbols-rounded">clear</i>
-          </button>
-        </div>
-        <!-- End Toggle Button -->
-      </div>
-      <hr class="horizontal dark my-1">
-      <div class="card-body pt-sm-3 pt-0">
-        <!-- Sidebar Backgrounds -->
-        <div>
-          <h6 class="mb-0">Sidebar Colors</h6>
-        </div>
-        <a href="javascript:void(0)" class="switch-trigger background-color">
-          <div class="badge-colors my-2 text-start">
-            <span class="badge filter bg-gradient-primary" data-color="primary" onclick="sidebarColor(this)"></span>
-            <span class="badge filter bg-gradient-dark active" data-color="dark" onclick="sidebarColor(this)"></span>
-            <span class="badge filter bg-gradient-info" data-color="info" onclick="sidebarColor(this)"></span>
-            <span class="badge filter bg-gradient-success" data-color="success" onclick="sidebarColor(this)"></span>
-            <span class="badge filter bg-gradient-warning" data-color="warning" onclick="sidebarColor(this)"></span>
-            <span class="badge filter bg-gradient-danger" data-color="danger" onclick="sidebarColor(this)"></span>
-          </div>
-        </a>
-        <!-- Sidenav Type -->
-        <div class="mt-3">
-          <h6 class="mb-0">Sidenav Type</h6>
-          <p class="text-sm">Choose between different sidenav types.</p>
-        </div>
-        <div class="d-flex">
-          <button class="btn bg-gradient-dark px-3 mb-2" data-class="bg-gradient-dark" onclick="sidebarType(this)">Dark</button>
-          <button class="btn bg-gradient-dark px-3 mb-2 ms-2" data-class="bg-transparent" onclick="sidebarType(this)">Transparent</button>
-          <button class="btn bg-gradient-dark px-3 mb-2  active ms-2" data-class="bg-white" onclick="sidebarType(this)">White</button>
-        </div>
-        <p class="text-sm d-xl-none d-block mt-2">You can change the sidenav type just on desktop view.</p>
-        <!-- Navbar Fixed -->
-        <div class="mt-3 d-flex">
-          <h6 class="mb-0">Navbar Fixed</h6>
-          <div class="form-check form-switch ps-0 ms-auto my-auto">
-            <input class="form-check-input mt-1 ms-auto" type="checkbox" id="navbarFixed" onclick="navbarFixed(this)">
-          </div>
-        </div>
-        <hr class="horizontal dark my-3">
-        <div class="mt-2 d-flex">
-          <h6 class="mb-0">Light / Dark</h6>
-          <div class="form-check form-switch ps-0 ms-auto my-auto">
-            <input class="form-check-input mt-1 ms-auto" type="checkbox" id="dark-version" onclick="darkMode(this)">
-          </div>
-        </div>
-        <hr class="horizontal dark my-sm-4">
-        <a class="btn bg-gradient-info w-100" href="https://www.creative-tim.com/product/material-dashboard-pro">Free Download</a>
-        <a class="btn btn-outline-dark w-100" href="https://www.creative-tim.com/learning-lab/bootstrap/overview/material-dashboard">View documentation</a>
-        <div class="w-100 text-center">
-          <a class="github-button" href="https://github.com/creativetimofficial/material-dashboard" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star creativetimofficial/material-dashboard on GitHub">Star</a>
-          <h6 class="mt-3">Thank you for sharing!</h6>
-          <a href="https://twitter.com/intent/tweet?text=Check%20Material%20UI%20Dashboard%20made%20by%20%40CreativeTim%20%23webdesign%20%23dashboard%20%23bootstrap5&amp;url=https%3A%2F%2Fwww.creative-tim.com%2Fproduct%2Fsoft-ui-dashboard" class="btn btn-dark mb-0 me-2" target="_blank">
-            <i class="fab fa-twitter me-1" aria-hidden="true"></i> Tweet
-          </a>
-          <a href="https://www.facebook.com/sharer/sharer.php?u=https://www.creative-tim.com/product/material-dashboard" class="btn btn-dark mb-0 me-2" target="_blank">
-            <i class="fab fa-facebook-square me-1" aria-hidden="true"></i> Share
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
+
   <!--   Core JS Files   -->
   <script src="assets/js/core/popper.min.js"></script>
   <script src="assets/js/core/bootstrap.min.js"></script>
   <script src="assets/js/plugins/perfect-scrollbar.min.js"></script>
   <script src="assets/js/plugins/smooth-scrollbar.min.js"></script>
   <script src="assets/js/plugins/chartjs.min.js"></script>
-  <script>
-    var ctx = document.getElementById("chart-bars").getContext("2d");
-
-    new Chart(ctx, {
-      type: "bar",
-      data: {
-        labels: ["M", "T", "W", "T", "F", "S", "S"],
-        datasets: [{
-          label: "Views",
-          tension: 0.4,
-          borderWidth: 0,
-          borderRadius: 4,
-          borderSkipped: false,
-          backgroundColor: "#43A047",
-          data: [50, 45, 22, 28, 50, 60, 76],
-          barThickness: 'flex'
-        }, ],
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            display: false,
-          }
-        },
-        interaction: {
-          intersect: false,
-          mode: 'index',
-        },
-        scales: {
-          y: {
-            grid: {
-              drawBorder: false,
-              display: true,
-              drawOnChartArea: true,
-              drawTicks: false,
-              borderDash: [5, 5],
-              color: '#e5e5e5'
-            },
-            ticks: {
-              suggestedMin: 0,
-              suggestedMax: 500,
-              beginAtZero: true,
-              padding: 10,
-              font: {
-                size: 14,
-                lineHeight: 2
-              },
-              color: "#737373"
-            },
-          },
-          x: {
-            grid: {
-              drawBorder: false,
-              display: false,
-              drawOnChartArea: false,
-              drawTicks: false,
-              borderDash: [5, 5]
-            },
-            ticks: {
-              display: true,
-              color: '#737373',
-              padding: 10,
-              font: {
-                size: 14,
-                lineHeight: 2
-              },
-            }
-          },
-        },
-      },
-    });
-
-
-    var ctx2 = document.getElementById("chart-line").getContext("2d");
-
-    new Chart(ctx2, {
-      type: "line",
-      data: {
-        labels: ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"],
-        datasets: [{
-          label: "Sales",
-          tension: 0,
-          borderWidth: 2,
-          pointRadius: 3,
-          pointBackgroundColor: "#43A047",
-          pointBorderColor: "transparent",
-          borderColor: "#43A047",
-          backgroundColor: "transparent",
-          fill: true,
-          data: [120, 230, 130, 440, 250, 360, 270, 180, 90, 300, 310, 220],
-          maxBarThickness: 6
-
-        }],
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            display: false,
-          },
-          tooltip: {
-            callbacks: {
-              title: function(context) {
-                const fullMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-                return fullMonths[context[0].dataIndex];
-              }
-            }
-          }
-        },
-        interaction: {
-          intersect: false,
-          mode: 'index',
-        },
-        scales: {
-          y: {
-            grid: {
-              drawBorder: false,
-              display: true,
-              drawOnChartArea: true,
-              drawTicks: false,
-              borderDash: [4, 4],
-              color: '#e5e5e5'
-            },
-            ticks: {
-              display: true,
-              color: '#737373',
-              padding: 10,
-              font: {
-                size: 12,
-                lineHeight: 2
-              },
-            }
-          },
-          x: {
-            grid: {
-              drawBorder: false,
-              display: false,
-              drawOnChartArea: false,
-              drawTicks: false,
-              borderDash: [5, 5]
-            },
-            ticks: {
-              display: true,
-              color: '#737373',
-              padding: 10,
-              font: {
-                size: 12,
-                lineHeight: 2
-              },
-            }
-          },
-        },
-      },
-    });
-
-    var ctx3 = document.getElementById("chart-line-tasks").getContext("2d");
-
-    new Chart(ctx3, {
-      type: "line",
-      data: {
-        labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-        datasets: [{
-          label: "Tasks",
-          tension: 0,
-          borderWidth: 2,
-          pointRadius: 3,
-          pointBackgroundColor: "#43A047",
-          pointBorderColor: "transparent",
-          borderColor: "#43A047",
-          backgroundColor: "transparent",
-          fill: true,
-          data: [50, 40, 300, 220, 500, 250, 400, 230, 500],
-          maxBarThickness: 6
-
-        }],
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: {
-            display: false,
-          }
-        },
-        interaction: {
-          intersect: false,
-          mode: 'index',
-        },
-        scales: {
-          y: {
-            grid: {
-              drawBorder: false,
-              display: true,
-              drawOnChartArea: true,
-              drawTicks: false,
-              borderDash: [4, 4],
-              color: '#e5e5e5'
-            },
-            ticks: {
-              display: true,
-              padding: 10,
-              color: '#737373',
-              font: {
-                size: 14,
-                lineHeight: 2
-              },
-            }
-          },
-          x: {
-            grid: {
-              drawBorder: false,
-              display: false,
-              drawOnChartArea: false,
-              drawTicks: false,
-              borderDash: [4, 4]
-            },
-            ticks: {
-              display: true,
-              color: '#737373',
-              padding: 10,
-              font: {
-                size: 14,
-                lineHeight: 2
-              },
-            }
-          },
-        },
-      },
-    });
-  </script>
   <script>
     var win = navigator.platform.indexOf('Win') > -1;
     if (win && document.querySelector('#sidenav-scrollbar')) {
@@ -700,8 +528,6 @@ const reservationChart = new Chart(ctx, {
       Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
     }
   </script>
-  <!-- Github buttons -->
-  <script async defer src="https://buttons.github.io/buttons.js"></script>
   <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
   <script src="assets/js/material-dashboard.min.js?v=3.2.0"></script>
 </body>

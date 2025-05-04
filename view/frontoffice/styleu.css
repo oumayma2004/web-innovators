@@ -1,25 +1,22 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
 body {
   font-family: Arial, sans-serif;
-  background: url("assets/background.jpg"); /* Image en arrière-plan */
-  background-size: cover; 
+  background-size: contain; /* Shows the whole image without cropping */
   margin: 0;
-  padding: 40px 0;
   color: #333;
   display: flex;
   justify-content: center;
   align-items: flex-start;
   min-height: 100vh;
   flex-direction: column;
-  padding-top: 20px; 
 }
 
 /* === TOP BAR === */
@@ -51,7 +48,6 @@ body {
   font-weight: 500;
   color: white;
 }
-
 
 .icon-phone {
   width: 16px;
@@ -94,7 +90,7 @@ body {
   border: 2px solid #ddd;
   border-radius: 10px;
   z-index: 1000;
-  box-shadow: 0px 5px 15px rgba(0,0,0,0.2);
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
   width: 300px;
 }
 
@@ -116,7 +112,7 @@ body {
 .form-popup input[type="text"],
 .form-popup input[type="email"],
 .form-popup input[type="password"] {
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
 .form-popup button {

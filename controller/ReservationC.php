@@ -35,6 +35,7 @@ class ReservationC {
             return false;
         }
     }
+    
     public function searchReservation($input) {
         try {
             $db = config::getConnexion();
@@ -58,6 +59,7 @@ class ReservationC {
             return [];
         }
     }
+    
     function getAllPacksReservationCount() {
         try {
             $db = config::getConnexion();
@@ -76,22 +78,21 @@ class ReservationC {
             return [];
         }
     }
-    public function getReservationStats()
-{
-    try {
-        $db = config::getConnexion();
-        $sql = "SELECT p.titre AS pack_name, COUNT(r.id) AS total_reservations
-                FROM reservation r
-                JOIN pack p ON r.pack_id = p.id
-                GROUP BY r.pack_id";
-        $query = $db->query($sql);
-        return $query->fetchAll();
-    } catch (PDOException $e) {
-        echo 'Error: ' . $e->getMessage();
-        return [];
+    
+    public function getReservationStats() {
+        try {
+            $db = config::getConnexion();
+            $sql = "SELECT p.titre AS pack_name, COUNT(r.id) AS total_reservations
+                    FROM reservation r
+                    JOIN pack p ON r.pack_id = p.id
+                    GROUP BY r.pack_id";
+            $query = $db->query($sql);
+            return $query->fetchAll();
+        } catch (PDOException $e) {
+            echo 'Error: ' . $e->getMessage();
+            return [];
+        }
     }
-}
-
     
     public function getMostReservedPack() {
         try {
@@ -133,9 +134,7 @@ class ReservationC {
             return [];
         }
     }
-        
     
-
     public function getReservationsByUserId($userId) {
         $sql = "SELECT * FROM reservation WHERE user_id = :user_id";
         $db = config::getConnexion();
@@ -163,6 +162,7 @@ class ReservationC {
             return [];
         }
     }
+    
     public function getUserById($id) {
         $sql = "SELECT * FROM users WHERE id = :id";
         $db = config::getConnexion();
@@ -281,6 +281,32 @@ class ReservationC {
             echo 'Error: ' . $e->getMessage();
         } catch (Exception $e) {
             echo 'Error: ' . $e->getMessage();
+        }
+    }
+    
+    // Récupérer tous les utilisateurs
+    public function getAllUsers() {
+        try {
+            $db = config::getConnexion();
+            $sql = "SELECT * FROM users";
+            $query = $db->query($sql);
+            return $query->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            echo 'Error: ' . $e->getMessage();
+            return [];
+        }
+    }
+    
+    // Récupérer tous les packs
+    public function getAllPacks() {
+        try {
+            $db = config::getConnexion();
+            $sql = "SELECT * FROM pack";
+            $query = $db->query($sql);
+            return $query->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            echo 'Error: ' . $e->getMessage();
+            return [];
         }
     }
 }

@@ -6,7 +6,6 @@
   .navbar-brand > img,
   .navbar-brand-img {
     max-width: 100%;
-    max-height: 2rem;
   }
   // Navbar navigaton
   .navbar-nav {
@@ -31,7 +30,7 @@
           margin-left: $dropdown-item-padding-x * 0.5;
         }
       }
-      .avatar{
+      .avatar {
         width: $font-size-3xl;
         height: $font-size-3xl;
       }
@@ -84,9 +83,10 @@
             min-height: 100%;
             padding-left: 0;
             padding-right: 0; // Target IE 10 & 11
-            @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
-            min-height: none;
-            height: 100%;
+            @media all and (-ms-high-contrast: none),
+              (-ms-high-contrast: active) {
+              min-height: none;
+              height: 100%;
             }
           }
           // Fixes the vertical navbar to the left
@@ -145,7 +145,7 @@
             > span.sidenav-normal {
               transition: all 0.1s ease 0s;
             }
-            &.active{
+            &.active {
               padding-top: $navbar-vertical-nav-link-padding-y;
               padding-bottom: $navbar-vertical-nav-link-padding-y;
             }
@@ -162,19 +162,27 @@
     &[data-color="#{$color}"] {
       .navbar-nav > .nav-item .nav-link.active {
         & + .collapse,
-        & + .collapsing{
-          .nav-item.active{
-            .nav-link.active{
-              @include gradient-directional(nth(#{$value}, 1) 0%, nth(#{$value}, -1) 100%, $deg: 195deg);
+        & + .collapsing {
+          .nav-item.active {
+            .nav-link.active {
+              @include gradient-directional(
+                nth(#{$value}, 1) 0%,
+                nth(#{$value}, -1) 100%,
+                $deg: 195deg
+              );
             }
           }
-          .nav-item{
-            .nav-link.active{
+          .nav-item {
+            .nav-link.active {
               background-color: $navbar-vertical-hover-bg-color;
-              & + .collapse{
-                .nav-item{
-                  .nav-link.active{
-                    @include gradient-directional(nth(#{$value}, 1) 0%, nth(#{$value}, -1) 100%, $deg: 195deg);
+              & + .collapse {
+                .nav-item {
+                  .nav-link.active {
+                    @include gradient-directional(
+                      nth(#{$value}, 1) 0%,
+                      nth(#{$value}, -1) 100%,
+                      $deg: 195deg
+                    );
                   }
                 }
               }
@@ -230,7 +238,7 @@
 
   // ! to be checked !
   // .collapse {
-  // 
+  //
   //   .nav-item {
   //     .nav-link {
   //       &.active {
@@ -243,7 +251,6 @@
   //     }
   //   }
   // }
-
 }
 // body:not(.dark-version) {
 //   .sidenav {
@@ -314,7 +321,7 @@
     }
 
     .sidenav {
-      &.fixed-start+.main-content {
+      &.fixed-start + .main-content {
         margin-left: 0 !important;
       }
     }
@@ -366,22 +373,30 @@
     border-bottom-width: 0;
     background-color: $navbar-vertical-hover-bg-color;
     & + .collapse,
-    & + .collapsing{
-      .nav-item.active{
-        .nav-link.active{
-          @include gradient-directional(nth($dark, 1) 0%, nth($dark, -1) 100%, $deg: 195deg);
-          span{
+    & + .collapsing {
+      .nav-item.active {
+        .nav-link.active {
+          @include gradient-directional(
+            nth($dark, 1) 0%,
+            nth($dark, -1) 100%,
+            $deg: 195deg
+          );
+          span {
             color: $white;
           }
         }
       }
-      .nav-item{
-        .nav-link.active{
+      .nav-item {
+        .nav-link.active {
           background-color: $navbar-vertical-hover-bg-color;
-          & + .collapse{
-            .nav-item{
-              .nav-link.active{
-                @include gradient-directional(nth($dark, 1) 0%, nth($dark, -1) 100%, $deg: 195deg);
+          & + .collapse {
+            .nav-item {
+              .nav-link.active {
+                @include gradient-directional(
+                  nth($dark, 1) 0%,
+                  nth($dark, -1) 100%,
+                  $deg: 195deg
+                );
                 color: $white !important;
               }
             }
@@ -393,7 +408,8 @@
 }
 
 .navbar-main {
-  transition: box-shadow $transition-base-time ease-in, background-color $transition-base-time ease-in;
+  transition: box-shadow $transition-base-time ease-in,
+    background-color $transition-base-time ease-in;
 
   &.fixed-top {
     width: calc(100% - (#{$navbar-vertical-open-width} + #{$spacer * 1.5} * 3));
@@ -412,7 +428,7 @@
       font-variant: normal;
       text-rendering: auto;
       -webkit-font-smoothing: antialiased;
-      font-family: 'Font Awesome 5 Free';
+      font-family: "Font Awesome 5 Free";
       font-weight: 700;
       content: "\f107";
       margin-left: auto;
@@ -504,15 +520,15 @@
       margin-bottom: 1.5px;
       margin-top: 1.5px;
 
-      +.collapse,
-      +.collapsing {
+      + .collapse,
+      + .collapsing {
         .nav {
           .nav-item {
-            >.nav-link {
+            > .nav-link {
               margin-top: 1.5px;
               margin-bottom: 1.5px;
-              +.collapse,
-              +.collapsing {
+              + .collapse,
+              + .collapsing {
                 .nav {
                   .nav-item {
                     .nav-link {
@@ -532,16 +548,16 @@
         background-color: $navbar-vertical-hover-bg-color;
         border-radius: $navbar-nav-link-border-radius;
 
-        +.collapse {
+        + .collapse {
           .nav {
             .nav-item {
               &:hover {
-                >.nav-link {
+                > .nav-link {
                   background-color: $navbar-vertical-hover-bg-color;
                   border-radius: $navbar-nav-link-border-radius;
                 }
               }
-              +.collapse {
+              + .collapse {
                 .nav {
                   .nav-item {
                     &:hover {
@@ -563,7 +579,7 @@
 
 @include media-breakpoint-up(xl) {
   .g-sidenav-hidden {
-    &.rtl{
+    &.rtl {
       .main-content {
         margin-right: $navbar-vertical-hidden-width !important;
       }
@@ -574,7 +590,7 @@
         }
         .nav-item {
           .nav-link {
-            .material-symbols-rounded{
+            .material-symbols-rounded {
               margin-right: $navbar-icon-material-margin-left;
             }
           }

@@ -1,22 +1,20 @@
 /* Corps de la page */
 body {
   font-family: Arial, sans-serif;
-  background: url("assets/background.jpg") no-repeat center center fixed; /* Image en arrière-plan */
-  background-size: cover; 
+  background: url("assets/back.jpeg") no-repeat center center fixed; /* Image en arrière-plan */
+  background-size: cover;
   margin: 0;
-  padding: 40px 0;
   color: #333;
   display: flex;
   justify-content: center;
   align-items: flex-start;
   min-height: 100vh;
   flex-direction: column;
-  padding-top: 20px; 
 }
 
-nav img{
+nav img {
   width: 150px;
-  display: block;  
+  display: block;
   margin-left: 0;
 }
 
@@ -25,7 +23,7 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #ffc0cb; 
+  background-color: #ffc0cb;
   padding: 15px 30px;
   position: fixed;
   top: 0;
@@ -44,7 +42,7 @@ header .links {
 }
 
 header .links {
-  margin-left: auto; 
+  margin-left: auto;
 }
 
 header img {
@@ -53,22 +51,21 @@ header img {
 
 header a {
   text-decoration: none;
-  color: white; 
+  color: white;
   font-size: 14px;
-  font-weight: bold; 
+  font-weight: bold;
 }
 
 /* Contenu principal des packs */
 h1 {
-  text-align: center; 
-  margin-top: 100px; 
-  color: white; 
-  font-size: 4em; 
-  font-family: "Great Vibes", cursive; 
-  font-weight: bold; 
-  letter-spacing: 2px; 
-  text-transform: uppercase; 
-  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); 
+  text-align: center;
+  margin-top: 100px;
+  color: white;
+  font-size: 4em;
+  font-weight: bold;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 /* Container des packs */
@@ -115,7 +112,7 @@ h1 {
 .pack-price {
   font-size: 1.3em;
   font-weight: bold;
-  color: #ffc0cb; 
+  color: #ffc0cb;
   margin-bottom: 15px;
 }
 
@@ -129,7 +126,7 @@ h1 {
   display: inline-block;
   margin-top: 15px;
   padding: 12px 20px;
-  background-color: pink; 
+  background-color: pink;
   color: white;
   text-decoration: none;
   border-radius: 10px;
@@ -138,7 +135,7 @@ h1 {
 }
 
 .btn:hover {
-  background-color: #ff1493; 
+  background-color: #ff1493;
   transform: scale(1.05);
 }
 
@@ -167,7 +164,8 @@ h1 {
   margin-bottom: 5px;
 }
 
-.reservation-form input, .reservation-form textarea {
+.reservation-form input,
+.reservation-form textarea {
   width: 100%;
   padding: 8px;
   margin-bottom: 10px;
