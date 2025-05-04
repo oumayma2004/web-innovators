@@ -1,219 +1,307 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tfarhida - Accueil</title>
-  <link rel="stylesheet" href="styleu.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
-</head>
-<!-- Barre supérieure -->
-<div class="top-bar">
-  <div class="logo">
-    <img src="assets/logo-removebg-preview.png">
-  </div>
-  <div class="phones">
-    <img src="assets/tel1.png" class="icon-phone" alt="Téléphone" />
-    <span>+216 50 548 028</span>
-    <img src="assets/tel1.png" class="icon-phone" alt="Téléphone" />
-    <span>+216 99 727 727</span>
-  </div>
-  <div class="user-links">
-    <a href="#" onclick="showLogin()">🔒 Log in</a>
-    <a href="#" onclick="showSignup()">👤 Sign up</a>
-  </div>
-</div>
-
-<body>
-  <!-- Formulaire Login -->
-  <div class="form-popup" id="login">
-    <form id="loginForm">
-      <h3>Connexion</h3>
-      <input type="email" id="loginEmail" placeholder="Email" required>
-      <input type="password" id="loginPassword" placeholder="Mot de passe" required>
-      <a href="forgot-password.php">Mot de passe oublié ?</a>
-      <button type="submit">Se connecter</button>
-      <button type="button" class="close-btn" onclick="closeForms()">Fermer</button>
-  </form>
-  
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tfarhida - Accueil</title>
+    <link rel="stylesheet" href="styleu.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <!-- Barre supérieure -->
+  <div class="top-bar">
+    <div class="logo">
+      <img src="assets/logo-removebg-preview.png" />
+    </div>
+    <div class="phones">
+      <img src="assets/tel1.png" class="icon-phone" alt="Téléphone" />
+      <span>+216 50 548 028</span>
+      <img src="assets/tel1.png" class="icon-phone" alt="Téléphone" />
+      <span>+216 99 727 727</span>
+    </div>
+    <div class="user-links">
+      <a href="#" onclick="showLogin()">🔒 Log in</a>
+      <a href="#" onclick="showSignup()">👤 Sign up</a>
+    </div>
   </div>
 
-  <!-- Formulaire Signup -->
-  <div class="form-popup"  id="signup">
-    <form  id="signupForm" action="signup.php" method="POST">
-      <h3>Inscription</h3>
-      <input type="text" id="prenom" name="prenom" placeholder="Prénom" required />
-      <input type="text" id="nom" name="nom" placeholder="Nom" required />
-      <input type="email" id="email" name="email" placeholder="Email" required />
-      <input type="tel" id="phone" name="phone" placeholder="Numéro de téléphone" required />
-      <input type="text" id="adresse" name="adresse" placeholder="Adresse" required />
-      <input type="date" id="date_c" name="date_c" placeholder="Date de naissance" required />
-      <input type="password" id="signupPassword" name="password" placeholder="Mot de passe" required />
-      <input type="password" id="signupPasswordConfirm" name="passwordConfirm" placeholder="Confirmer le mot de passe" required />      
-      <button type="submit">S'inscrire</button>
-      <button type="button" class="close-btn" onclick="closeForms()">Fermer</button>
-    </form>
-  </div>
+  <body class="bg-white py-5">
+    <div
+      class="container d-flex justify-content-center align-items-center"
+      style="display: flex; justify-content: center; margin: auto"
+    >
+      <img
+        src="assets/logo-removebg-preview.png"
+        alt="Hero logo"
+        style="max-width: 30%; height: auto; object-fit: contain"
+      />
 
-  <!-- Script pour gérer les formulaires -->
-  <script>
-    function showLogin() {
-      document.getElementById('login').style.display = 'block';
-      document.getElementById('signup').style.display = 'none';
-    }
+      <!-- Hero Illustration -->
+      <img
+        src="assets/front-office-hero.png"
+        alt="Hero illustration"
+        class="img-fluid"
+        style="max-width: 60%; z-index: 3; margin-left: 30px"
+      />
+    </div>
 
-    function showSignup() {
-      document.getElementById('signup').style.display = 'block';
-      document.getElementById('login').style.display = 'none';
-    }
+    <!-- Formulaire Login -->
+    <div class="form-popup" id="login">
+      <form id="loginForm">
+        <h3>Connexion</h3>
+        <input type="email" id="loginEmail" placeholder="Email" required />
+        <input
+          type="password"
+          id="loginPassword"
+          placeholder="Mot de passe"
+          required
+        />
+        <a href="forgot-password.php">Mot de passe oublié ?</a>
+        <button type="submit">Se connecter</button>
+        <button type="button" class="close-btn" onclick="closeForms()">
+          Fermer
+        </button>
+      </form>
+    </div>
 
-    function closeForms() {
-      document.getElementById('login').style.display = 'none';
-      document.getElementById('signup').style.display = 'none';
-    }
-  </script>
-  <script>
-    document.getElementById("signupForm").addEventListener("submit", function (event) {
-        event.preventDefault();
+    <!-- Formulaire Signup -->
+    <div class="form-popup" id="signup">
+      <form id="signupForm" action="signup.php" method="POST">
+        <h3>Inscription</h3>
+        <input
+          type="text"
+          id="prenom"
+          name="prenom"
+          placeholder="Prénom"
+          required
+        />
+        <input type="text" id="nom" name="nom" placeholder="Nom" required />
+        <input
+          type="email"
+          id="email"
+          name="email"
+          placeholder="Email"
+          required
+        />
+        <input
+          type="tel"
+          id="phone"
+          name="phone"
+          placeholder="Numéro de téléphone"
+          required
+        />
+        <input
+          type="text"
+          id="adresse"
+          name="adresse"
+          placeholder="Adresse"
+          required
+        />
+        <input
+          type="date"
+          id="date_c"
+          name="date_c"
+          placeholder="Date de naissance"
+          required
+        />
+        <input
+          type="password"
+          id="signupPassword"
+          name="password"
+          placeholder="Mot de passe"
+          required
+        />
+        <input
+          type="password"
+          id="signupPasswordConfirm"
+          name="passwordConfirm"
+          placeholder="Confirmer le mot de passe"
+          required
+        />
+        <button type="submit">S'inscrire</button>
+        <button type="button" class="close-btn" onclick="closeForms()">
+          Fermer
+        </button>
+      </form>
+    </div>
 
-        const prenom = document.getElementById("prenom").value;
-        const nom = document.getElementById("nom").value;
-        const email = document.getElementById("email").value;
-        const phone = document.getElementById("phone").value;
-        const adresse = document.getElementById("adresse").value;
-        const date_c = document.getElementById("date_c").value;
-        const password = document.getElementById("signupPassword").value;
-        const passwordConfirm = document.getElementById("signupPasswordConfirm").value;
+    <!-- Script pour gérer les formulaires -->
+    <script>
+      function showLogin() {
+        document.getElementById("login").style.display = "block";
+        document.getElementById("signup").style.display = "none";
+      }
 
-        // Regex patterns
-        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        const phonePattern = /^[0-9]{8,15}$/; // exemple : entre 8 et 15 chiffres
-        const passwordPattern = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+      function showSignup() {
+        document.getElementById("signup").style.display = "block";
+        document.getElementById("login").style.display = "none";
+      }
 
-        if (!prenom) {
+      function closeForms() {
+        document.getElementById("login").style.display = "none";
+        document.getElementById("signup").style.display = "none";
+      }
+    </script>
+    <script>
+      document
+        .getElementById("signupForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+
+          const prenom = document.getElementById("prenom").value;
+          const nom = document.getElementById("nom").value;
+          const email = document.getElementById("email").value;
+          const phone = document.getElementById("phone").value;
+          const adresse = document.getElementById("adresse").value;
+          const date_c = document.getElementById("date_c").value;
+          const password = document.getElementById("signupPassword").value;
+          const passwordConfirm = document.getElementById(
+            "signupPasswordConfirm"
+          ).value;
+
+          // Regex patterns
+          const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          const phonePattern = /^[0-9]{8,15}$/; // exemple : entre 8 et 15 chiffres
+          const passwordPattern =
+            /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+
+          if (!prenom) {
             alert("Le prénom est requis.");
             return;
-        }
+          }
 
-        if (!nom) {
+          if (!nom) {
             alert("Le nom est requis.");
             return;
-        }
-        if (prenom.length <= 2) {
+          }
+          if (prenom.length <= 2) {
             alert("Le prénom dois sup a 2 char.");
             return;
-        }
+          }
 
-        if (nom.length <= 3) {
+          if (nom.length <= 3) {
             alert("Le prénom dois sup a 2 char.");
             return;
-        }
+          }
 
-        if (!email) {
+          if (!email) {
             alert("L'email est requis.");
             return;
-        } else if (!emailPattern.test(email)) {
+          } else if (!emailPattern.test(email)) {
             alert("L'email n'est pas valide.");
             return;
-        }
+          }
 
-        if (!phone) {
+          if (!phone) {
             alert("Le numéro de téléphone est requis.");
             return;
-        } else if (!phonePattern.test(phone)) {
+          } else if (!phonePattern.test(phone)) {
             alert("Le numéro de téléphone n'est pas valide.");
             return;
-        }
+          }
 
-        if (!adresse) {
+          if (!adresse) {
             alert("L'adresse est requise.");
             return;
-        }
+          }
 
-        if (!date_c) {
+          if (!date_c) {
             alert("La date de naissance est requise.");
             return;
-        }
+          }
 
-        if (!password) {
+          if (!password) {
             alert("Le mot de passe est requis.");
             return;
-        } else if (!passwordPattern.test(password)) {
-            alert("Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial.");
+          } else if (!passwordPattern.test(password)) {
+            alert(
+              "Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial."
+            );
             return;
-        }
+          }
 
-        if (password !== passwordConfirm) {
+          if (password !== passwordConfirm) {
             alert("Les mots de passe ne correspondent pas.");
             return;
-        }
+          }
 
-        // Si tout est bon
-        alert("Formulaire envoyé avec succès !");
-        this.submit();
-    });
-</script>
-<script>
-  document.getElementById("loginForm").addEventListener("submit", function (event) {
-    event.preventDefault(); // Empêche le rechargement de la page
+          // Si tout est bon
+          alert("Formulaire envoyé avec succès !");
+          this.submit();
+        });
+    </script>
+    <script>
+      document
+        .getElementById("loginForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault(); // Empêche le rechargement de la page
 
-    // Récupérer les valeurs des champs
-    var email = document.getElementById("loginEmail").value;
-    var password = document.getElementById("loginPassword").value;
+          // Récupérer les valeurs des champs
+          var email = document.getElementById("loginEmail").value;
+          var password = document.getElementById("loginPassword").value;
 
-    // Créer un objet FormData pour envoyer les données du formulaire
-    var formData = new FormData();
-    formData.append("email", email);
-    formData.append("password", password);
+          // Créer un objet FormData pour envoyer les données du formulaire
+          var formData = new FormData();
+          formData.append("email", email);
+          formData.append("password", password);
 
-    // Création de la requête AJAX pour envoyer les données
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "login.php", true);
+          // Création de la requête AJAX pour envoyer les données
+          var xhr = new XMLHttpRequest();
+          xhr.open("POST", "login.php", true);
 
-    // Détecter la réponse du serveur
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4) { // Vérifier si la requête est terminée
-            if (xhr.status === 200) { // Vérifier si le statut de la requête est OK (200)
+          // Détecter la réponse du serveur
+          xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+              // Vérifier si la requête est terminée
+              if (xhr.status === 200) {
+                // Vérifier si le statut de la requête est OK (200)
                 try {
-                    var response = JSON.parse(xhr.responseText); // Parse la réponse du serveur
-                    console.log(response); // Log la réponse dans la console pour le débogage
+                  var response = JSON.parse(xhr.responseText); // Parse la réponse du serveur
+                  console.log(response); // Log la réponse dans la console pour le débogage
 
-                    if (response.status === "success") {
-                        // Vérifier si "response.message" existe et si le texte "Un e-mail contenant le code de vérification a été envoyé" est présent
-                        if (response.message && response.message.includes('A 2FA verification code has been sent')) {
-                            alert(response.message); // Affiche le message d'alerte
-                            window.location.href = 'verify_2fa.php'; // Redirection vers la page de vérification 2FA
-                        } else {
-                            // Si l'utilisateur est un admin ou un utilisateur normal, on les redirige
-                            if (response.role === "admin") {
-                                window.location.href = "../backoffice/user.php"; // Redirection vers la page admin
-                            } else {
-                                window.location.href = "pack.php"; // Redirection vers la page utilisateur
-                            }
-                        }
+                  if (response.status === "success") {
+                    // Vérifier si "response.message" existe et si le texte "Un e-mail contenant le code de vérification a été envoyé" est présent
+                    if (
+                      response.message &&
+                      response.message.includes(
+                        "A 2FA verification code has been sent"
+                      )
+                    ) {
+                      alert(response.message); // Affiche le message d'alerte
+                      window.location.href = "verify_2fa.php"; // Redirection vers la page de vérification 2FA
                     } else {
-                        alert(response.message);  // Affiche un message d'erreur
+                      // Si l'utilisateur est un admin ou un utilisateur normal, on les redirige
+                      if (response.role === "admin") {
+                        window.location.href = "../backoffice/user.php"; // Redirection vers la page admin
+                      } else {
+                        window.location.href = "pack.php"; // Redirection vers la page utilisateur
+                      }
                     }
+                  } else {
+                    alert(response.message); // Affiche un message d'erreur
+                  }
                 } catch (e) {
-                    // Si une erreur se produit pendant le parsing du JSON
-                    console.error("Erreur lors du parsing JSON : ", e);
-                    console.error("Réponse brute du serveur : ", xhr.responseText); // Affiche la réponse brute pour aider à déboguer
-                    alert("Erreur lors du traitement de la réponse du serveur.");
+                  // Si une erreur se produit pendant le parsing du JSON
+                  console.error("Erreur lors du parsing JSON : ", e);
+                  console.error(
+                    "Réponse brute du serveur : ",
+                    xhr.responseText
+                  ); // Affiche la réponse brute pour aider à déboguer
+                  alert("Erreur lors du traitement de la réponse du serveur.");
                 }
-            } else {
+              } else {
                 // Si la requête échoue, afficher un message d'erreur
                 console.error("Erreur du serveur : statut ", xhr.status);
                 alert("Erreur lors de la connexion, veuillez réessayer.");
+              }
             }
-        }
-    };
+          };
 
-    // Envoie les données au serveur
-    xhr.send(formData);
-});
-
-</script>
-  
-
-</body>
+          // Envoie les données au serveur
+          xhr.send(formData);
+        });
+    </script>
+  </body>
 </html>

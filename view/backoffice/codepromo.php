@@ -36,9 +36,9 @@ $inactiveCount = $statusCounts['inactive'];
   <aside class="sidenav navbar navbar-vertical navbar-expand-xs border-radius-lg fixed-start ms-2  bg-white my-2" id="sidenav-main">
     <div class="sidenav-header">
       <i class="fas fa-times p-3 cursor-pointer text-dark opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
-      <a class="navbar-brand px-4 py-3 m-0" href=" https://demos.creative-tim.com/material-dashboard/pages/dashboard " target="_blank">
-        <img src="assets/logosite1.png" class="navbar-brand-img" width="26" height="26" alt="main_logo">
-        <span class="ms-1 text-sm text-dark">Tfarhida</span>
+      <a class=" px-4 py-3 m-0" href=" https://demos.creative-tim.com/material-dashboard/pages/dashboard " target="_blank">
+        <img src="assets/logosite1.png" class="h-auto" width="180" alt="main_logo">
+       
       </a>
     </div>
     <hr class="horizontal dark mt-0 mb-2">
@@ -71,7 +71,7 @@ $inactiveCount = $statusCounts['inactive'];
         <li class="nav-item">
           <a class="nav-link text-dark" href="../pages/rtl.html">
             <i class="material-symbols-rounded opacity-5">format_textdirection_r_to_l</i>
-            <span class="nav-link-text ms-1">RTL</span>
+            <span class="nav-link-text ms-1">Réclamation</span>
           </a>
         </li>
         <li class="nav-item">
@@ -206,12 +206,16 @@ $inactiveCount = $statusCounts['inactive'];
         </div>
       </div>
     </div>  
-    <div class="search">
-                    <label>
-                        <input type="text" id="live_search12" placeholder="Search here">
-                        <ion-icon name="search-outline"></ion-icon>
-                    </label>
-                </div>
+    <div style="margin: 20px 0;">
+    <div style="display: flex; max-width: 400px; position: relative; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border-radius: 50px; overflow: hidden; transition: all 0.3s ease;">
+        <input type="text" id="live_search12" placeholder="Search here..." 
+               style="flex: 1; border: none; background-color: #f8f9fa; padding: 14px 20px; font-size: 16px; border-radius: 50px 0 0 50px; outline: none; transition: all 0.3s ease;">
+        <button type="button" 
+                style="background-color: pink; border: none; color: white; padding: 0 20px; cursor: pointer; border-radius: 0 50px 50px 0; transition: background-color 0.3s ease;">
+            <i class="fas fa-search" style="font-size: 18px;"></i>
+        </button>
+    </div>
+</div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
             <script type="text/javascript">
                 $(document).ready(function(){
@@ -235,7 +239,7 @@ $inactiveCount = $statusCounts['inactive'];
                  });
             </script>
       <div class="row mb-4">
-        <div class="col-lg-8 col-md-6 mb-md-0 mb-4">
+        <div class="col-lg-8 col-md-6 mb-md-0 mb-4 w-100">
           <div class="card">
             <div class="card-header pb-0">
             <a class="btn btn-outline-dark mt-3 w-10" href="ajoutcodeP.php" type="button">ajouter</a>  
