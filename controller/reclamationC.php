@@ -233,7 +233,34 @@ public function fetchFilteredSortedReclamations($search, $sort, $limit, $offset,
         die('Error: ' . $e->getMessage());
     }
 }
+// Ajouter une méthode pour récupérer les statistiques des réclamations
+public function getStatistiquesReclamations()
+{
+    $db = config::getConnexion();
 
+    try {
+        // Statistiques sur les réclamations répondues
+        $sqlRepondu = "SELECT COUNT(*) AS total_repondu FROM reclamtion WHERE etat = 'repondu'";
+        $queryRepondu = $db->prepare($sqlRepondu);
+        $queryRepondu->execute();
+        $totalRepondu = $queryRepondu->fetch(PDO::FETCH_ASSOC)['total_repondu'];
+
+        // Statistiques sur les réclamations non répondues
+        $sqlNonRepondu = "SELECT COUNT(*) AS total_non_repondu FROM reclamtion WHERE etat = 'en attente'";
+        $queryNonRepondu = $db->prepare($sqlNonRepondu);
+        $queryNonRepondu->execute();
+        $totalNonRepondu = $queryNonRepondu->fetch(PDO::FETCH_ASSOC)['total_non_repondu'];
+
+        // Retourner les résultats sous forme de tableau
+        return [
+            'total_repondu' => $totalRepondu,
+            'total_non_repondu' => $totalNonRepondu
+        ];
+
+    } catch (Exception $e) {
+        die('Erreur : ' . $e->getMessage());
+    }
+}
    
 }
 

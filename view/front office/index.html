@@ -1,66 +1,395 @@
 <!DOCTYPE html>
 <html lang="ar">
-  <head>
+<head>
     <meta charset="UTF-8" />
-    <!-- Assurez-vous de définir l'encodage UTF-8 -->
     <title>Webpage Design</title>
     <link rel="stylesheet" href="style.css" />
-    <style></style>
-  </head>
-  <body>
-    <div class="main">
-      <div class="navbar">
-        <div class="icon">
-          <h2 class="logo">تفرهيدة</h2>
-          <!-- Texte en arabe -->
-        </div>
+    <style>
+      :root {
+        --primary-color: #e60e44;
+        --secondary-color: #f3b1d2;
+        --text-light: #ffffff;
+        --text-dark: #2c3e50;
+        --transition-speed: 0.4s;
+      }
+      
+      body {
+        margin: 0;
+        padding: 0;
+        background: url('assets/background.jpg') no-repeat center center fixed;
+        background-size: cover;
+        min-height: 100vh;
+        font-family: 'Montserrat', 'Segoe UI', sans-serif;
+        display: flex;
+        flex-direction: column;
+      }
 
-        <div class="menu">
-          <ul>
-            <li><a href="#">HOME</a></li>
-            <li><a href="#">ABOUT</a></li>
-            <li><a href="#">SERVICE</a></li>
-            <li><a href="#">DESIGN</a></li>
-            <li class="dropdown">
-              <a href="#" class="dropbtn"
-                >Réclamation
-                <ion-icon
-                  name="chevron-down-outline"
-                  style="font-size: 12px; vertical-align: middle"
-                ></ion-icon
-              ></a>
-              <ul class="dropdown-content">
-                <li>
-                  <a href="listreclamation.php"
-                    ><ion-icon
-                      name="list-outline"
-                      style="margin-right: 8px"
-                    ></ion-icon>
-                    Liste des réclamations</a
-                  >
+      .main-content {
+        flex: 1;
+      }
+
+      .luxury-navbar {
+        display: flex;
+        align-items: center;
+        background: linear-gradient(135deg, var(--primary-color), #ee356c);
+        padding: 0 3rem;
+        height: 80px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        position: relative;
+        z-index: 1000;
+      }
+      
+      .luxury-logo {
+        color: var(--secondary-color);
+        font-size: 2rem;
+        font-weight: 700;
+        margin-right: auto;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        letter-spacing: 1px;
+      }
+      
+      .luxury-menu ul {
+        display: flex;
+        list-style: none;
+        height: 100%;
+        gap: 2px;
+        margin: 0;
+        padding: 0;
+      }
+      
+      .luxury-menu li {
+        position: relative;
+        display: flex;
+        align-items: center;
+      }
+      
+      .luxury-menu > ul > li > a {
+        color: var(--text-light);
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 1rem;
+        padding: 0 1.5rem;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        transition: all var(--transition-speed) ease;
+        position: relative;
+        overflow: hidden;
+      }
+      
+      .luxury-menu > ul > li > a span {
+        position: relative;
+        z-index: 1;
+      }
+      
+      .luxury-menu > ul > li > a::before {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 0;
+        background-color: rgba(255,255,255,0.2);
+        transition: all var(--transition-speed) ease;
+      }
+      
+      .luxury-menu > ul > li > a:hover {
+        color: var(--secondary-color);
+      }
+      
+      .luxury-menu > ul > li > a:hover::before {
+        height: 100%;
+      }
+      
+      /* Dropdown */
+      .luxury-dropdown-content {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background: white;
+        min-width: 250px;
+        border-radius: 0 0 12px 12px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(20px);
+        transition: all var(--transition-speed) ease;
+        z-index: 100;
+        padding: 10px 0;
+      }
+      
+      .luxury-dropdown:hover .luxury-dropdown-content {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+      
+      .luxury-dropdown-content a {
+        color: var(--text-dark);
+        padding: 12px 25px;
+        display: flex;
+        align-items: center;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        position: relative;
+      }
+      
+      .luxury-dropdown-content a::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 3px;
+        height: 100%;
+        background: var(--secondary-color);
+        transform: scaleY(0);
+        transition: transform 0.3s ease;
+      }
+      
+      .luxury-dropdown-content a:hover {
+        background: #f9f9f9;
+        padding-left: 30px;
+      }
+      
+      .luxury-dropdown-content a:hover::before {
+        transform: scaleY(1);
+      }
+      
+      /* Icônes */
+      .luxury-arrow {
+        font-size: 0.9rem;
+        margin-left: 0.5rem;
+        transition: all var(--transition-speed) ease;
+      }
+      
+      .luxury-dropdown:hover .luxury-arrow {
+        transform: rotate(180deg);
+        color: var(--secondary-color);
+      }
+      
+      .luxury-dropdown-content ion-icon {
+        margin-right: 1rem;
+        color: var(--primary-color);
+        font-size: 1.1rem;
+        min-width: 20px;
+      }
+
+      /* Contenu principal */
+      .content {
+        text-align: center;
+        padding: 50px 20px;
+      }
+
+      .content img.logo {
+        max-width: 300px;
+        height: auto;
+        margin: 0 auto;
+      }
+
+      /* Footer */
+      .luxury-footer {
+        background: linear-gradient(135deg, #2c3e50, #1a252f);
+        color: #ecf0f1;
+        padding: 70px 0 0;
+        font-family: 'Segoe UI', sans-serif;
+        min-height: 350px;
+      }
+
+      .footer-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 30px;
+      }
+
+      .footer-section h3 {
+        color: #f3b1d2;
+        font-size: 1.8rem;
+        margin-bottom: 20px;
+        font-weight: 700;
+      }
+
+      .footer-section h4 {
+        color: #f3b1d2;
+        font-size: 1.2rem;
+        margin-bottom: 20px;
+        position: relative;
+        padding-bottom: 10px;
+      }
+
+      .footer-section h4::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 50px;
+        height: 2px;
+        background: #e60e44;
+      }
+
+      .footer-section p {
+        margin-bottom: 20px;
+        line-height: 1.6;
+      }
+
+      .footer-section ul {
+        list-style: none;
+        padding: 0;
+      }
+
+      .footer-section ul li {
+        margin-bottom: 10px;
+      }
+
+      .footer-section ul li a {
+        color: #ecf0f1;
+        text-decoration: none;
+        transition: color 0.3s;
+        display: block;
+      }
+
+      .footer-section ul li a:hover {
+        color: #f3b1d2;
+        padding-left: 5px;
+      }
+
+      .contact-info li {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 15px;
+      }
+
+      .contact-info ion-icon {
+        font-size: 1.2rem;
+        color: #e60e44;
+      }
+
+      .social-icons {
+        display: flex;
+        gap: 15px;
+        margin-top: 20px;
+      }
+
+      .social-icons a {
+        color: #ecf0f1;
+        font-size: 1.5rem;
+        transition: transform 0.3s, color 0.3s;
+      }
+
+      .social-icons a:hover {
+        color: #f3b1d2;
+        transform: translateY(-3px);
+      }
+
+      .footer-bottom {
+        text-align: center;
+        padding: 20px 0;
+        margin-top: 50px;
+        background: rgba(0, 0, 0, 0.2);
+        font-size: 0.9rem;
+      }
+
+      @media (max-width: 768px) {
+        .footer-container {
+          grid-template-columns: 1fr;
+        }
+        
+        .footer-section {
+          margin-bottom: 30px;
+        }
+        
+        .luxury-navbar {
+          padding: 0 1rem;
+        }
+        
+        .luxury-menu > ul > li > a {
+          padding: 0 0.8rem;
+          font-size: 0.9rem;
+        }
+      }
+    </style>
+</head>
+<body>
+    <div class="luxury-navbar">
+        <div class="luxury-logo">تفرهيدة</div>
+        <div class="luxury-menu">
+            <ul>
+                <li><a href="#"><span>Home</span></a></li>
+                <li><a href="#"><span>Evenement</span></a></li>
+                <li><a href="#"><span>Packs</span></a></li>
+                <li><a href="#"><span>sponsor</span></a></li>
+                <li class="luxury-dropdown">
+                    <a href="#">
+                        <span>Réclamation</span>
+                        <ion-icon name="chevron-down-outline" class="luxury-arrow"></ion-icon>
+                    </a>
+                    <div class="luxury-dropdown-content">
+                        <a href="listreclamation.php">
+                            <ion-icon name="list-outline"></ion-icon>
+                            <span>Liste des réclamations</span>
+                        </a>
+                        <a href="ajouterreclamation.php">
+                            <ion-icon name="add-outline"></ion-icon>
+                            <span>Ajouter une réclamation</span>
+                        </a>
+                    </div>
                 </li>
-                <li>
-                  <a href="ajouterreclamation.php"
-                    ><ion-icon
-                      name="add-outline"
-                      style="margin-right: 8px"
-                    ></ion-icon>
-                    Ajouter une réclamation</a
-                  >
-                </li>
-              </ul>
-            </li>
-            <li><a href="#">CONTACT</a></li>
-          </ul>
+                <li><a href="#"><span>Contact</span></a></li>
+            </ul>
         </div>
-      </div>
-      <div class="content">
-        <a href="index.html">
-          <img id="logo" class="logo" src="file/logosite.png" alt=""
-        /></a>
-      </div>
     </div>
 
-    <script src="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js"></script>
-  </body>
+    <div class="main-content">
+        <div class="content">
+            <a href="index.html">
+                <img id="logo" class="logo" src="assets/logosite-removebg-preview.png" alt="">
+            </a>
+        </div>
+    </div>
+
+    <footer class="luxury-footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>تفرهيدة</h3>
+                <p>Plateforme de gestion des réclamations et services clients</p>
+                <div class="social-icons">
+                    <a href="#"><ion-icon name="logo-facebook"></ion-icon></a>
+                    <a href="#"><ion-icon name="logo-twitter"></ion-icon></a>
+                    <a href="#"><ion-icon name="logo-instagram"></ion-icon></a>
+                    <a href="#"><ion-icon name="logo-linkedin"></ion-icon></a>
+                </div>
+            </div>
+
+            <div class="footer-section">
+                <h4>Liens rapides</h4>
+                <ul>
+                    <li><a href="#">Accueil</a></li>
+                    <li><a href="#">À propos</a></li>
+                    <li><a href="#">Services</a></li>
+                    <li><a href="listreclamation.php">Réclamations</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h4>Contactez-nous</h4>
+                <ul class="contact-info">
+                    <li><ion-icon name="mail-outline"></ion-icon> contact@votresite.com</li>
+                    <li><ion-icon name="call-outline"></ion-icon> +212 6 12 34 56 78</li>
+                    <li><ion-icon name="location-outline"></ion-icon> Casablanca, Maroc</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2023 تفرهيدة. Tous droits réservés.</p>
+        </div>
+    </footer>
+
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</body>
 </html>

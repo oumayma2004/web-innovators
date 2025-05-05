@@ -146,9 +146,29 @@ $listReponses = $reponseC->fetchFilteredSortedReponses($searchReponse, $sortRepo
             <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Tables</li>
           </ol>
         </nav>
+        <!-- settings eli zedethomm  -->
+        <div class="d-flex ms-auto"> <!-- Conteneur flex poussé à droite -->
+  <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
+    <a href="javascript:;" class="nav-link text-body p-0" id="iconNavbarSidenav">
+      <div class="sidenav-toggler-inner">
+        <i class="sidenav-toggler-line"></i>
+        <i class="sidenav-toggler-line"></i>
+        <i class="sidenav-toggler-line"></i>
+      </div>
+    </a>
+  </li>
+  <li class="nav-item px-3 d-flex align-items-center">
+    <a href="javascript:;" class="nav-link text-body p-0">
+      <i class="material-symbols-rounded fixed-plugin-button-nav">settings</i>
+    </a>
+  </li>
+</div>
+           
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
         <div class="input-group input-group-outline">
         <form method="GET" class="d-flex justify-content-center align-items-center my-5 gap-3">
+          
+       
   <!-- Champ de recherche -->
   <div class="input-group input-group-outline me-2" style="max-width: 300px;">
     <label class="form-label" style="transform: translateY(-24px) scale(0.8); color: #6c757d; transition: all 0.2s;">Rechercher</label>
@@ -243,12 +263,24 @@ $listReponses = $reponseC->fetchFilteredSortedReponses($searchReponse, $sortRepo
           <ul class="navbar-nav d-flex align-items-center  justify-content-end">
 
             
+          <li class="nav-item d-flex align-items-center">
+  <a href="../pages/sign-in.html" class="nav-link px-0 position-relative">
+    <span class="icon-backdrop bg-gradient-pink rounded-circle d-flex align-items-center justify-content-center" 
+          style="width: 36px; height: 36px; box-shadow: 0 4px 6px rgba(233, 30, 99, 0.3);">
+      <i class="material-symbols-rounded text-white" style="font-size: 20px;">account_circle</i>
+    </span>
+  </a>
+</li>
 
-            <li class="nav-item d-flex align-items-center">
-              <a href="../pages/sign-in.html" class="nav-link text-body font-weight-bold px-0">
-                <i class="material-symbols-rounded">account_circle</i>
-              </a>
-            </li>
+<style>
+  .bg-gradient-pink {
+    background: linear-gradient(135deg, #ff80ab 0%, #ff4081 100%);
+  }
+  .icon-backdrop:hover {
+    transform: translateY(-2px);
+    transition: all 0.3s ease;
+  }
+</style>
           </ul>
         </div>
       </div>
@@ -260,9 +292,9 @@ $listReponses = $reponseC->fetchFilteredSortedReponses($searchReponse, $sortRepo
         <div class="col-12">
           <div class="card my-4">
             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-              <div class="bg-gradient-dark shadow-dark border-radius-lg pt-4 pb-3">
-                <h6 class="text-white text-capitalize ps-3">Table Reclamation</h6>
-              </div>
+            <div class="bg-gradient-pink shadow-pink border-radius-lg pt-4 pb-3" style="background: linear-gradient(195deg, #ec407a, #d81b60);">
+    <h6 class="text-white text-capitalize ps-3">Table Reclamation</h6>
+</div>
             </div>
             <div class="table-responsive p-0">
             <table class="table align-items-center justify-content-center mb-0">
@@ -432,9 +464,9 @@ echo '</div>';
         <div class="col-12">
           <div class="card my-4">
             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-              <div class="bg-gradient-dark shadow-dark border-radius-lg pt-4 pb-3">
-                <h6 class="text-white text-capitalize ps-3">Table Reclamation</h6>
-              </div>
+            <div class="bg-gradient-pink shadow-pink border-radius-lg pt-4 pb-3" style="background: linear-gradient(195deg, #ec407a, #d81b60);">
+    <h6 class="text-white text-capitalize ps-3">Table Repense</h6>
+</div>
             </div>
             <div class="table-responsive p-0">
             <table class="table align-items-center mb-0">
@@ -480,7 +512,70 @@ echo '</div>';
           </div>
         </div>
       </div>
-      <footer class="footer py-4  ">
+      
+        <?php
+$s = $reclamationC->getStatistiquesReclamations();
+?>
+
+<div class="card my-2">
+  <div class="card-header p-2 bg-gradient-pink text-white">
+    <h6 class="m-0">Stats Réclamations</h6>
+  </div>
+  <div class="card-body p-2">
+    <div class="row g-1 text-center">
+      <div class="col-4">
+        <div class="p-1 border rounded">
+          <div class="text-success fw-bold"><?= $s['total_repondu'] ?></div>
+          <small>Répondues</small>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="p-1 border rounded">
+          <div class="text-danger fw-bold"><?= $s['total_non_repondu'] ?></div>
+          <small>Non répondues</small>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="p-1 border rounded">
+          <div class="fw-bold"><?= $s['total_repondu'] + $s['total_non_repondu'] ?></div>
+          <small>Total</small>
+        </div>
+      </div>
+    </div>
+    
+    <canvas id="rcChart" height="300px" width="300px" class="mt-2" style="max-width: 300px; margin: auto;"></canvas>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+      new Chart(document.getElementById('rcChart'), {
+        type: 'doughnut',
+        data: {
+          labels: ['Répondues', 'En attente'],
+          datasets: [{
+            data: [<?= $s['total_repondu'] ?>, <?= $s['total_non_repondu'] ?>],
+            backgroundColor: ['#4CAF50', '#F44336']
+          }]
+        },
+        options: {
+          cutout: '65%',
+          plugins: {
+            legend: {
+              display: true,
+              position: 'bottom',
+              labels: {
+                boxWidth: 12,
+                font: {
+                  size: 10
+                }
+              }
+            }
+          }
+        }
+      });
+    </script>
+  </div>
+</div>
+<footer class="footer py-4  ">
         <div class="container-fluid">
           <div class="row align-items-center justify-content-lg-between">
             <div class="col-lg-6 mb-lg-0 mb-4">
@@ -511,6 +606,7 @@ echo '</div>';
             </div>
           </div>
         </div>
+
       </footer>
     </div>
   </main>
@@ -524,6 +620,9 @@ echo '</div>';
           <h5 class="mt-3 mb-0">Material UI Configurator</h5>
           <p>See our dashboard options.</p>
         </div>
+        
+
+
         <div class="float-end mt-4">
           <button class="btn btn-link text-dark p-0 fixed-plugin-close-button">
             <i class="material-symbols-rounded">clear</i>
@@ -576,8 +675,9 @@ echo '</div>';
         <a class="btn bg-gradient-info w-100" href="https://www.creative-tim.com/product/material-dashboard-pro">Free Download</a>
         <a class="btn btn-outline-dark w-100" href="https://www.creative-tim.com/learning-lab/bootstrap/overview/material-dashboard">View documentation</a>
         <div class="w-100 text-center">
-          <a class="github-button" href="https://github.com/creativetimofficial/material-dashboard" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star creativetimofficial/material-dashboard on GitHub">Star</a>
-          <h6 class="mt-3">Thank you for sharing!</h6>
+
+
+        <h6 class="mt-3">Thank you for sharing!</h6>
           <a href="https://twitter.com/intent/tweet?text=Check%20Material%20UI%20Dashboard%20made%20by%20%40CreativeTim%20%23webdesign%20%23dashboard%20%23bootstrap5&amp;url=https%3A%2F%2Fwww.creative-tim.com%2Fproduct%2Fsoft-ui-dashboard" class="btn btn-dark mb-0 me-2" target="_blank">
             <i class="fab fa-twitter me-1" aria-hidden="true"></i> Tweet
           </a>
