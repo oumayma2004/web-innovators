@@ -553,7 +553,7 @@ $s = $reclamationC->getStatistiquesReclamations();
           labels: ['Répondues', 'En attente'],
           datasets: [{
             data: [<?= $s['total_repondu'] ?>, <?= $s['total_non_repondu'] ?>],
-            backgroundColor: ['#4CAF50', '#F44336']
+            backgroundColor: ['#DA1884', '#FF91A4']
           }]
         },
         options: {
