@@ -3,7 +3,6 @@ include_once "../../Controller/sponsorsC.php";
 
 $sponsorController = new SponsorC();
 $sponsors = $sponsorController->getValidSponsors();
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -38,7 +37,6 @@ $sponsors = $sponsorController->getValidSponsors();
     <div class="link"> 
         <a href="index.php">Home |</a>
         <a href="form.php">add sponsor |</a>
-
         <a href="">About |</a>
         <a href="">FA&Q |</a>
         <a href="">Contact</a>
@@ -51,11 +49,13 @@ $sponsors = $sponsorController->getValidSponsors();
     <?php if (!empty($sponsors)) : ?>
         <?php foreach ($sponsors as $sponsor): ?>
             <div class="event1">
-            <?php if (!empty($sponsor['image'])): ?>
-    <img src="path/to/your/image/directory/<?= htmlspecialchars($sponsor['image']) ?>" alt="Image sponsor">
-<?php else: ?>
-    <img src="assets/default-image.jpg" alt="Image par défaut">
-<?php endif; ?>
+
+                <?php if (!empty($sponsor['image']) && file_exists('../tfarhida/view/uploads/' . $sponsor['image'])): ?>
+                    <img src="../tfarhida/view/uploads/<?= htmlspecialchars($sponsor['image']) ?>" ...
+
+                <?php else: ?>
+                    <span>No Image</span>
+                <?php endif; ?>
 
                 <h6><?= htmlspecialchars($sponsor['nom_complet']) ?></h6>
                 <p><strong>Entreprise :</strong> <?= htmlspecialchars($sponsor['entreprise']) ?></p>
@@ -68,7 +68,6 @@ $sponsors = $sponsorController->getValidSponsors();
         <p>Aucun sponsor validé trouvé.</p>
     <?php endif; ?>
 </div>
-
 
 <br><br>
 
@@ -88,7 +87,7 @@ $sponsors = $sponsorController->getValidSponsors();
     <div class="FO">
         <p class="p">Suivez-nous :</p>
         <a href="http://www.facebook.com"><img class="social" src="assets/fb.png" alt=""></a>
-        <img class="social" src="assets/instagram.png" alt=""><br>
+        <img class="social" src="assets/instagram.png" alt="">
         <img class="social" src="assets/twitter.png" alt="">
         <img class="social" src="assets/youtube.png" alt="">
     </div>

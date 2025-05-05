@@ -1,7 +1,9 @@
 <?php
 require_once '../../../../../Controller/sponsorsC.php';
 require_once '../../../../../Controller/ContratC.php';
-require_once '../../../../../Model/Contrat.php'; // Assure-toi que le modèle est inclus
+require_once '../../../../../Model/Contrat.php';
+require_once __DIR__ . '/../../../../../vendor/autoload.php';
+use Twilio\Rest\Client;
 
 $contratC = new ContratC();
 $sponsorC = new SponsorC();
@@ -11,7 +13,6 @@ $errors = [];
 $success = false;
 
 if (isset($_POST['submit'])) {
-    // Validation basique
     if (empty($_POST['id_sponsor'])) {
         $errors['id_sponsor'] = "Le sponsor est requis.";
     }
@@ -28,7 +29,6 @@ if (isset($_POST['submit'])) {
         $errors['type_contrat'] = "Type de contrat requis.";
     }
 
-    // Si pas d’erreurs, création et ajout
     if (empty($errors)) {
         $contrat = new Contrat(
             null,
@@ -42,6 +42,39 @@ if (isset($_POST['submit'])) {
         $success = $contratC->ajouterContrat($contrat);
 
         if ($success) {
+            // Envoi SMS via Twilio
+            $account_sid = 'ACf5fc8a36db6d9a5bbfa595e21ab34876';
+            $auth_token = '7c9a01cf920fede48dc9eed8f657513b';
+            $twilio_number = '+18104280546';
+            $client = new Client($account_sid, $auth_token);
+
+            $sponsor = $sponsorC->recupererSponsor($_POST['id_sponsor']);
+            if ($sponsor && !empty($sponsor['telephone'])) {
+                // Formater le numéro en +216XXXXXXXX
+                $rawNumber = preg_replace('/\D/', '', $sponsor['telephone']);
+                if (strlen($rawNumber) === 8) {
+                    $formattedNumber = '+216' . $rawNumber;
+                } elseif (strlen($rawNumber) === 9 && $rawNumber[0] === '0') {
+                    $formattedNumber = '+216' . substr($rawNumber, 1);
+                } elseif (strpos($rawNumber, '216') !== 0) {
+                    $formattedNumber = '+216' . $rawNumber;
+                } else {
+                    $formattedNumber = '+' . $rawNumber;
+                }
+
+                try {
+                    $client->messages->create(
+                        $formattedNumber,
+                        [
+                            'from' => $twilio_number,
+                            'body' => "Bonjour " . $sponsor['nom_complet'] . ", un nouveau contrat a été signé avec vous. Merci pour votre collaboration."
+                        ]
+                    );
+                } catch (Exception $e) {
+                    error_log("Erreur Twilio : " . $e->getMessage());
+                }
+            }
+
             header("Location: liste_sponsors.php?success=1");
             exit();
         } else {
@@ -50,6 +83,7 @@ if (isset($_POST['submit'])) {
     }
 }
 ?>
+
 
 
 <!DOCTYPE html>
@@ -89,7 +123,7 @@ if (isset($_POST['submit'])) {
     <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link text-dark" href="../pages/dashboard.html">
+          <a class="nav-link text-dark" href="">
             <i class="material-symbols-rounded opacity-5">dashboard</i>
             <span class="nav-link-text ms-1">Dashboard</span>
           </a>
@@ -101,46 +135,41 @@ if (isset($_POST['submit'])) {
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-dark" href="../pages/billing.html">
+          <a class="nav-link text-dark" href="">
             <i class="material-symbols-rounded opacity-5">receipt_long</i>
-            <span class="nav-link-text ms-1">Billing</span>
+            <span class="nav-link-text ms-1">reclamation </span>
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-dark" href="../pages/virtual-reality.html">
+          <a class="nav-link text-dark" href="">
             <i class="material-symbols-rounded opacity-5">view_in_ar</i>
-            <span class="nav-link-text ms-1">Virtual Reality</span>
+            <span class="nav-link-text ms-1">evenenment</span>
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-dark" href="../pages/rtl.html">
+          <a class="nav-link text-dark" href="">
             <i class="material-symbols-rounded opacity-5">format_textdirection_r_to_l</i>
-            <span class="nav-link-text ms-1">RTL</span>
+            <span class="nav-link-text ms-1">packs</span>
           </a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link text-dark" href="../pages/notifications.html">
-            <i class="material-symbols-rounded opacity-5">notifications</i>
-            <span class="nav-link-text ms-1">Notifications</span>
-          </a>
-        </li>
+
         <li class="nav-item mt-3">
           <h6 class="ps-4 ms-2 text-uppercase text-xs text-dark font-weight-bolder opacity-5">Account pages</h6>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-dark" href="../pages/profile.html">
+          <a class="nav-link text-dark" href="">
             <i class="material-symbols-rounded opacity-5">person</i>
             <span class="nav-link-text ms-1">Profile</span>
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-dark" href="../pages/sign-in.html">
+          <a class="nav-link text-dark" href="">
             <i class="material-symbols-rounded opacity-5">login</i>
             <span class="nav-link-text ms-1">Sign In</span>
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-dark" href="../pages/sign-up.html">
+          <a class="nav-link text-dark" href="">
             <i class="material-symbols-rounded opacity-5">assignment</i>
             <span class="nav-link-text ms-1">Sign Up</span>
           </a>
@@ -371,7 +400,7 @@ if (isset($_POST['submit'])) {
 
         <!-- Boutons -->
         <div class="d-flex justify-content-between mt-4">
-          <button type="submit" name="submit" class="btn btn-primary px-4 py-2 fw-bold">
+          <button type="submit" name="submit" class="btn btn-primary">
             <i class="bi bi-check-circle-fill me-2"></i>Ajouter le contrat
           </button>
           <a href="liste_sponsors.php" class="btn btn-outline-secondary px-4 py-2">

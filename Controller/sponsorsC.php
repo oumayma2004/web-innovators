@@ -158,7 +158,78 @@ class SponsorC
             die("Erreur lors de la mise à jour : " . $e->getMessage());
         }
     }
+    // Compter le nombre de sponsors avec recherche
+public function countSponsorsWithSearch($search)
+{
+    $sql = "SELECT COUNT(*) AS total FROM sponsors
+            WHERE 
+            nom_complet LIKE :search OR 
+            entreprise LIKE :search OR 
+            telephone LIKE :search OR 
+            contact_email LIKE :search OR 
+            secteur LIKE :search OR 
+            budget LIKE :search OR 
+            type_sponsoring LIKE :search OR 
+            message LIKE :search OR 
+            site_web LIKE :search OR 
+            statut LIKE :search OR 
+            date_envoi LIKE :search";
+    $db = config::getConnexion();
+    try {
+        $query = $db->prepare($sql);
+        $query->execute([':search' => '%' . $search . '%']);
+        return $query->fetch(PDO::FETCH_ASSOC)['total'];
+    } catch (Exception $e) {
+        die('Error: ' . $e->getMessage());
+    }
+}
+
+// Récupérer une liste de sponsors avec recherche, tri et pagination
+public function fetchFilteredSortedSponsors($search, $sort, $limit, $offset, $statutFilter = '')
+{
+    $db = config::getConnexion();
     
+    $sql = "SELECT * FROM sponsors WHERE (
+                nom_complet LIKE :search OR 
+                entreprise LIKE :search OR 
+                telephone LIKE :search OR 
+                contact_email LIKE :search OR 
+                secteur LIKE :search OR 
+                budget LIKE :search OR 
+                type_sponsoring LIKE :search OR 
+                message LIKE :search OR 
+                site_web LIKE :search OR 
+                statut LIKE :search OR 
+                date_envoi LIKE :search
+            )";
+
+    if (!empty($statutFilter)) {
+        $sql .= " AND statut = :statutFilter";
+    }
+
+    $allowedSortValues = ['ASC', 'DESC'];
+    $sort = in_array(strtoupper($sort), $allowedSortValues) ? strtoupper($sort) : 'ASC';
+
+    $sql .= " ORDER BY date_envoi $sort LIMIT :limit OFFSET :offset";
+
+    try {
+        $query = $db->prepare($sql);
+        $query->bindValue(':search', '%' . $search . '%', PDO::PARAM_STR);
+
+        if (!empty($statutFilter)) {
+            $query->bindValue(':statutFilter', $statutFilter, PDO::PARAM_STR);
+        }
+
+        $query->bindValue(':limit', (int)$limit, PDO::PARAM_INT);
+        $query->bindValue(':offset', (int)$offset, PDO::PARAM_INT);
+
+        $query->execute();
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    } catch (Exception $e) {
+        die('Error: ' . $e->getMessage());
+    }
+}
+
     
     
 }

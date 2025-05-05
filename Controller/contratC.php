@@ -116,5 +116,92 @@ class ContratC
             die('Erreur : ' . $e->getMessage());
         }
     }
+
+    // Compter le nombre de contrats avec recherche
+    public function countContratsWithSearch($search, $typeContrat = '')
+    {
+        $sql = "SELECT COUNT(*) AS total FROM contrat
+                WHERE (
+                    id_sponsor LIKE :search OR
+                    date_signature LIKE :search OR
+                    date_fin LIKE :search OR
+                    montant LIKE :search OR
+                    type_contrat LIKE :search
+                )";
+                
+        // Ajouter le filtre par type de contrat si spécifié
+        if (!empty($typeContrat)) {
+            $sql .= " AND type_contrat = :typeContrat";
+        }
+        
+        $db = config::getConnexion();
+        try {
+            $query = $db->prepare($sql);
+            $query->bindValue(':search', '%' . $search . '%', PDO::PARAM_STR);
+            
+            if (!empty($typeContrat)) {
+                $query->bindValue(':typeContrat', $typeContrat, PDO::PARAM_STR);
+            }
+            
+            $query->execute();
+            return $query->fetch(PDO::FETCH_ASSOC)['total'];
+        } catch (Exception $e) {
+            die('Error: ' . $e->getMessage());
+        }
+    }
+    
+    // Récupérer une liste de contrats avec recherche, tri et pagination
+    public function fetchFilteredSortedContrats($search, $sort, $limit, $offset, $typeContrat = '')
+    {
+        $db = config::getConnexion();
+       
+        $sql = "SELECT * FROM contrat WHERE (
+                    id_sponsor LIKE :search OR
+                    date_signature LIKE :search OR
+                    date_fin LIKE :search OR
+                    montant LIKE :search OR
+                    type_contrat LIKE :search
+                )";
+                
+        // Ajouter le filtre par type de contrat si spécifié
+        if (!empty($typeContrat)) {
+            $sql .= " AND type_contrat = :typeContrat";
+        }
+        
+        $allowedSortValues = ['ASC', 'DESC'];
+        $sort = in_array(strtoupper($sort), $allowedSortValues) ? strtoupper($sort) : 'ASC';
+        $sql .= " ORDER BY date_signature $sort LIMIT :limit OFFSET :offset";
+        
+        try {
+            $query = $db->prepare($sql);
+            $query->bindValue(':search', '%' . $search . '%', PDO::PARAM_STR);
+            $query->bindValue(':limit', (int)$limit, PDO::PARAM_INT);
+            $query->bindValue(':offset', (int)$offset, PDO::PARAM_INT);
+            
+            if (!empty($typeContrat)) {
+                $query->bindValue(':typeContrat', $typeContrat, PDO::PARAM_STR);
+            }
+            
+            $query->execute();
+            return $query->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $e) {
+            die('Error: ' . $e->getMessage());
+        }
+    }
+
+
+    public function countContratsByType() {
+        $sql = "SELECT type_contrat, COUNT(*) as count FROM contrat GROUP BY type_contrat";
+        $db = config::getConnexion();
+        try {
+            $query = $db->prepare($sql);
+            $query->execute();
+            return $query->fetchAll();
+        } catch (PDOException $e) {
+            die('Erreur: ' . $e->getMessage());
+        }
+    }
+    
+
 }
 ?>

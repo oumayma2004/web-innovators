@@ -1,15 +1,125 @@
 <?php
-
+// Inclusion des fichiers nécessaires
 require_once '../../../../../Controller/sponsorsC.php';
 require_once '../../../../../Controller/ContratC.php';
-$contratC = new ContratC();
-$listeContrats = $contratC->afficherContrats();
+require_once '../../../../../config.php';
+require_once __DIR__ . '/../../../../../vendor/autoload.php';
+
+use Twilio\Rest\Client;
+
+// Instanciation des classes
 $sponsorC = new SponsorC();
-$sponsors = $sponsorC->afficherSponsors();
+$contratC = new ContratC();
+
+// Paramètres Sponsors
+$searchSponsor = $_GET['searchSponsor'] ?? '';
+$statutFilter = $_GET['statut'] ?? '';
+$sortSponsor = $_GET['sortSponsor'] ?? 'ASC';
+$pageSponsor = (int) ($_GET['pageSponsor'] ?? 1);
+$limit = 3;
+$offsetSponsor = ($pageSponsor - 1) * $limit;
+
+// Paramètres Contrats
+$searchContrat = $_GET['searchContrat'] ?? '';
+$typeContrat = $_GET['type_contrat'] ?? '';
+$sortContrat = $_GET['sortContrat'] ?? 'ASC';
+$pageContrat = (int) ($_GET['pageContrat'] ?? 1);
+$offsetContrat = ($pageContrat - 1) * $limit;
+
+// Récupération des données
+$totalSponsors = $sponsorC->countSponsorsWithSearch($searchSponsor);
+$totalPagesSponsors = ceil($totalSponsors / $limit);
+$listSponsors = $sponsorC->fetchFilteredSortedSponsors($searchSponsor, $sortSponsor, $limit, $offsetSponsor, $statutFilter);
+
+$totalContrats = $contratC->countContratsWithSearch($searchContrat, $typeContrat);
+$totalPagesContrats = ceil($totalContrats / $limit);
+$listContrats = $contratC->fetchFilteredSortedContrats($searchContrat, $sortContrat, $limit, $offsetContrat, $typeContrat);
+
+// --- Twilio credentials ---
+define('TWILIO_ACCOUNT_SID', 'ACf5fc8a36db6d9a5bbfa595e21ab34876');
+define('TWILIO_AUTH_TOKEN', '7c9a01cf920fede48dc9eed8f657513b');
+define('TWILIO_PHONE_NUMBER', '+18104280546');
+
+// Fonction pour envoyer un SMS
+function sendExpirationSMS($phoneNumber, $sponsorName, $contractId, $expirationDate) {
+    try {
+        $client = new Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);
+
+        $formattedNumber = formatPhoneNumber($phoneNumber);
+        if (!$formattedNumber) {
+            throw new Exception("Numéro de téléphone invalide");
+        }
+
+        $message = $client->messages->create(
+            $formattedNumber,
+            [
+                'from' => TWILIO_PHONE_NUMBER,
+                'body' => "Bonjour $sponsorName, votre contrat (ID: $contractId) expire aujourd'hui ($expirationDate). Merci de nous contacter pour renouveler."
+            ]
+        );
+
+        return $message->sid;
+    } catch (Exception $e) {
+        error_log("Erreur Twilio: " . $e->getMessage());
+        return false;
+    }
+}
+
+// Fonction de formatage du numéro
+function formatPhoneNumber($phoneNumber) {
+    $cleaned = preg_replace('/[^0-9]/', '', $phoneNumber);
+
+    // Format : 0XXXXXXXX
+    if (strlen($cleaned) === 8) {
+        return '+216' . $cleaned;
+    }
+
+    // Déjà en format international
+    if (substr($cleaned, 0, 3) === '216' && strlen($cleaned) === 11) {
+        return '+' . $cleaned;
+    }
+
+    return false;
+}
+
+// Vérification automatique de la date de fin de contrat
+foreach ($listContrats as $contrat): 
+    $sponsor = $sponsorC->recupererSponsor($contrat['id_sponsor']);
+    
+    if (!$sponsor || empty($sponsor['telephone'])) continue;
+
+    $dateFin = (new DateTime($contrat['date_fin']))->format('Y-m-d');
+    $today = (new DateTime())->format('Y-m-d');
+
+    if ($dateFin === $today) {
+        $smsResult = sendExpirationSMS(
+            $sponsor['telephone'],
+            $sponsor['nom_complet'],
+            $contrat['id_contrat'],
+            $dateFin
+        );
+
+        if ($smsResult) {
+            echo "<script>console.log('✅ SMS envoyé à {$sponsor['telephone']}');</script>";
+        } else {
+            echo "<script>console.error('❌ Échec SMS à {$sponsor['telephone']}');</script>";
+        }
+    }
+endforeach;
 
 
+$typeStats = $contratC->countContratsByType();
+$labels = [];
+$counts = [];
+
+foreach ($typeStats as $stat) {
+    $labels[] = $stat['type_contrat'];
+    $counts[] = $stat['count'];
+}
 
 ?>
+
+
 
 
 <!DOCTYPE html>
@@ -49,7 +159,7 @@ $sponsors = $sponsorC->afficherSponsors();
     <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link text-dark" href="../pages/dashboard.html">
+          <a class="nav-link text-dark" href="">
             <i class="material-symbols-rounded opacity-5">dashboard</i>
             <span class="nav-link-text ms-1">Dashboard</span>
           </a>
@@ -104,131 +214,206 @@ $sponsors = $sponsorC->afficherSponsors();
     </div>
     <div class="sidenav-footer position-absolute w-100 bottom-0 ">
       <div class="mx-3">
-        <a class="btn btn-outline-dark mt-4 w-100" href="https://www.creative-tim.com/learning-lab/bootstrap/overview/material-dashboard?ref=sidebarfree" type="button">Documentation</a>
-        <a class="btn bg-gradient-dark w-100" href="https://www.creative-tim.com/product/material-dashboard-pro?ref=sidebarfree" type="button">Upgrade to pro</a>
       </div>
     </div>
   </aside>
   <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
     <!-- Navbar -->
-    <nav class="navbar navbar-main navbar-expand-lg px-0 mx-3 shadow-none border-radius-xl" id="navbarBlur" data-scroll="true">
-      <div class="container-fluid py-1 px-3">
-        <nav aria-label="breadcrumb">
-          <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
-            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Pages</a></li>
-            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Tables</li>
-          </ol>
-        </nav>
-        <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
-          <div class="ms-md-auto pe-md-3 d-flex align-items-center">
-            <div class="input-group input-group-outline">
-              <label class="form-label">Type here...</label>
-              <input type="text" class="form-control">
-            </div>
-          </div>
-          <ul class="navbar-nav d-flex align-items-center  justify-content-end">
-            <li class="nav-item d-flex align-items-center">
-              <a class="btn btn-outline-primary btn-sm mb-0 me-3" target="_blank" href="https://www.creative-tim.com/builder?ref=navbar-material-dashboard">Online Builder</a>
-            </li>
-            <li class="mt-1">
-              <a class="github-button" href="https://github.com/creativetimofficial/material-dashboard" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star creativetimofficial/material-dashboard on GitHub">Star</a>
-            </li>
-            <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
-              <a href="javascript:;" class="nav-link text-body p-0" id="iconNavbarSidenav">
-                <div class="sidenav-toggler-inner">
-                  <i class="sidenav-toggler-line"></i>
-                  <i class="sidenav-toggler-line"></i>
-                  <i class="sidenav-toggler-line"></i>
-                </div>
-              </a>
-            </li>
-            <li class="nav-item px-3 d-flex align-items-center">
-              <a href="javascript:;" class="nav-link text-body p-0">
-                <i class="material-symbols-rounded fixed-plugin-button-nav">settings</i>
-              </a>
-            </li>
-            <li class="nav-item dropdown pe-3 d-flex align-items-center">
-              <a href="javascript:;" class="nav-link text-body p-0" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="material-symbols-rounded">notifications</i>
-              </a>
-              <ul class="dropdown-menu  dropdown-menu-end  px-2 py-3 me-sm-n4" aria-labelledby="dropdownMenuButton">
-                <li class="mb-2">
-                  <a class="dropdown-item border-radius-md" href="javascript:;">
-                    <div class="d-flex py-1">
-                      <div class="my-auto">
-                        <img src="../assets/img/team-2.jpg" class="avatar avatar-sm  me-3 ">
-                      </div>
-                      <div class="d-flex flex-column justify-content-center">
-                        <h6 class="text-sm font-weight-normal mb-1">
-                          <span class="font-weight-bold">New message</span> from Laur
-                        </h6>
-                        <p class="text-xs text-secondary mb-0">
-                          <i class="fa fa-clock me-1"></i>
-                          13 minutes ago
-                        </p>
-                      </div>
-                    </div>
-                  </a>
-                </li>
-                <li class="mb-2">
-                  <a class="dropdown-item border-radius-md" href="javascript:;">
-                    <div class="d-flex py-1">
-                      <div class="my-auto">
-                        <img src="../assets/img/small-logos/logo-spotify.svg" class="avatar avatar-sm bg-gradient-dark  me-3 ">
-                      </div>
-                      <div class="d-flex flex-column justify-content-center">
-                        <h6 class="text-sm font-weight-normal mb-1">
-                          <span class="font-weight-bold">New album</span> by Travis Scott
-                        </h6>
-                        <p class="text-xs text-secondary mb-0">
-                          <i class="fa fa-clock me-1"></i>
-                          1 day
-                        </p>
-                      </div>
-                    </div>
-                  </a>
-                </li>
-                <li>
-                  <a class="dropdown-item border-radius-md" href="javascript:;">
-                    <div class="d-flex py-1">
-                      <div class="avatar avatar-sm bg-gradient-secondary  me-3  my-auto">
-                        <svg width="12px" height="12px" viewBox="0 0 43 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                          <title>credit-card</title>
-                          <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                            <g transform="translate(-2169.000000, -745.000000)" fill="#FFFFFF" fill-rule="nonzero">
-                              <g transform="translate(1716.000000, 291.000000)">
-                                <g transform="translate(453.000000, 454.000000)">
-                                  <path class="color-background" d="M43,10.7482083 L43,3.58333333 C43,1.60354167 41.3964583,0 39.4166667,0 L3.58333333,0 C1.60354167,0 0,1.60354167 0,3.58333333 L0,10.7482083 L43,10.7482083 Z" opacity="0.593633743"></path>
-                                  <path class="color-background" d="M0,16.125 L0,32.25 C0,34.2297917 1.60354167,35.8333333 3.58333333,35.8333333 L39.4166667,35.8333333 C41.3964583,35.8333333 43,34.2297917 43,32.25 L43,16.125 L0,16.125 Z M19.7083333,26.875 L7.16666667,26.875 L7.16666667,23.2916667 L19.7083333,23.2916667 L19.7083333,26.875 Z M35.8333333,26.875 L28.6666667,26.875 L28.6666667,23.2916667 L35.8333333,23.2916667 L35.8333333,26.875 Z"></path>
-                                </g>
-                              </g>
-                            </g>
-                          </g>
-                        </svg>
-                      </div>
-                      <div class="d-flex flex-column justify-content-center">
-                        <h6 class="text-sm font-weight-normal mb-1">
-                          Payment successfully completed
-                        </h6>
-                        <p class="text-xs text-secondary mb-0">
-                          <i class="fa fa-clock me-1"></i>
-                          2 days
-                        </p>
-                      </div>
-                    </div>
-                  </a>
-                </li>
-              </ul>
-            </li>
-            <li class="nav-item d-flex align-items-center">
-              <a href="../pages/sign-in.html" class="nav-link text-body font-weight-bold px-0">
-                <i class="material-symbols-rounded">account_circle</i>
-              </a>
-            </li>
-          </ul>
-        </div>
+    <form method="GET" class="sponsor-filter-form">
+  <div class="filter-container">
+    <!-- Champ de recherche -->
+    <div class="search-group">
+      <div class="input-wrapper">
+        <input type="text" class="search-input" name="searchSponsor" 
+               placeholder=" " 
+               value="<?php echo isset($_GET['searchSponsor']) ? htmlspecialchars($_GET['searchSponsor']) : ''; ?>">
+        <label>Rechercher un sponsor</label>
+        <i class="fas fa-search icon"></i>
       </div>
-    </nav>
+    </div>
+
+    <!-- Filtrage par statut -->
+    <div class="filter-group">
+      <div class="select-wrapper">
+        <select name="statut" class="form-select">
+          <option value="">Tous les statuts</option>
+          <option value="En attente" <?php if (isset($_GET['statut']) && $_GET['statut'] == 'En attente') echo 'selected'; ?>>En attente</option>
+          <option value="oui" <?php if (isset($_GET['statut']) && $_GET['statut'] == 'oui') echo 'selected'; ?>>Accepté</option>
+          <option value="non" <?php if (isset($_GET['statut']) && $_GET['statut'] == 'non') echo 'selected'; ?>>Refusé</option>
+        </select>
+        <i class="fas fa-chevron-down icon"></i>
+      </div>
+    </div>
+
+    <!-- Boutons -->
+    <div class="button-group">
+      <button type="submit" class="btn-filter">
+        <i class="fas fa-filter"></i> Appliquer
+      </button>
+      <a href="?page=1" class="btn-reset">
+        <i class="fas fa-times"></i> reinitialiser
+      </a>
+    </div>
+  </div>
+</form>
+
+<style>
+.sponsor-filter-form {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  margin-bottom: 2rem;
+}
+
+.filter-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+}
+
+.search-group, .filter-group {
+  flex: 1;
+  min-width: 200px;
+}
+
+.input-wrapper {
+  position: relative;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 2.5rem;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  background-color: white;
+  color: #495057;
+  font-size: 0.9rem;
+  transition: all 0.3s;
+}
+
+.search-input:focus {
+  border-color: #d63384;
+  box-shadow: 0 0 0 3px rgba(77, 171, 247, 0.2);
+  outline: none;
+}
+
+.search-input:focus + label,
+.search-input:not(:placeholder-shown) + label {
+  transform: translateY(-130%) scale(0.85);
+  background: white;
+  padding: 0 0.3rem;
+  color: #d63384;
+}
+
+.search-input + label {
+  position: absolute;
+  left: 2.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6c757d;
+  pointer-events: none;
+  transition: all 0.2s;
+}
+
+.select-wrapper {
+  position: relative;
+}
+
+.form-select {
+  width: 100%;
+  padding: 0.75rem 2.5rem 0.75rem 1rem;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  background-color: white;
+  color: #495057;
+  font-size: 0.9rem;
+  appearance: none;
+  transition: all 0.3s;
+}
+
+.form-select:focus {
+  border-color: #d63384;
+  box-shadow: 0 0 0 3px rgba(77, 171, 247, 0.2);
+  outline: none;
+}
+
+.icon {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6c757d;
+}
+
+.input-wrapper .icon {
+  left: 1rem;
+}
+
+.select-wrapper .icon {
+  right: 1rem;
+  pointer-events: none;
+}
+
+.button-group {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.btn-filter {
+  background-color: #d63384;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-filter:hover {
+  background-color: #339af0;
+  transform: translateY(-1px);
+}
+
+.btn-reset {
+  background-color: #f1f3f5;
+  color: #495057;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-reset:hover {
+  background-color: #e9ecef;
+  transform: translateY(-1px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .filter-container {
+    flex-direction: column;
+  }
+  
+  .search-group, .filter-group, .button-group {
+    width: 100%;
+  }
+  
+  .button-group {
+    justify-content: flex-end;
+  }
+}
+</style>
     <!-- End Navbar -->
     <div class="container-fluid py-2">
       <div class="row">
@@ -251,10 +436,12 @@ $sponsors = $sponsorC->afficherSponsors();
 
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Date envoi</th>
                       <th class="text-secondary opacity-7">Actions</th>
+                      <th class="text-secondary opacity-7">Actions</th> 
+
                     </tr>
                   </thead>
                   <tbody>
-                    <?php foreach ($sponsors as $sponsor): ?>
+                    <?php foreach ($listSponsors as $sponsor): ?>
                       <tr>
                         <td>
                           <div class="d-flex px-2 py-1">
@@ -289,37 +476,214 @@ $sponsors = $sponsorC->afficherSponsors();
                             <form method="POST" action="traitement_sponsor.php" style="display:inline;">
                               <input type="hidden" name="id_sponsor" value="<?= $sponsor['id_sponsor'] ?>">
                               <input type="hidden" name="action" value="accepter">
-                              <button type="submit" class="btn btn-sm btn-success">✅ Accepter</button>
+                              <button type="submit" class="btn btn-sm btn-outline-success">✅ Accepter</button>
                             </form>
                             <form method="POST" action="traitement_sponsor.php" style="display:inline;">
                               <input type="hidden" name="id_sponsor" value="<?= $sponsor['id_sponsor'] ?>">
                               <input type="hidden" name="action" value="rejeter">
-                              <button type="submit" class="btn btn-sm btn-danger">❌ Refuser</button>
+                              <button type="submit" class="btn btn-sm btn-outline-danger">❌ Refuser</button>
                             </form>
                           <?php else: ?>
                             <span class="text-muted text-xs">Aucune action</span>
                           <?php endif; ?>
-                          <a href="updatesposors.php?id=<?= $sponsor['id_sponsor'] ?>" class="btn btn-sm btn-outline-primary">✏️ Modifier</a>
-                          <a href="deletesp.php?id=<?= $sponsor['id_sponsor'] ?>" class="btn btn-sm btn-outline-danger">🗑 Supprimer</a>
+                          <a href="updatesposors.php?id=<?= $sponsor['id_sponsor'] ?>" class="btn btn-sm btn-primary">✏️ Modifier</a>
+                          <a href="deletesp.php?id=<?= $sponsor['id_sponsor'] ?>" class="btn btn-sm btn-danger">🗑 Supprimer</a>
                         </td>
                       </tr>
                     <?php endforeach; ?>
                   </tbody>
 
                 </table>
+                <style>
+.pagination {
+    margin: 20px 0;
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+}
 
+.pagination a {
+    color: #d63384; /* Rose foncé */
+    background-color: #fff;
+    border: 1px solid #d63384;
+    padding: 8px 12px;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.pagination a:hover {
+    background-color: #d63384;
+    color: white;
+}
+
+/* Style pour la page active (vous devrez ajouter une classe 'active' au lien de la page courante) */
+.pagination a.active {
+    background-color: #d63384;
+    color: white;
+    font-weight: bold;
+}
+</style>
               </div>
             </div>
+            <?php
+$totalPagesSponsors = ceil($totalSponsors / $limit);
+$currentPageSponsor = isset($_GET['pageSponsor']) ? (int)$_GET['pageSponsor'] : 1;
+
+echo '<div class="pagination">';
+for ($i = 1; $i <= $totalPagesSponsors; $i++) {
+    $activeClass = ($i == $currentPageSponsor) ? 'active' : '';
+    echo "<a class='$activeClass' href='?pageSponsor=$i&searchSponsor=" . urlencode($searchSponsor) . "&statut=" . urlencode($statutFilter) . "&sortSponsor=" . urlencode($sortSponsor) . "'>$i</a> ";
+}
+echo '</div>';
+?>
+
           </div>
         </div>
       </div>
       <div class="row">
+        
+      <form method="GET" class="filter-form">
+  <div class="filter-container">
+    <!-- Filtrage par type de contrat -->
+    <div class="filter-group">
+      <select name="type_contrat" class="form-select">
+        <option value="">Tous les types</option>
+        <option value="Exclusif" <?php if (isset($_GET['type_contrat']) && $_GET['type_contrat'] == 'Exclusif') echo 'selected'; ?>>Exclusif</option>
+        <option value="Non-exclusif" <?php if (isset($_GET['type_contrat']) && $_GET['type_contrat'] == 'Non-exclusif') echo 'selected'; ?>>Non-exclusif</option>
+        <option value="Saison" <?php if (isset($_GET['type_contrat']) && $_GET['type_contrat'] == 'Saison') echo 'selected'; ?>>Saison</option>
+        <option value="Événementiel" <?php if (isset($_GET['type_contrat']) && $_GET['type_contrat'] == 'Événementiel') echo 'selected'; ?>>Événementiel</option>
+      </select>
+    </div>
+
+    <!-- Tri par date -->
+    <div class="filter-group">
+      <select name="sortContrat" class="form-select">
+        <option value="ASC" <?php if (isset($_GET['sortContrat']) && $_GET['sortContrat'] == 'ASC') echo 'selected'; ?>>Plus ancien</option>
+        <option value="DESC" <?php if (isset($_GET['sortContrat']) && $_GET['sortContrat'] == 'DESC') echo 'selected'; ?>>Plus récent</option>
+      </select>
+    </div>
+
+    <!-- Boutons de soumission -->
+    <div class="button-group">
+      <button type="submit" class="btn-filter">
+        <i class="fas fa-search"></i> Filtrer
+      </button>
+      <a href="?pageContrat=1" class="btn-reset">
+        <i class="fas fa-undo"></i> Réinitialiser
+      </a>
+    </div>
+  </div>
+</form>
+
+<style>
+.filter-form {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  margin-bottom: 2rem;
+}
+
+.filter-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+}
+
+.filter-group {
+  flex: 1;
+  min-width: 200px;
+}
+
+.form-select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  background-color: white;
+  color: #495057;
+  font-size: 0.9rem;
+  transition: all 0.3s;
+}
+
+.form-select:focus {
+  border-color: #d63384;
+  box-shadow: 0 0 0 3px rgba(77, 171, 247, 0.2);
+  outline: none;
+}
+
+.button-group {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.btn-filter {
+  background-color: #d63384;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-filter:hover {
+  background-color: #339af0;
+  transform: translateY(-1px);
+}
+
+.btn-reset {
+  background-color: #f1f3f5;
+  color: #495057;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-reset:hover {
+  background-color: #e9ecef;
+  transform: translateY(-1px);
+}
+
+/* Icônes Font Awesome */
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css");
+
+/* Responsive */
+@media (max-width: 768px) {
+  .filter-container {
+    flex-direction: column;
+  }
+  
+  .filter-group, .button-group {
+    width: 100%;
+  }
+  
+  .button-group {
+    justify-content: flex-end;
+  }
+}
+</style>
         <div class="col-12">
+        
 
           <div class="card my-4">
-            
+
+
+
             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-                      <a href="ajouterContrat.php" class="btn btn-sm btn-success me-3"><i class="fas fa-plus me-1"></i> Ajouter Contrat</a>
 
               <div class="bg-gradient-dark shadow-dark border-radius-lg pt-4 pb-3">
                 <h6 class="text-white text-capitalize ps-3">contrat contrat</h6>
@@ -340,23 +704,27 @@ $sponsors = $sponsorC->afficherSponsors();
         </tr>
     </thead>
     <tbody>
-        <?php 
-        // Récupérer la date actuelle à 12:00
-        $today = new DateTime();
-        $today->setTime(12, 0, 0);
-        $todayStr = $today->format('Y-m-d');
-        
-        foreach ($listeContrats as $contrat): 
-            $sponsorC = new SponsorC();
-            $sponsor = $sponsorC->recupererSponsor($contrat['id_sponsor']); 
-            
-            // Vérifier si la date de fin est aujourd'hui à 12:00
-            $dateFin = new DateTime($contrat['date_fin']);
-            $dateFin->setTime(12, 0, 0);
-            $isExpiringToday = ($dateFin->format('Y-m-d') === $todayStr);
-        ?>
-        <tr <?= $isExpiringToday ? 'class="bg-warning bg-opacity-10"' : '' ?>>
-            <td>
+    
+<?php foreach ($listContrats as $contrat): 
+    // Récupérer les informations du sponsor
+    $sponsor = $sponsorC->recupererSponsor($contrat['id_sponsor']); 
+
+    // Vérifier si le contrat est expiré
+    $dateFin = new DateTime($contrat['date_fin']);
+    $dateFin->setTime(0, 0, 0);
+    $today = new DateTime();
+    $today->setTime(0, 0, 0);
+    
+    // Définir $isExpiredOrToday avant de l'utiliser
+    $isExpiredOrToday = ($dateFin <= $today);
+    
+    // Vérifier si le contrat est expiré ET que le numéro de téléphone existe
+    if ($isExpiredOrToday && !empty($sponsor['tel'])) {
+        // ... votre code d'envoi de SMS ...
+    }
+?>
+    <tr <?= $isExpiredOrToday ? 'class="bg-warning bg-opacity-10"' : '' ?>>
+    <td>
                 <p class="text-sm font-weight-bold mb-0"><?= htmlspecialchars($contrat['id_contrat']) ?></p>
             </td>
             <td>
@@ -369,13 +737,15 @@ $sponsors = $sponsorC->afficherSponsors();
                 <span class="text-xs font-weight-bold"><?= htmlspecialchars($contrat['date_signature']) ?></span>
             </td>
             <td>
-                <p class="text-sm mb-0">
-                    <?= htmlspecialchars($contrat['date_fin']) ?>
-                    <?php if ($isExpiringToday): ?>
-                        <span class="badge bg-gradient-warning ms-2">Expire aujourd'hui!</span>
-                    <?php endif; ?>
-                </p>
-            </td>
+        <p class="text-sm mb-0">
+            <?= htmlspecialchars($contrat['date_fin']) ?>
+            <?php if ($isExpiredOrToday): ?>
+                <span class="badge bg-gradient-warning ms-2">
+                    <?= ($dateFin->format('Y-m-d') === $today->format('Y-m-d')) ? "Expire aujourd'hui!" : "Déjà expiré!" ?>
+                </span>
+            <?php endif; ?>
+        </p>
+    </td>
             <td>
                 <p class="text-sm mb-0"><?= htmlspecialchars($contrat['type_contrat']) ?></p>
             </td>
@@ -384,9 +754,14 @@ $sponsors = $sponsorC->afficherSponsors();
                 <a href="supprimerContrat.php?id=<?= $contrat['id_contrat'] ?>" class="btn btn-sm btn-danger m-1" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce contrat ?')">Supprimer</a>
             </td>
         </tr>
-        <?php endforeach; ?>
     </tbody>
+    <?php endforeach; ?>
 </table>
+<div class="d-flex justify-content-end mt-3" style="width: 100%;">
+    <a href="ajouterContrat.php" class="btn btn-success w-100" style="height: 100%;">
+        <i class="fas fa-plus me-1"></i> Ajouter Contrat
+    </a>
+</div>
 
 <script>
 // Afficher une alerte si un contrat expire aujourd'hui
@@ -400,10 +775,78 @@ window.onload = function() {
 };
 </script>
               </div>
+              <?php
+$totalPagesContrats = ceil($totalContrats / $limit);
+$currentPageContrat = isset($_GET['pageContrat']) ? (int)$_GET['pageContrat'] : 1;
+
+echo '<div class="pagination">';
+for ($i = 1; $i <= $totalPagesContrats; $i++) {
+    $activeClass = ($i == $currentPageContrat) ? 'active' : '';
+    echo "<a class='$activeClass' href='?pageContrat=$i&searchContrat=" . urlencode($searchContrat) . "&sortContrat=" . urlencode($sortContrat) . "'>$i</a> ";
+}
+echo '</div>';
+?>
+
             </div>
           </div>
         </div>
+
+        <div class="container-fluid py-2">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-8">
+      <div class="card my-4">
+        <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+          <div class="bg-gradient-dark shadow-dark border-radius-lg pt-4 pb-3">
+            <h6 class="text-white text-capitalize ps-3">Statistique des types de contrat</h6>
+          </div>
+        </div>
+        <div class="card-body d-flex justify-content-center align-items-center">
+          <div style="width: 300px; height: 300px;">
+            <canvas id="typeContratChart"></canvas>
+          </div>
+        </div>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const ctx = document.getElementById('typeContratChart').getContext('2d');
+  const typeContratChart = new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: <?= json_encode($labels); ?>,
+      datasets: [{
+        label: 'Nombre de contrats',
+        data: <?= json_encode($counts); ?>,
+        backgroundColor: [
+          '#4e73df',
+          '#1cc88a',
+          '#36b9cc',
+          '#f6c23e',
+          '#e74a3b',
+          '#858796'
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'bottom',
+        },
+        title: {
+          display: true,
+          text: 'Répartition des types de contrat'
+        }
+      }
+    }
+  });
+</script>
+
       <footer class="footer py-4  ">
         <div class="container-fluid">
           <div class="row align-items-center justify-content-lg-between">
@@ -497,8 +940,6 @@ window.onload = function() {
           </div>
         </div>
         <hr class="horizontal dark my-sm-4">
-        <a class="btn bg-gradient-info w-100" href="https://www.creative-tim.com/product/material-dashboard-pro">Free Download</a>
-        <a class="btn btn-outline-dark w-100" href="https://www.creative-tim.com/learning-lab/bootstrap/overview/material-dashboard">View documentation</a>
         <div class="w-100 text-center">
           <a class="github-button" href="https://github.com/creativetimofficial/material-dashboard" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star creativetimofficial/material-dashboard on GitHub">Star</a>
           <h6 class="mt-3">Thank you for sharing!</h6>
