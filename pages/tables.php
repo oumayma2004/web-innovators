@@ -45,9 +45,9 @@
     <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link text-dark" href="">
+          <a class="nav-link text-dark" href="../pages/events_by_season.php">
             <i class="material-symbols-rounded opacity-5">dashboard</i>
-            <span class="nav-link-text ms-1">Dashboard</span>
+            <span class="nav-link-text ms-1">Stat</span>
           </a>
         </li>
         <li class="nav-item">
