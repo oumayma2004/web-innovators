@@ -22,10 +22,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $reclamationC->ajouterReclamation($reclamation);
     
     // Send SMS with Twilio
-    $sid = 'AC99a440f3ceb445fc89c2ae862aef1a62';
-    $token = '0095df58991ccd93ebf40d28d89e9465';
-    $twilioNumber = '+16204008831';
-    $client = new Client($sid, $token);
+   // $sid = 'AC99a440f3ceb445fc89c2ae862aef1a62';
+   // $token = '0095df58991ccd93ebf40d28d89e9465';
+    //$twilioNumber = '+16204008831';
+    //$client = new Client($sid, $token);
     
     $message = "Bonjour " . $_POST['nom'] . ", votre réclamation concernant l'événement '" . $_POST['evenement_concerne'] . "' a été ajoutée avec succès.";
     try {
