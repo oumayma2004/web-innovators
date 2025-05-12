@@ -1,9 +1,9 @@
 <?php
 session_start();
-if (!isset($_SESSION['user'])) {
+/*if (!isset($_SESSION['user'])) {
     header('Location: index.html');
     exit();
-}
+}*/
 require_once '../../config.php'; 
 require_once '../../controller/userc.php'; 
 include '../../controller/packc.php'; 
@@ -553,7 +553,7 @@ $user = $controller->getUserById($user_id);
             <ul>
                 <li><a href="index.html"><span>Accueil</span></a></li>
                 <li><a href="pack.php" class="active"><span>Packs</span></a></li>
-                <li><a href="liste_sponsors.php"><span>Sponsors</span></a></li>
+                <li><a href="index.php"><span>Sponsors</span></a></li>
                 <li class="luxury-dropdown">
                     <a href="#">
                         <span>Réclamation</span>

@@ -259,154 +259,166 @@ $sponsors = $sponsorController->getValidSponsors();
 
     <!-- [Previous content: main-content, forms, etc.] -->
 
-    <footer class="luxury-footer">
-        <div class="footer-container">
-            <div class="footer-section">
-                <h3>تفرهيدة</h3>
-                <p>Plateforme de gestion des réclamations et services clients</p>
-                <div class="social-icons">
-                    <a href="#"><ion-icon name="logo-facebook"></ion-icon></a>
-                    <a href="#"><ion-icon name="logo-twitter"></ion-icon></a>
-                    <a href="#"><ion-icon name="logo-instagram"></ion-icon></a>
-                    <a href="#"><ion-icon name="logo-linkedin"></ion-icon></a>
-                </div>
-            </div>
+   <script src="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js"></script>
 
-
-            <div class="footer-section">
-                <h4>Contactez-nous</h4>
-                <ul class="contact-info">
-                    <li><ion-icon name="mail-outline"></ion-icon> contact@votresite.com</li>
-                    <li><ion-icon name="call-outline"></ion-icon> +212 6 12 34 56 78</li>
-                    <li><ion-icon name="location-outline"></ion-icon> Marsa,Tunisie</li>
-                </ul>
+<footer class="luxury-footer">
+    <div class="footer-container">
+        <div class="footer-section">
+            <h3>تفرهيدة</h3>
+            <p>Plateforme de gestion des réclamations et services clients</p>
+            <div class="social-icons">
+                <a href="#"><ion-icon name="logo-facebook"></ion-icon></a>
+                <a href="#"><ion-icon name="logo-twitter"></ion-icon></a>
+                <a href="#"><ion-icon name="logo-instagram"></ion-icon></a>
+                <a href="#"><ion-icon name="logo-linkedin"></ion-icon></a>
             </div>
         </div>
 
-        <div class="footer-bottom">
-            <p>© 2023 تفرهيدة. Tous droits réservés.</p>
+        <div class="footer-section">
+            <h4>Liens rapides</h4>
+            <ul>
+                <li><a href="#"><H1>Home</H1></a></li>
+                <li><a href="#">Evenement</a></li>
+                <li><a href="#">Packs</a></li>
+                <li><a href="#">Sponsor</a></li>
+                <li><a href="listreclamation.php">Réclamations</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
         </div>
-    </footer>
 
-    <style>
-        /* Style du footer */
-        .luxury-footer {
-            background: linear-gradient(135deg, #2c3e50, #1a252f);
-            color: #ecf0f1;
-            padding: 50px 0 0;
-            font-family: 'Segoe UI', sans-serif;
-            position: relative;
-            margin-top: 50px;
-        }
+        <div class="footer-section">
+            <h4>Contactez-nous</h4>
+            <ul class="contact-info">
+                <li><ion-icon name="mail-outline"></ion-icon> contact@votresite.com</li>
+                <li><ion-icon name="call-outline"></ion-icon> +212 6 12 34 56 78</li>
+                <li><ion-icon name="location-outline"></ion-icon> Marsa,Tunisie</li>
+            </ul>
+        </div>
+    </div>
 
+    <div class="footer-bottom">
+        <p>&copy; 2023 تفرهيدة. Tous droits réservés.</p>
+    </div>
+</footer>
+
+<style>
+    /* Style du footer */
+    .luxury-footer {
+        background: linear-gradient(135deg, #2c3e50, #1a252f);
+        color: #ecf0f1;
+        padding: 50px 0 0;
+        font-family: 'Segoe UI', sans-serif;
+        position: relative;
+        margin-top: 50px;
+    }
+
+    .footer-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 30px;
+    }
+
+    .footer-section h3 {
+        color: #f3b1d2;
+        font-size: 1.8rem;
+        margin-bottom: 20px;
+        font-weight: 700;
+    }
+
+    .footer-section h4 {
+        color: #f3b1d2;
+        font-size: 1.2rem;
+        margin-bottom: 20px;
+        position: relative;
+        padding-bottom: 10px;
+    }
+
+    .footer-section h4::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 50px;
+        height: 2px;
+        background: #e60e44;
+    }
+
+    .footer-section p {
+        margin-bottom: 20px;
+        line-height: 1.6;
+    }
+
+    .footer-section ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    .footer-section ul li {
+        margin-bottom: 10px;
+    }
+
+    .footer-section ul li a {
+        color: #ecf0f1;
+        text-decoration: none;
+        transition: color 0.3s;
+        display: block;
+    }
+
+    .footer-section ul li a:hover {
+        color: #f3b1d2;
+        padding-left: 5px;
+    }
+
+    .contact-info li {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+
+    .contact-info ion-icon {
+        font-size: 1.2rem;
+        color: #e60e44;
+    }
+
+    .social-icons {
+        display: flex;
+        gap: 15px;
+        margin-top: 20px;
+    }
+
+    .social-icons a {
+        color: #ecf0f1;
+        font-size: 1.5rem;
+        transition: transform 0.3s, color 0.3s;
+    }
+
+    .social-icons a:hover {
+        color: #f3b1d2;
+        transform: translateY(-3px);
+    }
+
+    .footer-bottom {
+        text-align: center;
+        padding: 20px 0;
+        margin-top: 50px;
+        background: rgba(0, 0, 0, 0.2);
+        font-size: 0.9rem;
+    }
+
+    @media (max-width: 768px) {
         .footer-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
+            grid-template-columns: 1fr;
         }
-
-        .footer-section h3 {
-            color: #f3b1d2;
-            font-size: 1.8rem;
-            margin-bottom: 20px;
-            font-weight: 700;
+        
+        .footer-section {
+            margin-bottom: 30px;
         }
-
-        .footer-section h4 {
-            color: #f3b1d2;
-            font-size: 1.2rem;
-            margin-bottom: 20px;
-            position: relative;
-            padding-bottom: 10px;
-        }
-
-        .footer-section h4::after {
-            content: '';
-            position: absolute;
-            left: 0;
-            bottom: 0;
-            width: 50px;
-            height: 2px;
-            background: #e60e44;
-        }
-
-        .footer-section p {
-            margin-bottom: 20px;
-            line-height: 1.6;
-        }
-
-        .footer-section ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .footer-section ul li {
-            margin-bottom: 10px;
-        }
-
-        .footer-section ul li a {
-            color: #ecf0f1;
-            text-decoration: none;
-            transition: color 0.3s;
-            display: block;
-        }
-
-        .footer-section ul li a:hover {
-            color: #f3b1d2;
-            padding-left: 5px;
-        }
-
-        .contact-info li {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        .contact-info li ion-icon {
-            font-size: 1.2rem;
-            color: #e60e44;
-        }
-
-        .social-icons {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .social-icons a {
-            color: #ecf0f1;
-            font-size: 1.5rem;
-            transition: transform 0.3s, color 0.3s;
-        }
-
-        .social-icons a:hover {
-            color: #f3b1d2;
-            transform: translateY(-3px);
-        }
-
-        .footer-bottom {
-            text-align: center;
-            padding: 20px 0;
-            margin-top: 50px;
-            background: rgba(0, 0, 0, 0.2);
-            font-size: 0.9rem;
-        }
-
-        @media (max-width: 768px) {
-            .footer-container {
-                grid-template-columns: 1fr;
-            }
-            
-            .footer-section {
-                margin-bottom: 30px;
-            }
-        }
-    </style>
-
+    }
+</style>
     <!-- JavaScript pour la gestion des formulaires -->
     <script>
         function showLogin() {
