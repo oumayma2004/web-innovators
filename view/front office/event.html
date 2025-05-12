@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>tfarhida</title>
+  <link rel="icon" href="assets/logo-removebg-preview.png" style="border-radius: 50%;" />
+  <link rel="stylesheet" href="../../style.css" />
+  <style>
+    /* Basic styling for the dynamic events */
+    .row1 {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      margin: 20px 0;
+    }
+    .event1, .event2, .event3 {
+      width: 30%;
+      border: 1px solid #ccc;
+      padding: 10px;
+      box-sizing: border-box;
+      text-align: center;
+    }
+    .event1 img, .event2 img, .event3 img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+    }
+    .chat-container {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      max-height: 300px;
+      background: white;
+      border-top: 1px solid #ccc;
+      overflow-y: auto;
+      padding: 10px;
+    }
+    .message {
+      margin: 8px 0;
+    }
+    .user {
+      color: blue;
+      font-weight: bold;
+    }
+    .bot {
+      color: green;
+      font-weight: bold;
+    }
+    
+
+    /* Footer Styling */
+footer {
+  background-color: black;
+  color: #fff;
+  padding: 30px 20px;
+  text-align: center;
+  font-size: 14px;
+  position: relative;
+  bottom: 0;
+  width: 100%;
+}
+
+footer .FO {
+  display: inline-block;
+  margin: 15px 20px;
+}
+
+footer .FO p {
+  margin: 5px 0;
+}
+
+footer .social {
+  width: 30px;
+  height: 30px;
+  margin: 5px;
+  transition: transform 0.3s ease;
+}
+
+footer .social:hover {
+  transform: scale(1.2);
+}
+
+footer .FO a {
+  color: #fff;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+footer .FO a:hover {
+  color: #f39c12;
+}
+
+footer h6 {
+  font-size: 12px;
+  margin-top: 20px;
+  color: #ddd;
+}
+
+footer .FO .social-icons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+}
+
+footer .FO .social-icons img {
+  transition: transform 0.3s ease;
+}
+
+footer .FO .social-icons img:hover {
+  transform: scale(1.1);
+}
+nav a {
+  text-decoration: none;
+  color: #c75050;
+  font-size: 18px;
+  margin-right: 8px;
+}
+#chat-container {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      width: 300px;
+      max-height: 400px;
+      background: #f9f9f9;
+      border-radius: 15px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      overflow-y: auto;
+      padding: 15px;
+      z-index: 999;
+    }
+
+    #chat-container h4 {
+      margin-top: 0;
+      text-align: center;
+      color: #333;
+    }
+
+    .message {
+      margin-bottom: 10px;
+      padding: 10px;
+      border-radius: 10px;
+      max-width: 90%;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .user {
+      background-color: #d0e6ff;
+      align-self: flex-end;
+      text-align: right;
+    }
+
+    .bot {
+      background-color: #e2f0d9;
+      align-self: flex-start;
+    }
+
+    .chat-messages {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .mic-btn {
+      background-color: #ffc0cb;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 50px;
+      font-size: 16px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .mic-btn:hover {
+      background-color: #ffc0cb;
+    }
+
+    .mic-btn img {
+      width: 18px;
+      height: 18px;
+    }
+    .mic-btn1 {
+      background-color: #ffc0cb;
+      color: white;
+      border: none;
+      cursor: pointer;
+      margin-top: 5px;
+      margin-left: 0px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .mic-btn1:hover {
+      background-color: #ffc0cb;
+    }
+
+    .mic-btn1 img {
+      width: 15px;
+    }
+
+    /* === Scrollbar style === */
+    #chat-container::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    #chat-container::-webkit-scrollbar-thumb {
+      background: #ccc;
+      border-radius: 3px;
+    }
+    /* Close button styling */
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  font-size: 24px;
+  color: #333;
+  cursor: pointer;
+}
+
+.close-btn:hover {
+  color: #f39c12;  /* Add a hover effect */
+}
+
+
+
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="tel">
+      <img src="../../assets/tel.png" alt="tel" />
+      <a href="tel:+21692000500"> +216 92 000 500 </a>
+      <img src="../../assets/tel.png" alt="tel" />
+      <a href="tel:+21692500200"> +216 92 500 200</a>
+    </div>
+    <div class="links">
+      <img src="../../assets/lock.png" />
+      <a href="login.php" onclick="showLogin()">Log in </a>
+      <img src="../../assets/user.png" />
+      <a href="signup.php">Sign up</a>
+      <a href="panier.php"><img src="../../assets/sac-de-courses.png" alt="panier" width="25px"></a>
+      <!-- Bouton Parler qui déclenche l'apparition du chat -->
+      <button id="show-chat-btn" class="mic-btn1">
+        <img src="../../assets/micro.png" alt="Microphone"> Parler
+      </button>
+
+      <!-- Conteneur chat MASQUÉ au début -->
+      <div id="chat-container" style="display: none;">
+        <button id="close-chat-btn" class="close-btn">&times;</button>
+        <h4>Assistant Vocal</h4>
+        <div id="chat" class="chat-messages"></div>
+        <button class="mic-btn" onclick="startListening()">
+          <img src="../../assets/micro.png" alt="Microphone"> Parler
+        </button>
+      </div>
+      <script>
+        // Affiche le chat au clic sur "Parler"
+        document.getElementById("show-chat-btn").addEventListener("click", function () {
+          const chatBox = document.getElementById("chat-container");
+          chatBox.style.display = "block";
+          startListening(); // Démarre l'écoute directe
+        });
+      
+        // (le reste du script reste inchangé)
+      </script>
+      
+      <script>
+        const chat = document.getElementById("chat");
+    
+        function appendMessage(from, text) {
+          const msg = document.createElement("div");
+          msg.classList.add("message", from === "Vous" ? "user" : "bot");
+          msg.innerHTML = `<strong>${from}:</strong><br>${text}`;
+          chat.appendChild(msg);
+          chat.scrollTop = chat.scrollHeight;
+        }
+    
+        function speak(text) {
+          const utterance = new SpeechSynthesisUtterance(text);
+          utterance.lang = "fr-FR";
+          speechSynthesis.speak(utterance);
+        }
+    
+        function startListening() {
+          const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+          recognition.lang = "fr-FR";
+          recognition.start();
+    
+          recognition.onresult = async function (event) {
+            const userText = event.results[0][0].transcript;
+            appendMessage("Vous", userText);
+    
+            const botText = await getAIResponse(userText);
+            appendMessage("Bot", botText);
+            speak(botText);
+          };
+    
+          recognition.onerror = function (event) {
+            appendMessage("Erreur", event.error);
+          };
+        }
+    
+        function getLocalResponse(text) {
+          const msg = text.toLowerCase();
+          if (msg.includes("bonjour") || msg.includes("salut")) return "Bonjour ! Comment puis-je vous aider ?";
+          if (msg.includes("événement")) return "Le prochain événement est un concert samedi à 20h.";
+          if (msg.includes("réserver") || msg.includes("réservation")) return "Vous pouvez réserver via la page 'Réservation'.";
+          if (msg.includes("heure")) return "Les événements débutent à 20h.";
+          if (msg.includes("lieu") || msg.includes("où")) return "L'événement se tiendra au centre culturel.";
+          if (msg.includes("merci")) return "Avec plaisir 😊";
+          return null;
+        }
+    
+        async function getAIResponse(text) {
+          const localResponse = getLocalResponse(text);
+          if (localResponse) return localResponse;
+    
+          try {
+            const response = await fetch("http://localhost:3000/chat", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ text })
+            });
+            const data = await response.json();
+            return data.response || "Je n'ai pas trouvé de réponse exacte.";
+          } catch (e) {
+            return "Erreur de connexion au serveur IA.";
+          }
+        }
+        // Close chat container when close button is clicked
+document.getElementById("close-chat-btn").addEventListener("click", function () {
+  const chatBox = document.getElementById("chat-container");
+  chatBox.style.display = "none";
+});
+
+      </script>
+      
+  </header>
+
+  <hr />
+
+  <!-- Navbar -->
+  <nav>
+    <a href="index.html"><img src="assets/logo-removebg-preview.png" alt="logo" /></a>
+    <div class="link">
+      <a href="index.html">Home </a>
+      <a href="pack.php">Packs </a>
+      <a href="">Sponsors </a>
+      <a href="">Reclamation</a>
+    </div>
+  </nav>
+
+  <!-- Slideshow -->
+  <div class="slideshow-container">
+    <div class="mySlides fade">
+      <img src="../../assets/kawther" />
+    </div>
+
+    <div class="mySlides fade">
+      <img src="../../assets/t8ani" />
+    </div>
+
+    <div class="mySlides fade">
+      <img src="../../assets/timo" />
+    </div>
+  </div>
+
+  <div style="text-align:center">
+    <span class="dot"></span>
+    <span class="dot"></span>
+    <span class="dot"></span>
+  </div>
+
+  <!-- Slideshow Script -->
+  <script>
+    let slideIndex = 0;
+    showSlides();
+    function showSlides() {
+      let i;
+      let slides = document.getElementsByClassName("mySlides");
+      let dots = document.getElementsByClassName("dot");
+      for (i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none";
+      }
+      slideIndex++;
+      if (slideIndex > slides.length) {
+        slideIndex = 1;
+      }
+      for (i = 0; i < dots.length; i++) {
+        dots[i].className = dots[i].className.replace(" active", "");
+      }
+      slides[slideIndex - 1].style.display = "block";
+      dots[slideIndex - 1].className += " active";
+      setTimeout(showSlides, 2000);
+    }
+  </script>
+
+  <!-- Events Section -->
+  <br>
+  <h2>OUR EVENTS</h2><br />
+  <!-- Add this container where events should be shown -->
+  <div id="dynamic-events"></div>
+
+  <!-- Insert the script before closing body tag -->
+  <script>
+    async function fetchEvents() {
+      try {
+        // Fetch events data from the server
+        const response = await fetch('../../get_events.php');
+        const events = await response.json();  // Parse the JSON response
+
+        const container = document.getElementById('dynamic-events');
+        container.innerHTML = ''; // Clear the container before adding new data
+
+        let rowDiv;
+
+        events.forEach((event, index) => {
+          // Create a new row every 3 events
+          if (index % 3 === 0) {
+            rowDiv = document.createElement('div');
+            rowDiv.classList.add('row1');
+            container.appendChild(rowDiv);
+          }
+
+          const eventDiv = document.createElement('div');
+          eventDiv.classList.add(`event${(index % 3) + 1}`);  // Adds class event1, event2, or event3
+
+          // Format the date in French
+          const date = new Date(event.date_de_e);  // Assuming the date in the backend is 'date_de_e'
+          const options = { day: '2-digit', month: 'long', year: 'numeric' };
+          const formattedDate = date.toLocaleDateString('fr-FR', options);
+
+          eventDiv.innerHTML = `
+            <div class="image-overlay">
+              <div class="price-tag">${event.prix_e ? event.prix_e + ' TND' : 'Gratuit'}</div>
+            </div>
+            <a href="event_details.php?id=${event.id_event}">
+              <img src="../../uploads/${event.image}" alt="${event.nom_e} - ${event.etat_e} - ${event.category_e}" />
+            </a>
+            <div class="event-text">
+              <h6>${event.nom_e}</h6>
+              <p><strong>Date:</strong> ${formattedDate} </p>
+              <p><strong>État:</strong> ${event.etat_e}</p>
+              <p><strong>Catégorie:</strong> ${event.category_e}</p>
+              <p><strong>Lieu:</strong> ${event.lieu_e || 'Non spécifié'}</p>
+              <p><strong>Description:</strong> ${event.description_e || 'Aucune description'}</p>
+            </div>
+          `;
+
+          rowDiv.appendChild(eventDiv);
+        });
+
+      } catch (err) {
+        console.error('Erreur lors du chargement des événements:', err);
+      }
+    }
+
+    function renderStars(rating) {
+      let stars = '';
+      for (let i = 1; i <= 5; i++) {
+        if (i <= rating) {
+          stars += '<span class="star filled">&#9733;</span>';  // Filled star
+        } else {
+          stars += '<span class="star empty">&#9734;</span>';  // Empty star
+        }
+      }
+      return stars;
+    }
+
+    // Fetch events initially and every 5 seconds after that
+    fetchEvents();
+    setInterval(fetchEvents, 5000);
+  </script>
+
+  <!-- Footer -->
+  <footer>
+    <div class="FO">
+      <p class="p">Meilleur prix GARANTI</p>
+    </div>
+    <div class="FO">
+      <p class="p">Paiement 100% sécurisé</p>
+    </div>
+    <div class="FO">
+      <p class="p">+200000 clients satisfaits</p>
+    </div>
+    <div class="FO">
+      <p class="p">Suivez-nous :</p>
+      <div class="social-icons">
+        <a href="http://www.facebook.com"><img class="social" src="assets/fb.png" alt="Facebook"></a>
+        <a href="http://www.instagram.com"><img class="social" src="assets/instagram.png" alt="Instagram"></a>
+        <a href="http://www.twitter.com"><img class="social" src="assets/twitter.png" alt="Twitter"></a>
+        <a href="http://www.youtube.com"><img class="social" src="assets/youtube.png" alt="YouTube"></a>
+      </div>
+    </div>
+    <h6>@Copyright 2025 All Rights Reserved</h6>
+  </footer>
+  
+</body>
+</html>

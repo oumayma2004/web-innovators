@@ -6,7 +6,7 @@
 
 .main{
     width: 100%;
-    background-image: url(file/back.png);
+    background-image: url(assets/background.jpg);
     background-position: center;
     background-size: cover;
     height: 105vh;

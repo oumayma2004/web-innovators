@@ -156,21 +156,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['contenu'])) {
             <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Tables</li>
           </ol>
         </nav>
-        <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
-          <div class="ms-md-auto pe-md-3 d-flex align-items-center">
-            <div class="input-group input-group-outline">
-              <label class="form-label">Type here...</label>
-              <input type="text" class="form-control">
-            </div>
-          </div>
-          <ul class="navbar-nav d-flex align-items-center  justify-content-end">
-            <li class="nav-item d-flex align-items-center">
-              <a class="btn btn-outline-primary btn-sm mb-0 me-3" target="_blank" href="https://www.creative-tim.com/builder?ref=navbar-material-dashboard">Online Builder</a>
-            </li>
-            <li class="mt-1">
-              <a class="github-button" href="https://github.com/creativetimofficial/material-dashboard" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star creativetimofficial/material-dashboard on GitHub">Star</a>
-            </li>
-            <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
+
+<!-- settings eli zedethomm -->
+
+        <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
               <a href="javascript:;" class="nav-link text-body p-0" id="iconNavbarSidenav">
                 <div class="sidenav-toggler-inner">
                   <i class="sidenav-toggler-line"></i>
@@ -184,10 +173,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['contenu'])) {
                 <i class="material-symbols-rounded fixed-plugin-button-nav">settings</i>
               </a>
             </li>
-            <li class="nav-item dropdown pe-3 d-flex align-items-center">
-              <a href="javascript:;" class="nav-link text-body p-0" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="material-symbols-rounded">notifications</i>
-              </a>
+        <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
+          <div class="ms-md-auto pe-md-3 d-flex align-items-center">
+            <div class="input-group input-group-outline">
+              <label class="form-label">Type here...</label>
+              <input type="text" class="form-control">
+            </div>
+          </div>
+          <ul class="navbar-nav d-flex align-items-center  justify-content-end">
+           
+
+
+
+          
               <ul class="dropdown-menu  dropdown-menu-end  px-2 py-3 me-sm-n4" aria-labelledby="dropdownMenuButton">
                 <li class="mb-2">
                   <a class="dropdown-item border-radius-md" href="javascript:;">
@@ -257,10 +255,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['contenu'])) {
                 </li>
               </ul>
             </li>
+            
+<!-- icone homme-->
             <li class="nav-item d-flex align-items-center">
-              <a href="../pages/sign-in.html" class="nav-link text-body font-weight-bold px-0">
-                <i class="material-symbols-rounded">account_circle</i>
-              </a>
+  <a href="../pages/sign-in.html" class="nav-link px-0 position-relative">
+    <span class="icon-backdrop bg-gradient-pink rounded-circle d-flex align-items-center justify-content-center" 
+          style="width: 36px; height: 36px; box-shadow: 0 4px 6px rgba(233, 30, 99, 0.3);">
+      <i class="material-symbols-rounded text-white" style="font-size: 20px;">account_circle</i>
+    </span>
+  </a>
+</li>
+
+<style>
+  .bg-gradient-pink {
+    background: linear-gradient(135deg, #ff80ab 0%, #ff4081 100%);
+  }
+  .icon-backdrop:hover {
+    transform: translateY(-2px);
+    transition: all 0.3s ease;
+  }
+</style>
             </li>
           </ul>
         </div>
@@ -271,11 +285,52 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['contenu'])) {
   <div class="row justify-content-center">
     <div class="col-md-8">
       <!-- Titre -->
-     <div class="card shadow-lg border-0">
-     <div class="card-header text-white text-center py-4 rounded-top" style="background-color: #FF009A;">
-  <h4 class="mb-0 font-weight-bold text-white"><i class="fas fa-edit mr-2"></i>Modifier la Réponse</h4>
-  <p class="mb-0 opacity-8">Mise à jour de la réponse à la réclamation</p>
+     <div class="card shadow-lg border-0 overflow-hidden">
+  <!-- En-tête avec animation fluide -->
+  <div class="card-header text-center py-4 rounded-top position-relative" 
+       style="background: linear-gradient(195deg, #FF009A, #D10068);
+              background-size: 200% 200%;
+              animation: gradientFlow 8s ease infinite;
+              overflow: hidden;">
+    
+    <!-- Effet de vague lumineuse -->
+    <div class="position-absolute w-200 h-100 bg-white/10 -bottom-20 -left-20 rotate-3" 
+         style="animation: waveMove 7s linear infinite;"></div>
+    
+    <!-- Contenu (protégé par z-index) -->
+    <div class="position-relative" style="z-index: 2;">
+      <h4 class="mb-0 font-weight-bold text-white">
+        <i class="fas fa-edit mr-2"></i>Modifier la Réponse
+      </h4>
+      <p class="mb-0 opacity-8">Mise à jour de la réponse à la réclamation</p>
+    </div>
+  </div>
+  
+  <!-- Corps de la carte -->
+  <div class="card-body">
+    <!-- Votre contenu ici -->
+  </div>
 </div>
+
+<style>
+  /* Animation du dégradé */
+  @keyframes gradientFlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  
+  /* Animation de la vague */
+  @keyframes waveMove {
+    0% { transform: translateX(-100%) rotate(3deg); }
+    100% { transform: translateX(100%) rotate(3deg); }
+  }
+  
+  /* Effet de survol optionnel */
+  .card-header:hover {
+    box-shadow: inset 0 0 30px rgba(255,255,255,0.1);
+  }
+</style>
 
 
     <div class="card-body p-5 rounded-bottom" style="background-color: #f1f1f1;">
@@ -316,9 +371,47 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['contenu'])) {
                 <a href="reclamations.php" class="btn btn-outline-dark btn-lg px-4 mr-2">
                     <i class="fas fa-arrow-left mr-2"></i> Retour
                 </a>
-                <button type="submit" class="btn btn-rose-gradient btn-lg px-5">
+                <button type="submit" class="btn btn-lg px-5 position-relative overflow-hidden" 
+        style="
+          background: linear-gradient(195deg, #ec407a, #d81b60);
+          border: none;
+          border-radius: 0.5rem;
+          color: white;
+          box-shadow: 0 4px 15px rgba(236, 64, 122, 0.4);
+          transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+          z-index: 1;
+        ">
   <i class="fas fa-save mr-2"></i> Enregistrer
+  
+  <!-- Effet de vague rose -->
+  <span style="
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 200%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transform: rotate(-5deg);
+    animation: waveMove 3s linear infinite;
+    z-index: -1;
+  "></span>
 </button>
+
+<style>
+  @keyframes waveMove {
+    0% { transform: translateX(-100%) rotate(-5deg); }
+    100% { transform: translateX(100%) rotate(-5deg); }
+  }
+  
+  button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(216, 27, 96, 0.6);
+  }
+  
+  button:active {
+    transform: translateY(1px);
+  }
+</style>
 
             </div>
         </form>
